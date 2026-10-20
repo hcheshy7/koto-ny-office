@@ -1,6 +1,7 @@
 // The Sonos queue for the Koto NY office.
 // GET  /api/sonos                                  -> { ok:true, queue:[{ slot, title, artist, by, t }] }
 // POST /api/sonos  { id, title, artist?, by }      -> { ok:true, queue }
+// DELETE /api/sonos { slot, t }                   -> { ok:true, queue }   (removes an upcoming song; later songs move up)
 // A new song starts every 3.5 minutes (one "slot"). A song someone adds takes the next free slot,
 // so it plays straight after whatever is on now, or after the songs people added before it.
 // Slots nobody fills play the office shuffle. Uses the same Upstash Redis storage as the other functions.
@@ -54,7 +55,27 @@ export default async function handler(req, res) {
         return res.status(200).json({ ok: true, queue: q });
       } finally { if (got) await redis(['DEL', KEY + ':lock']); }
     }
-    res.setHeader('Allow', 'GET, POST');
+    if (req.method === 'DELETE') {                                    // take a song out of the queue; the songs after it move up
+      let body = req.body;
+      if (typeof body === 'string') { try { body = JSON.parse(body); } catch (_) { body = {}; } }
+      body = body || {};
+      const slot = Number(body.slot), t = Number(body.t);
+      if (!Number.isFinite(slot)) return res.status(400).json({ ok: false, error: 'Which song?' });
+      let got = false;
+      for (let i = 0; i < 10 && !got; i++) { got = await redis(['SET', KEY + ':lock', '1', 'NX', 'PX', 3000]); if (!got) await new Promise(r => setTimeout(r, 120)); }
+      try {
+        const now = Date.now(), cur = Math.floor(now / SLOT);
+        let q = await load(now);
+        const k = q.findIndex(s => s.slot === slot && (!t || s.t === t));
+        if (k < 0 || slot <= cur) return res.status(200).json({ ok: true, queue: q });   // already gone, or already playing
+        q.splice(k, 1);
+        let next = cur + 1;
+        for (const s of q) if (s.slot > cur) { s.slot = Math.max(next, Math.min(s.slot, next)); next = s.slot + 1; }
+        await redis(['SET', KEY, JSON.stringify(q), 'PX', 864e5]);
+        return res.status(200).json({ ok: true, queue: q });
+      } finally { if (got) await redis(['DEL', KEY + ':lock']); }
+    }
+    res.setHeader('Allow', 'GET, POST, DELETE');
     return res.status(405).json({ ok: false, error: 'Method not allowed.' });
   } catch (err) {
     return res.status(500).json({ ok: false, error: String(err.message || err) });

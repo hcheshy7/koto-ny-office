@@ -12,7 +12,7 @@ function cleanLook(l) {
   l = l || {};
   const o = { skin: hex(l.skin), hair: hex(l.hair), eyes: hex(l.eyes), shirt: hex(l.shirt), pants: hex(l.pants),
     style: STYLES.includes(l.style) ? l.style : 'short', top: TOPS.includes(l.top) ? l.top : 'tee', bottom: BOTTOMS.includes(l.bottom) ? l.bottom : 'pants',
-    acc: Math.max(0, Math.min(ACCS - 1, l.acc | 0)) };
+    acc: Math.max(0, Math.min(ACCS - 1, l.acc | 0)), face: Math.max(0, Math.min(3, l.face | 0)), v: l.v === 2 ? 2 : 1 };
   if (hex(l.streak)) o.streak = l.streak;
   return o;
 }
