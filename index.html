@@ -970,7 +970,13 @@ const shade=(x,y,w,h)=>{if(CUR){CUR.shades.push([x,y,w,h]);return}oval(OF,x+w/2,
   note(x+3,y+11,'#ffd166');px(g,x+66,y+14,9,5,'#fbfaf6');px(g,x+67,y+15,3,3,'#1f9a96');px(g,x+71,y+15,3,1,'#9a948a');pin(x+70,y+14,'#d6473c');
   for(const[a,c]of[[[x+5,y+3],[x+14,y+3]],[[x+14,y+3],[x+24,y+3]],[[x+58,y+3],[x+69,y+3]]]){const n=Math.abs(c[0]-a[0]);for(let k=1;k<n;k++)px(g,a[0]+k,a[1]+1+Math.round(Math.sin(k/n*Math.PI)*2),1,1,'#c0241c')}   // red string between pins
  }
- poster(386,88,11,15,ART.halftone);poster(451,88,11,15,ART.memphis);          // either side of the elevator lobby
+ poster(451,88,11,15,ART.memphis);
+ {const x=385,y=84,O='#1d1c21';                                       // the suggestion box, mounted on the wall left of the lobby doorway
+  px(g,x+3,y,7,1,O);px(g,x+1,y+1,11,1,O);px(g,x,y+2,13,15,O);px(g,x+1,y+17,11,1,O);
+  px(g,x+3,y+1,7,1,'#3d7be0');px(g,x+1,y+2,11,14,'#3d7be0');px(g,x+2,y+2,3,1,'#8fc0ff');px(g,x+1,y+3,2,12,'#6fa3f0');px(g,x+10,y+3,2,13,'#2a5aa8');px(g,x+1,y+15,11,2,'#2a5aa8');
+  px(g,x+3,y+4,7,2,O);px(g,x+3,y+6,7,1,'#8fc0ff');
+  for(const[a,b,w]of[[4,9,2],[7,9,2],[4,10,5],[5,11,3],[6,12,1]])px(g,x+a,y+b,w,1,'#ff8fb1');px(g,x+4,y+9,1,1,'#ffd0de');
+  px(g,x+2,y+18,9,1,'rgba(0,0,0,.25)')}          // either side of the elevator lobby
  // the bathrooms: three closed rooms off the hall, seen only from above (their ceilings), never inside
  {const covered=(i,j)=>T(i,j+1)===WALL&&open(i,j+2);
   for(let j=0;j<=5;j++)for(let i=0;i<=10;i++){if(T(i,j)!==VOID||covered(i,j))continue;const x=i*TS,y=j*TS;
@@ -1130,8 +1136,7 @@ function mailbox(i,j){block(i,j);shade(i*TS+1,j*TS+10,14,5);put(SUGGEST_BOX,i*TS
 /* =====================================================================
    FURNITURE PLACEMENT  (same layout as the floor plan)
    ===================================================================== */
-[[6,7],[42,7],[6,20],[33,20],[23,5],[34,1],[42,1]].forEach(([i,j])=>piece('plant',i,j,'Pot plant',()=>plant(i,j)));
-piece('mailbox',27,4,'Suggestion box',()=>mailbox(27,4));                         // by the lift: the suggestion box      // a few pot plants tucked into corners
+[[6,7],[42,7],[6,20],[33,20],[23,5],[34,1],[42,1]].forEach(([i,j])=>piece('plant',i,j,'Pot plant',()=>plant(i,j)));      // a few pot plants tucked into corners
 // left meeting rooms: a TV on the wall, round table in the middle, two chairs either side
 function tvWall(i,j){put(sprite(30,16,g=>{px(g,0,0,30,16,'#1f2330');px(g,1,1,28,13,'#ffd23f');px(g,1,1,28,1,'#ffe680');
   drawLogo(g,4,3,false,'#141218');px(g,12,14,6,2,'#2b2f3a')}),i*TS+1,j*TS-15,j*TS);return things[things.length-1]}
@@ -1607,6 +1612,43 @@ scene.sort((a,b)=>a.base-b.base);
 // Each person is a 16x30 pixel figure in the proportions of the classic farming-game townsfolk: a big head with a full
 // head of shaded hair, small bright eyes, and a compact body with separate arms, legs and shoes.  They are drawn facing
 // the front, the back and the side; `blink` draws the eyes closed.
+function extraBits(P,L,v){                                         // headphones, bows, headbands, flower clips, scarves and necklaces
+  const D='#2e2b33';
+  if(L.scarf){const c='#f4ead2',st='#e2574c',sh='#d8ccb0',longHair=/long|wavy|curlylong|braids/.test(L.style||'');   // a cosy cream scarf with red stripes
+    if(v==='s'){P(5,14,6,2,c);P(5,15,6,1,sh);P(5,16,2,4,c);P(5,17,2,1,st);P(5,19,2,1,st)}
+    else if(v==='f'){P(3,14,10,2,c);P(3,15,10,1,sh);P(5,14,1,2,st);P(10,14,1,2,st);P(9,16,2,4,c);P(9,17,2,1,st);P(9,19,2,1,st);P(10,16,1,4,sh)}
+    else if(!longHair){P(3,14,10,2,c);P(3,15,10,1,sh);P(6,14,1,2,st);P(9,14,1,2,st)}}
+  if(L.necklace&&v!=='b'){const gd='#f2c14e';if(v==='f'){P(5,15,1,1,gd);P(6,16,4,1,gd);P(10,15,1,1,gd);P(7,17,2,1,'#7fd3c4')}else P(9,15,1,2,gd)}
+  if(L.headband){const c='#ff8fb1';if(v==='s'){P(3,3,8,1,c);P(2,4,2,1,c)}else{P(3,3,10,1,c);P(2,4,1,1,c);P(13,4,1,1,c)}}
+  if(L.flower){const p='#ff9ec4',y='#ffd23f';const[x,yy]=v==='f'?[11,4]:v==='s'?[3,4]:[3,5];P(x,yy,3,3,p);P(x+1,yy-1,1,1,p);P(x+1,yy+3,1,1,p);P(x-1,yy+1,1,1,p);P(x+3,yy+1,1,1,p);P(x+1,yy+1,1,1,y)}
+  if(L.bow){const c='#ff5f8f',k=mix(c,-.3);const x=v==='s'?2:v==='b'?2:10;P(x,1,2,3,c);P(x+3,1,2,3,c);P(x+2,2,1,1,k);P(x,2,1,1,mix(c,.25));P(x+4,2,1,1,mix(c,-.15))}
+  if(L.headphones){const c=L.shirt?mix(L.shirt,-.1):'#3d7be0';
+    if(v==='s'){P(4,1,6,1,D);P(3,2,1,6,D);P(5,8,3,4,D);P(6,9,1,2,c)}
+    else{P(3,1,10,1,D);P(2,2,1,6,D);P(13,2,1,6,D);P(0,8,3,4,D);P(13,8,3,4,D);P(1,9,1,2,c);P(14,9,1,2,c)}}
+}
+function drawHat(g,P,L,v){                                         // hats that sit on the head: a knitted beanie with a cuff and pom-pom, or a baseball cap with a brim
+  const c=L.hat,hi=mix(c,.22),sh=mix(c,-.22),dk=mix(c,-.42),side=v==='s';
+  const crown=[[5,10],[3,12],[2,13],[2,13]];                       // rows 1-4: the dome over the head
+  g.clearRect(0,0,16,5);                                           // the hat hides any hair on top of the head
+  if(L.hatStyle==='bucket'){                                        // a soft bucket hat with a brim all the way round
+    P(4,1,8,1,c);P(3,2,10,2,c);P(4,1,3,1,hi);P(3,2,1,2,hi);P(12,2,1,2,sh);P(3,3,10,1,sh);
+    if(side){P(1,4,15,1,c);P(0,5,16,1,sh)}else{P(1,4,14,1,c);P(0,5,16,1,sh);P(1,4,14,1,mix(c,.1))}
+    return}
+  if(L.hatStyle==='beanie'){
+    P(6,0,4,1,'#f4f2ec');P(6,0,1,1,'#ffffff');P(9,0,1,1,'#d8d4cc');                 // pom-pom
+    crown.forEach(([a,b],k)=>{P(a,1+k,b-a+1,1,c)});
+    for(let x=3;x<=12;x+=2)P(x,2,1,2,sh);                          // knit ribs
+    P(3,2,1,2,hi);P(4,1,2,1,hi);P(side?11:12,2,1,2,dk);
+    P(1,4,14,2,sh);for(let x=1;x<15;x+=2)P(x,4,1,2,dk);P(1,4,14,1,mix(c,-.1));   // the folded cuff
+    if(side){P(14,4,1,2,sh)}
+  }else{                                                           // baseball cap
+    crown.forEach(([a,b],k)=>{P(a,1+k,b-a+1,1,c)});
+    P(4,2,2,1,hi);P(3,3,1,2,hi);P(12,3,1,2,sh);P(7,1,2,1,dk);       // shine, shade, and the button on top
+    if(v==='f'){P(7,2,1,3,sh);P(1,5,14,1,dk);P(2,5,12,1,sh);P(3,6,10,1,dk)}       // seam down the front, and the brim curving towards you
+    else if(v==='b'){P(2,5,12,1,sh);P(6,4,4,2,dk);P(7,5,2,1,mix(L.hair||'#5a3825',0))}   // the band at the back with the strap gap
+    else{P(2,5,10,1,sh);P(10,5,6,1,dk);P(11,4,4,1,sh)}             // side: the brim sticks out in front
+  }
+}
 function paintChar(g,L,view,pose,blink){
   const P=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h)};
   const skin=L.skin||'#f6d2ad',hair=L.hair||'#5a3825',shirt=L.shirt||'#4a90d9',pants=L.pants||'#2f3b52',shoe=L.shoes||'#5a3a2a';
@@ -1615,7 +1657,7 @@ function paintChar(g,L,view,pose,blink){
   const iris=L.eyes||'#5a3418',DARK='#2a1a22',lip=mix(skin,-.36);
   const style=(L.style||'short').toLowerCase(),bald=style==='bald',sit=pose==='sit',wa=pose==='walkA',wb=pose==='walkB';
   const H=(x,y,w,h)=>P(x,y,w,h,hair),HS=(x,y,w,h)=>P(x,y,w,h,hairS),HH=(x,y,w,h)=>P(x,y,w,h,hairH);
-  const head=()=>{P(4,3,8,1,skin);P(3,4,10,1,skin);P(2,5,12,8,skin);P(3,13,10,1,skin);P(3,13,1,1,skinS);P(12,13,1,1,skinS)};
+  const head=()=>{if(bald){P(6,1,4,1,skin);P(4,2,8,1,skin)}P(4,3,8,1,skin);P(3,4,10,1,skin);P(2,5,12,8,skin);P(3,13,10,1,skin);P(3,13,1,1,skinS);P(12,13,1,1,skinS)};
   if(view==='f'){
     // hair that falls behind the head and shoulders
     if(style==='long'){H(1,6,14,14);H(2,20,12,1);HS(1,15,1,5);HS(14,15,1,5);HS(4,19,1,2);HS(11,19,1,2)}
@@ -1633,8 +1675,10 @@ function paintChar(g,L,view,pose,blink){
       P(4,25,3,3-la,pants);P(9,25,3,3-ra,pants);P(7,24,2,1,pantsS);P(6,25,1,3-la,pantsS);P(11,25,1,3-ra,pantsS);
       P(3,28-la,4,2,shoe);P(9,28-ra,4,2,shoe);P(3,29-la,4,1,shoeS);P(9,29-ra,4,1,shoeS);
       if(L.bottom==='shorts'){P(4,26,3,2-la,skin);P(9,26,3,2-ra,skin);P(6,26,1,2-la,skinS);P(11,26,1,2-ra,skinS)}
-      if(L.bottom==='skirt'){P(4,26,3,2-la,skin);P(9,26,3,2-ra,skin);P(3,22,10,4,pants);P(3,25,10,1,pantsS);P(3,22,10,1,pantsH)}}
+      if(L.bottom==='skirt'){P(4,26,3,2-la,skin);P(9,26,3,2-ra,skin);P(3,22,10,4,pants);P(3,25,10,1,pantsS);P(3,22,10,1,pantsH)}
+      bottomExtra(P,L,'f',pants,pantsS,pantsH,la,ra,false)}
     if(sit&&L.bottom==='skirt'){P(3,22,10,3,pants);P(3,24,10,1,pantsS)}
+    if(sit)bottomExtra(P,L,'f',pants,pantsS,pantsH,0,0,true);
     // body, arms and hands
     P(4,15,8,7,shirt);P(3,15,10,2,shirt);P(4,21,8,1,shirtS);P(10,17,2,4,shirtS);P(5,15,5,1,shirtH);P(6,14,4,1,skinS);P(7,15,2,1,skin);
     const al=wa?1:0,ar=wb?1:0;
@@ -1653,7 +1697,7 @@ function paintChar(g,L,view,pose,blink){
     if(L.mustache)P(6,10,4,1,fh);
     // hair on top
     if(!bald){
-      if(style==='buzz'){H(4,2,8,1);H(3,3,10,1);H(2,4,12,1);H(2,5,1,3);H(13,5,1,3);HH(5,3,3,1)}
+      if(style==='buzz'){H(5,1,6,1);H(4,2,8,1);H(3,3,10,1);H(2,4,12,1);H(2,5,1,3);H(13,5,1,3);HH(5,3,3,1)}
       else if(style==='mohawk'){H(6,0,4,5);HH(7,0,1,3);HS(9,1,1,4);P(3,4,3,1,hairS);P(10,4,3,1,hairS);P(2,5,1,2,hairS);P(13,5,1,2,hairS)}
       else if(style==='curly'||style==='curlylong'||style==='afro'){H(4,0,8,1);H(2,1,12,1);H(1,2,14,4);H(0,3,1,4);H(15,3,1,4);H(1,6,3,2);H(12,6,3,2);H(4,6,2,1);H(9,6,3,1);H(1,8,1,2);H(14,8,1,2);
         HH(4,1,2,1);HH(9,2,2,1);HH(12,4,1,1);HH(2,3,1,1);HS(6,4,1,1);HS(11,5,1,1);HS(3,5,1,1);HS(8,1,1,1)}
@@ -1671,8 +1715,7 @@ function paintChar(g,L,view,pose,blink){
     }
     if(style==='braids'&&!bald){for(let y=9;y<20;y+=2){H(1,y,2,1);HS(1,y+1,2,1);H(13,y,2,1);HS(13,y+1,2,1)}HH(1,9,1,1);HH(13,9,1,1);P(1,20,2,1,'#e8559a');P(13,20,2,1,'#e8559a');H(1,21,2,1);H(13,21,2,1)}
     if(L.earrings){P(1,11,1,2,'#ffd166');P(14,11,1,2,'#ffd166')}
-    if(L.hat){if(L.hatStyle==='cap'){P(3,1,10,3,L.hat);P(3,1,10,1,mix(L.hat,.2));P(2,4,12,1,mix(L.hat,-.25));P(7,1,2,1,mix(L.hat,-.25))}
-      else if(L.hatStyle==='beanie'){P(3,0,10,3,L.hat);P(4,0,8,1,mix(L.hat,.2));P(2,3,12,2,mix(L.hat,-.2));P(7,-1,2,1,'#f4f2ec')}else{P(3,0,10,4,L.hat);P(2,4,12,1,mix(L.hat,-.25))}}
+    extraBits(P,L,'f');if(L.hat)drawHat(g,P,L,'f');
   }else if(view==='b'){
     if(sit){P(4,22,8,3,pants);P(4,24,8,1,pantsS)}
     else{P(4,22,8,3,pants);const la=wa?2:0,ra=wb?2:0;P(4,25,3,3-la,pants);P(9,25,3,3-ra,pants);P(7,24,2,1,pantsS);
@@ -1680,11 +1723,11 @@ function paintChar(g,L,view,pose,blink){
     P(4,15,8,7,shirt);P(3,15,10,2,shirt);P(4,21,8,1,shirtS);P(4,16,1,5,shirtS);P(11,16,1,5,shirtS);P(6,14,4,1,skinS);
     const al=wa?1:0,ar=wb?1:0;
     P(2,16+al,2,4,shirt);P(2,16+al,1,4,shirtS);P(2,20+al,2,2,skin);P(12,16+ar,2,4,shirt);P(13,16+ar,1,4,shirtS);P(12,20+ar,2,2,skin);
-    topBack(P,L,shirt,shirtS,pants);if(!sit&&L.bottom){const la=wa?2:0,ra=wb?2:0;if(L.bottom!=='pants'){P(4,26,3,2-la,skin);P(9,26,3,2-ra,skin)}if(L.bottom==='skirt'){P(3,22,10,4,pants);P(3,25,10,1,pantsS)}}
+    topBack(P,L,shirt,shirtS,pants);if(!sit&&L.bottom){const la=wa?2:0,ra=wb?2:0;if(L.bottom==='shorts'||L.bottom==='skirt'){P(4,26,3,2-la,skin);P(9,26,3,2-ra,skin)}if(L.bottom==='skirt'){P(3,22,10,4,pants);P(3,25,10,1,pantsS)}bottomExtra(P,L,'b',pants,pantsS,mix(pants,.14),la,ra,false)}
     head();
     if(!bald){
       if(style==='afro')oval(g,8,7,8.5,7.5,hair);
-      if(style==='buzz'){H(4,2,8,1);H(3,3,10,1);H(2,4,12,5);H(3,9,10,1);HH(5,3,3,1)}
+      if(style==='buzz'){H(5,1,6,1);H(4,2,8,1);H(3,3,10,1);H(2,4,12,5);H(3,9,10,1);HH(5,3,3,1)}
       else if(style==='mohawk'){H(6,0,4,11);HH(7,0,1,6);P(3,4,3,6,hairS);P(10,4,3,6,hairS)}
       else if(style==='curly'||style==='afro'){H(4,0,8,1);H(2,1,12,1);H(1,2,14,9);H(0,3,1,6);H(15,3,1,6);H(2,11,12,1);HH(4,2,2,1);HH(9,4,2,1);HS(5,7,2,1);HS(11,8,1,1);HS(3,9,1,1);HH(12,6,1,1)}
       else if(style==='curlylong'){H(4,0,8,1);H(2,1,12,1);H(0,2,16,18);H(1,20,14,1);HH(4,2,2,1);HH(9,5,2,1);HS(4,10,2,1);HS(10,13,2,1);HH(6,16,1,1);HS(12,17,2,1);HS(2,15,1,2)}
@@ -1701,7 +1744,7 @@ function paintChar(g,L,view,pose,blink){
         if(style==='braids'){for(let y=11;y<20;y+=2){H(4,y,2,1);HS(4,y+1,2,1);H(10,y,2,1);HS(10,y+1,2,1)}P(4,20,2,1,'#e8559a');P(10,20,2,1,'#e8559a');H(4,21,2,1);H(10,21,2,1)}}
       if(L.streak){P(4,2,2,1,L.streak);P(3,3,2,2,L.streak);P(2,5,1,6,L.streak)}
     }
-    if(L.hat){if(L.hatStyle==='beanie'){P(3,0,10,3,L.hat);P(2,3,12,2,mix(L.hat,-.2));P(7,-1,2,1,'#f4f2ec')}else P(3,0,10,4,L.hat)}
+    extraBits(P,L,'b');if(L.hat)drawHat(g,P,L,'b');
   }else{                                                           // side view, facing right
     if(style==='long'){H(1,6,5,14);H(2,20,4,1);HS(1,15,1,5)}
     if(style==='curlylong'){H(0,5,6,15);H(1,20,5,1);HS(0,10,1,2);HS(2,19,2,1)}
@@ -1718,10 +1761,12 @@ function paintChar(g,L,view,pose,blink){
     else{P(5,22,6,6,pants);P(5,22,6,1,pantsH);P(5,28,7,2,shoe);P(5,29,7,1,shoeS)}
     if(!sit&&(L.bottom==='shorts'||L.bottom==='skirt')){if(wa){P(8,26,3,2,skin);P(4,25,2,2,skin)}else if(wb)P(6,26,4,2,skin);else P(5,26,6,2,skin)}
     if(L.bottom==='skirt'){P(4,22,8,4,pants);P(4,25,8,1,pantsS)}
+    bottomExtra(P,L,'s',pants,pantsS,pantsH,wa?2:0,wb?2:0,sit);
     P(5,15,6,7,shirt);P(5,21,6,1,shirtS);P(5,16,1,5,shirtS);P(6,15,4,1,shirtH);P(6,14,3,1,skinS);
     topSide(P,L,shirt,shirtS,shirtH,pants);
     const ax=wa?8:wb?6:7;P(ax,16,2,4,shirtS);P(ax,16,1,4,shirt);P(ax,20,2,2,skin);
-    P(4,3,7,1,skin);P(3,4,9,1,skin);P(2,5,11,8,skin);P(13,9,1,2,skin);P(3,13,9,1,skin);P(3,13,1,1,skinS);
+    if(L.top==='tank'){P(ax,16,2,4,skin);P(ax+1,16,1,4,skinS)}else if(L.top==='vest'||L.top==='cardigan'&&0){P(ax,16,2,4,'#f4f2ec');P(ax+1,16,1,4,'#d9d6cc')}
+    if(bald){P(5,1,4,1,skin);P(4,2,7,1,skin)}P(4,3,7,1,skin);P(3,4,9,1,skin);P(2,5,11,8,skin);P(13,9,1,2,skin);P(3,13,9,1,skin);P(3,13,1,1,skinS);
     P(10,10,2,1,blush);P(6,9,1,2,skinS);
     if(L.glasses){P(10,8,2,2,'#eef8ff');P(6,7,7,1,DARK);P(9,8,1,2,DARK);if(blink)P(10,9,2,1,DARK);else P(11,8,1,2,DARK)}
     if(L.sunglasses){P(9,7,4,3,'#1d1c21');P(6,7,3,1,'#1d1c21');P(10,8,1,1,'#5b6168')}
@@ -1731,7 +1776,7 @@ function paintChar(g,L,view,pose,blink){
     if(L.beard){P(8,11,5,1,fh);P(6,12,7,2,fh);P(11,11,2,1,lip)}
     if(L.mustache)P(10,10,3,1,fh);
     if(!bald){
-      if(style==='buzz'){H(4,2,7,1);H(3,3,9,1);H(2,4,10,1);H(2,5,4,4);HH(5,3,3,1)}
+      if(style==='buzz'){H(5,1,5,1);H(4,2,7,1);H(3,3,9,1);H(2,4,10,1);H(2,5,4,4);HH(5,3,3,1)}
       else if(style==='mohawk'){H(3,0,8,1);H(2,1,10,2);HH(5,0,3,1);P(2,3,4,4,hairS)}
       else if(style==='curly'||style==='curlylong'||style==='afro'){H(4,0,7,1);H(2,1,11,1);H(1,2,13,4);H(0,3,1,5);H(1,6,5,5);H(9,6,3,1);H(6,6,2,2);HH(4,1,2,1);HH(9,2,2,1);HS(2,6,1,1);HS(11,4,1,1);HS(4,8,1,1)}
       else if(style==='bun'){H(2,0,4,1);H(1,1,5,1);HH(3,0,1,1);P(3,2,3,1,'#b8577a');H(6,2,5,1);H(2,3,11,2);H(1,3,1,5);H(2,5,4,5);H(10,5,2,1);HH(6,3,4,1);HS(3,7,1,2)}
@@ -1745,12 +1790,28 @@ function paintChar(g,L,view,pose,blink){
       if(L.streak){P(8,1,2,1,L.streak);P(9,2,2,1,L.streak);P(10,3,2,2,L.streak)}
     }
     if(L.earrings)P(5,11,1,2,'#ffd166');
-    if(L.hat){if(L.hatStyle==='cap'){P(3,1,10,3,L.hat);P(11,3,4,1,mix(L.hat,-.25))}else if(L.hatStyle==='beanie'){P(3,0,10,3,L.hat);P(2,3,11,2,mix(L.hat,-.2));P(6,-1,2,1,'#f4f2ec')}else{P(3,0,10,4,L.hat);P(11,4,4,1,mix(L.hat,-.25))}}
+    extraBits(P,L,'s');if(L.hat)drawHat(g,P,L,'s');
   }
 }
 // clothing styles drawn over the plain t-shirt: stripes, a hoodie, a collared shirt, overalls, an open jacket, a sweater
+function bottomExtra(P,L,v,pants,pantsS,pantsH,la,ra,sit){        // the newer bottoms: a long skirt and joggers
+  const b=L.bottom;
+  if(b==='longskirt'){if(sit){if(v==='s'){P(4,22,9,3,pants);P(4,24,9,1,pantsS)}else{P(3,22,10,4,pants);P(3,25,10,1,pantsS);P(3,22,10,1,pantsH)}return}
+    const rows=v==='s'?[[5,11],[5,11],[4,11],[4,12],[4,12],[3,12]]:[[4,11],[4,11],[3,12],[3,12],[2,13],[2,13]];   // flares out towards the ankles
+    rows.forEach(([a,b],k)=>P(a,22+k,b-a+1,1,pants));P(rows[0][0],22,rows[0][1]-rows[0][0]+1,1,pantsH);P(rows[5][0],27,rows[5][1]-rows[5][0]+1,1,pantsS);
+    for(const x of(v==='s'?[7,10]:[5,8,11]))P(x,24,1,3,mix(pants,-.12));P(v==='s'?6:4,24,1,2,mix(pants,.1))}
+  else if(b==='joggers'&&!sit){if(v==='s'){P(5,27,6,1,pantsS)}else{P(4,27-la,3,1,pantsS);P(9,27-ra,3,1,pantsS)}if(v==='f'){P(4,22,8,1,pantsS);P(7,22,1,2,'#f4f2ec');P(9,22,1,1,'#f4f2ec')}}
+}
 function topFront(P,L,shirt,shirtS,shirtH,pants,pantsS,al,ar){
-  const t=L.top||'tee',W='#f4f2ec';
+  const t=L.top||'tee',W='#f4f2ec',skin=L.skin||'#f6d2ad',skinS=mix(skin,-.13);
+  if(t==='tank'){P(2,16+al,2,4,skin);P(2,16+al,1,4,skinS);P(12,16+ar,2,4,skin);P(13,16+ar,1,4,skinS);P(3,15,2,1,skin);P(11,15,2,1,skin);P(6,15,4,1,skin);P(7,16,2,1,skin)}
+  else if(t==='turtleneck'){P(5,14,6,2,shirtH);P(5,15,6,1,shirtS);for(let x=5;x<11;x+=2)P(x,14,1,1,shirt);P(4,21,8,1,shirtS)}
+  else if(t==='flannel'){const d=mix(shirt,-.35);for(const y of[16,19])P(4,y,8,1,shirtS);for(const x of[5,8,11])P(x,15,1,7,shirtS);for(const x of[5,8,11])for(const y of[16,19])P(x,y,1,1,d);
+    P(2,17+al,2,1,shirtS);P(12,17+ar,2,1,shirtS);P(5,15,2,1,d);P(9,15,2,1,d);P(7,16,2,1,skin);P(7,17,1,4,d)}
+  else if(t==='cardigan'){P(6,15,4,7,W);P(7,15,2,1,mix(W,-.06));P(6,15,1,7,mix(W,-.1));P(5,15,1,7,shirtS);P(10,15,1,7,shirtS);P(10,17,1,1,shirtH);P(10,19,1,1,shirtH);P(4,21,8,1,shirtH);P(6,21,4,1,mix(W,-.1))}
+  else if(t==='vest'){P(2,16+al,2,4,W);P(2,16+al,1,4,'#d9d6cc');P(12,16+ar,2,4,W);P(13,16+ar,1,4,'#d9d6cc');P(3,15,1,1,W);P(12,15,1,1,W);P(6,15,4,1,W);P(7,16,2,2,W);P(4,21,8,1,shirtH);for(let x=4;x<12;x+=2)P(x,21,1,1,shirtS)}
+  else if(t==='graphic'){const hc=mix(shirt,.55);P(6,17,1,1,hc);P(9,17,1,1,hc);P(5,18,6,1,hc);P(6,19,4,1,hc);P(7,20,2,1,hc);P(5,17,1,1,hc);P(10,17,1,1,hc);P(6,17,4,0,hc)}   // a heart printed on the front
+
   if(t==='stripes'){for(const y of[16,18,20]){P(4,y,8,1,shirtS);P(2,y+al,2,1,shirtS);P(12,y+ar,2,1,shirtS)}}
   else if(t==='hoodie'){P(4,14,8,1,shirtS);P(3,15,2,1,shirtS);P(11,15,2,1,shirtS);P(6,16,1,3,W);P(9,16,1,3,W);P(5,19,6,2,shirtS);P(5,19,6,1,mix(shirt,-.1))}
   else if(t==='collar'){P(5,15,2,2,W);P(9,15,2,2,W);P(7,16,2,1,shirtS);for(const y of[17,19])P(8,y,1,1,W)}
@@ -1759,14 +1820,27 @@ function topFront(P,L,shirt,shirtS,shirtH,pants,pantsS,al,ar){
   else if(t==='sweater'){P(4,21,8,1,shirtH);P(6,14,4,1,shirtS);P(5,15,6,1,shirtS);P(2,19+al,2,1,shirtH);P(12,19+ar,2,1,shirtH)}
 }
 function topBack(P,L,shirt,shirtS,pants){
-  const t=L.top||'tee';
+  const t=L.top||'tee',skin=L.skin||'#f6d2ad',skinS=mix(skin,-.13),W='#f4f2ec';
+  if(t==='tank'){P(2,16,2,4,skin);P(2,16,1,4,skinS);P(12,16,2,4,skin);P(13,16,1,4,skinS);P(3,15,2,1,skin);P(11,15,2,1,skin);P(5,15,6,1,skin)}
+  else if(t==='turtleneck'){P(5,14,6,2,mix(shirt,.18));P(5,15,6,1,shirtS)}
+  else if(t==='flannel'){for(const y of[16,19])P(4,y,8,1,shirtS);for(const x of[5,8,11])P(x,15,1,7,shirtS);P(5,15,6,1,mix(shirt,-.35))}
+  else if(t==='vest'){P(2,16,2,4,W);P(2,16,1,4,'#d9d6cc');P(12,16,2,4,W);P(13,16,1,4,'#d9d6cc');P(3,15,1,1,W);P(12,15,1,1,W);P(5,15,6,1,W);P(4,21,8,1,mix(shirt,.22))}
+  else if(t==='cardigan'){P(4,21,8,1,mix(shirt,.22));P(5,15,6,1,shirtS)}
+
   if(t==='stripes'){for(const y of[16,18,20])P(4,y,8,1,shirtS)}
   else if(t==='hoodie'){P(4,14,8,3,shirtS);P(5,14,6,1,mix(shirt,-.3))}
   else if(t==='overalls'){P(4,20,8,2,pants);P(5,15,1,5,pants);P(10,15,1,5,pants)}
   else if(t==='collar'){P(5,15,6,1,'#f4f2ec')}
 }
 function topSide(P,L,shirt,shirtS,shirtH,pants){
-  const t=L.top||'tee';
+  const t=L.top||'tee',skin=L.skin||'#f6d2ad',W='#f4f2ec';
+  if(t==='tank'){P(6,15,4,1,skin);P(9,16,1,1,skin)}
+  else if(t==='turtleneck'){P(6,14,4,2,shirtH);P(6,15,4,1,shirtS)}
+  else if(t==='flannel'){for(const y of[16,19])P(5,y,6,1,shirtS);for(const x of[6,9])P(x,15,1,7,shirtS)}
+  else if(t==='cardigan'){P(10,15,1,7,W);P(9,15,1,7,shirtS)}
+  else if(t==='vest'){P(9,15,2,2,W);P(5,21,6,1,shirtH)}
+  else if(t==='graphic'){const hc=mix(shirt,.55);P(9,17,1,2,hc)}
+
   if(t==='stripes'){for(const y of[16,18,20])P(5,y,6,1,shirtS)}
   else if(t==='hoodie'){P(4,14,3,3,shirtS)}
   else if(t==='collar'){P(8,15,3,1,'#f4f2ec')}
@@ -3142,7 +3216,7 @@ function portrait(c){const cv=document.createElement('canvas');cv.width=18;cv.he
 function openWho(){
   const grid=document.getElementById('whoGrid');grid.textContent='';let last=null;try{last=localStorage.getItem('kotoNY.name')}catch(_){}
   for(const c of chars.filter(c=>!c.def.staff).sort((p,q)=>p.def.name.localeCompare(q.def.name))){
-    const bt=document.createElement('button');bt.type='button';bt.append(portrait(c),document.createTextNode(c.def.name));if(c.def.name===last)bt.className='me';
+    const bt=document.createElement('button');bt.type='button';bt.dataset.name=c.def.name;bt.append(portrait(c),document.createTextNode(c.def.name));if(c.def.name===last)bt.className='me';
     bt.addEventListener('click',()=>pickWho(c.def.name));grid.appendChild(bt)}
   {const bt=document.createElement('button');bt.type='button';bt.className='guest'+(last==='~guest'?' me':'');bt.append(guestPortrait(),document.createTextNode('Guest'));   // someone from outside the team
    bt.addEventListener('click',askName);const row=document.getElementById('whoGuestRow');row.textContent='';row.appendChild(bt)}
@@ -3278,11 +3352,13 @@ const PL={me:null,remote:new Map(),ctl:new Set(),keys:[],url:'/api/players',netT
 // ---------- how someone looks: a small set of choices, turned into sprites ----------
 const LOOKS={skin:['#fbe0c4','#f6d2ad','#f2c9a1','#e8b48c','#d9a06e','#c99068','#ab7145','#8a5a3a','#6b4429','#4a2c1a'],
   style:['short','sidepart','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','long','wavy','mullet','ponytail','pigtails','bun','braids','bald'],
-  top:['tee','stripes','hoodie','collar','sweater','jacket','overalls'],bottom:['pants','shorts','skirt']};
+  top:['tee','graphic','stripes','tank','collar','flannel','hoodie','sweater','turtleneck','vest','cardigan','jacket','overalls'],bottom:['pants','joggers','shorts','skirt','longskirt']};
 const NICE={short:'Short',sidepart:'Side part',pixie:'Pixie',spiky:'Spiky',buzz:'Buzz',mohawk:'Mohawk',curly:'Curly',curlylong:'Long curls',afro:'Afro',bob:'Bob',shoulder:'Shoulder',long:'Long',wavy:'Wavy',mullet:'Mullet',ponytail:'Ponytail',pigtails:'Pigtails',bun:'Bun',braids:'Braids',bald:'Bald',
-  tee:'T-shirt',stripes:'Stripes',hoodie:'Hoodie',collar:'Collared',sweater:'Sweater',jacket:'Jacket',overalls:'Overalls',pants:'Pants',shorts:'Shorts',skirt:'Skirt'};
+  tee:'T-shirt',graphic:'Heart tee',stripes:'Stripes',tank:'Tank top',collar:'Collared',flannel:'Flannel',hoodie:'Hoodie',sweater:'Sweater',turtleneck:'Turtleneck',vest:'Sweater vest',cardigan:'Cardigan',jacket:'Jacket',overalls:'Overalls',pants:'Pants',joggers:'Joggers',shorts:'Shorts',skirt:'Skirt',longskirt:'Long skirt'};
 const ACCS=[['None',{}],['Glasses',{glasses:1}],['Sunglasses',{sunglasses:1}],['Earrings',{earrings:1}],['Glasses + earrings',{glasses:1,earrings:1}],
-  ['Beanie',{hat:1,hatStyle:'beanie'}],['Cap',{hat:1,hatStyle:'cap'}],['Beanie + glasses',{hat:1,hatStyle:'beanie',glasses:1}],['Cap + sunglasses',{hat:1,hatStyle:'cap',sunglasses:1}]];
+  ['Beanie',{hat:1,hatStyle:'beanie'}],['Cap',{hat:1,hatStyle:'cap'}],['Beanie + glasses',{hat:1,hatStyle:'beanie',glasses:1}],['Cap + sunglasses',{hat:1,hatStyle:'cap',sunglasses:1}],
+  ['Bucket hat',{hat:1,hatStyle:'bucket'}],['Headphones',{headphones:1}],['Hair bow',{bow:1}],['Headband',{headband:1}],['Flower clip',{flower:1}],['Scarf',{scarf:1}],['Necklace',{necklace:1}],
+  ['Glasses + scarf',{glasses:1,scarf:1}],['Headphones + glasses',{headphones:1,glasses:1}],['Bow + earrings',{bow:1,earrings:1}],['Flower + necklace',{flower:1,necklace:1}]];
 const FACES=[['None',{}],['Beard',{beard:1}],['Mustache',{mustache:1}],['Beard + mustache',{beard:1,mustache:1}]];   // facial hair, its own choice
 const OLD_ACC=[[0,0],[1,0],[2,0],[3,0],[0,1],[0,2],[1,1],[2,1],[1,2],[4,0],[5,0],[6,0],[7,0],[8,0],[6,1]];   // looks saved before facial hair had its own row
 const HEX=/^#[0-9a-f]{6}$/i;
@@ -3290,10 +3366,10 @@ function cleanLook(l){l=l||{};const o={};for(const k of['skin','hair','eyes','sh
   o.style=LOOKS.style.includes(l.style)?l.style:'short';o.top=LOOKS.top.includes(l.top)?l.top:'tee';o.bottom=LOOKS.bottom.includes(l.bottom)?l.bottom:'pants';
   let acc=l.acc|0,face=l.face|0;if(l.v!==2){const m=OLD_ACC[acc]||[0,0];acc=m[0];face=m[1]}
   o.acc=Math.max(0,Math.min(ACCS.length-1,acc));o.face=Math.max(0,Math.min(FACES.length-1,face));o.v=2;if(HEX.test(l.streak))o.streak=l.streak;return o}
-function spriteLook(l){const f=Object.assign({},ACCS[l.acc|0]?ACCS[l.acc|0][1]:{},FACES[l.face|0]?FACES[l.face|0][1]:{});const o=Object.assign({},l,{glasses:!!f.glasses,sunglasses:!!f.sunglasses,earrings:!!f.earrings,beard:!!f.beard,mustache:!!f.mustache});
+function spriteLook(l){const f=Object.assign({},ACCS[l.acc|0]?ACCS[l.acc|0][1]:{},FACES[l.face|0]?FACES[l.face|0][1]:{});const o=Object.assign({},l,{glasses:!!f.glasses,sunglasses:!!f.sunglasses,earrings:!!f.earrings,beard:!!f.beard,mustache:!!f.mustache,headphones:!!f.headphones,bow:!!f.bow,headband:!!f.headband,flower:!!f.flower,scarf:!!f.scarf,necklace:!!f.necklace});
   if(f.hat){o.hat=mix(l.shirt,-.2);o.hatStyle=f.hatStyle}else{o.hat=null;o.hatStyle=null}return o}
 function modelFromDef(L){                                          // a teammate's current look, in the maker's terms
-  const has=k=>!!L[k],acc=ACCS.findIndex(([,f])=>['glasses','sunglasses','earrings'].every(k=>!!f[k]===has(k))&&!f.hat),face=FACES.findIndex(([,f])=>['beard','mustache'].every(k=>!!f[k]===has(k)));
+  const has=k=>!!L[k],acc=ACCS.findIndex(([,f])=>['glasses','sunglasses','earrings','headphones','bow','headband','flower','scarf','necklace'].every(k=>!!f[k]===has(k))&&!f.hat),face=FACES.findIndex(([,f])=>['beard','mustache'].every(k=>!!f[k]===has(k)));
   return cleanLook({v:2,skin:L.skin,hair:L.hair,eyes:L.eyes,shirt:L.shirt,pants:L.pants,style:L.style,top:L.top,bottom:L.bottom,acc:acc<0?0:acc,face:face<0?0:face,streak:L.streak})}
 let MYLOOK=cleanLook({});try{const l=JSON.parse(localStorage.getItem('kotoNY.look')||'null');if(l)MYLOOK=cleanLook(l)}catch(_){}
 const lookSprites=l=>{const k=JSON.stringify(l);if(!PL.sprCache.has(k))PL.sprCache.set(k,makeSprites(spriteLook(l)));return PL.sprCache.get(k)};
@@ -3367,6 +3443,7 @@ const NO_BEARD=new Set(['Mo']);                                     // people wh
 function applyTeamLook(c,l){                                       // a teammate's new look: their sprite, and their colour in Who's doing what
   const k=JSON.stringify(l);if(c.lookKey===k)return;c.lookKey=k;
   c.def.look=Object.assign({},spriteLook(l),{top:l.top,bottom:l.bottom});if(NO_BEARD.has(c.def.name)){c.def.look.beard=false;c.def.look.mustache=false}c.spr=makeSprites(c.def.look);
+  {const bt=document.querySelector('#whoGrid button[data-name="'+c.def.name+'"]'),old=bt&&bt.querySelector('canvas');if(old)old.replaceWith(portrait(c))}   // their picture in the "Who is visiting?" grid too
 }
 async function saveTeamLook(name,l){try{const m=JSON.parse(localStorage.getItem('kotoNY.looks')||'{}');m[name]=l;localStorage.setItem('kotoNY.looks',JSON.stringify(m))}catch(_){}try{await fetch('/api/looks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,look:l,id:ON.id})})}catch(_){}}
 async function pullLooks(){if(location.protocol==='file:')return;try{const r=await fetch('/api/looks',{cache:'no-store'});const j=await r.json();
@@ -3461,7 +3538,7 @@ function puppetLabels(fs,hits,placed){
    if(nearS){const[fx,fy]=charXY(me);sb.style.left=Math.round(sx(fx)/dpr)+'px';sb.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(sb.hidden===!!nearS)sb.hidden=!nearS;
    const bb=document.getElementById('boardBtn'),nearB=me&&!me.mv&&document.getElementById('who').hidden&&document.getElementById('bulletin').hidden&&me.x>7&&me.x<12.5&&me.y>7&&me.y<9.2;   // in front of the corkboard
    if(nearB){const[fx,fy]=charXY(me);bb.style.left=Math.round(sx(fx)/dpr)+'px';bb.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(bb.hidden===!!nearB)bb.hidden=!nearB;
-   const mb=document.getElementById('mailBtn'),nearM=me&&!me.mv&&document.getElementById('who').hidden&&document.getElementById('suggest').hidden&&Math.hypot(me.x-27.5,me.y-4.5)<1.6;   // next to the suggestion box
+   const mb=document.getElementById('mailBtn'),nearM=me&&!me.mv&&document.getElementById('who').hidden&&document.getElementById('suggest').hidden&&Math.hypot(me.x-24.5,me.y-7.5)<1.2;   // in front of the suggestion box on the wall
    if(nearM){const[fx,fy]=charXY(me);mb.style.left=Math.round(sx(fx)/dpr)+'px';mb.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(mb.hidden===!!nearM)mb.hidden=!nearM}
   if(me&&me.char&&me.char.desk&&!me.home&&!offHours(me.char)){     // an arrow over your desk pointing at your chair
     const d=me.char.desk,X=sx(d.i*TS+8-WX0),Y=sy(d.j*TS-22-OZ-WY0),a=fs*.95,bob=Math.sin(performance.now()/260)*fs*.18;   // a bobbing yellow arrow over your chair
@@ -3664,7 +3741,7 @@ function frame(t){
 resync();                                                          // work out the office as it is right now
 for(const c of chars){c.rx=c.x;c.ry=c.y}
 hud();resize();requestAnimationFrame(frame);
-window.__office={SQ,NP,PIX,pixSvg,chatters,MM,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
+window.__office={makeSprites,spriteLook,cleanLook,SQ,NP,PIX,pixSvg,chatters,MM,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
 })();
 </script>
 </body>
