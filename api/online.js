@@ -46,7 +46,8 @@ export default async function handler(req, res) {
       else if (n.startsWith('~')) { if (!visitors.includes(n.slice(1))) visitors.push(n.slice(1)); }
       else if (!people.includes(n)) people.push(n);
     }
-    return res.status(200).json({ ok: true, people, visitors, guests: guests.size });
+    const walking = (await redis(['HLEN', 'koto:players'])) || 0;             // so quiet viewers know whether to look for people walking around
+    return res.status(200).json({ ok: true, people, visitors, guests: guests.size, walking });
   } catch (err) {
     return res.status(500).json({ ok: false, error: String(err.message || err) });
   }
