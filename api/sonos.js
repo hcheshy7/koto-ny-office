@@ -1,6 +1,7 @@
 // The Sonos queue for the Koto NY office.
 // GET  /api/sonos                                  -> { ok:true, queue:[{ slot, title, artist, by, t }] }
 // POST /api/sonos  { id, title, artist?, by }      -> { ok:true, queue }
+// PUT  /api/sonos  { from:'now'|'next', list:[{ title, artist, by, year }] } -> { ok:true, queue }   (replaces the line-up; for removing or reordering any song)
 // DELETE /api/sonos { slot, t }                   -> { ok:true, queue }   (removes an upcoming song; later songs move up)
 // A new song starts every 3.5 minutes (one "slot"). A song someone adds takes the next free slot,
 // so it plays straight after whatever is on now, or after the songs people added before it.
@@ -55,6 +56,23 @@ export default async function handler(req, res) {
         return res.status(200).json({ ok: true, queue: q });
       } finally { if (got) await redis(['DEL', KEY + ':lock']); }
     }
+    if (req.method === 'PUT') {                                      // the whole line-up from now (or from the next song) on, after someone removed or reordered songs
+      let body = req.body;
+      if (typeof body === 'string') { try { body = JSON.parse(body); } catch (_) { body = {}; } }
+      body = body || {};
+      const fromNow = body.from === 'now', list = Array.isArray(body.list) ? body.list.slice(0, MAX) : null;
+      if (!list) return res.status(400).json({ ok: false, error: 'No songs sent.' });
+      const songs = list.map(x => ({ title: clean(x && x.title, 60), artist: clean(x && x.artist, 40), by: clean(x && x.by, 20), year: Math.max(0, Math.min(2100, (x && x.year) | 0)) })).filter(x => x.title);
+      let got = false;
+      for (let i = 0; i < 10 && !got; i++) { got = await redis(['SET', KEY + ':lock', '1', 'NX', 'PX', 3000]); if (!got) await new Promise(r => setTimeout(r, 120)); }
+      try {
+        const now = Date.now(), cur = Math.floor(now / SLOT), start = fromNow ? cur : cur + 1;
+        const q = (await load(now)).filter(s => s.slot < start);
+        songs.forEach((x, k) => q.push(Object.assign({ slot: start + k, t: now + k }, x)));
+        await redis(['SET', KEY, JSON.stringify(q), 'PX', 864e5]);
+        return res.status(200).json({ ok: true, queue: q });
+      } finally { if (got) await redis(['DEL', KEY + ':lock']); }
+    }
     if (req.method === 'DELETE') {                                    // take a song out of the queue; the songs after it move up
       let body = req.body;
       if (typeof body === 'string') { try { body = JSON.parse(body); } catch (_) { body = {}; } }
@@ -75,7 +93,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ ok: true, queue: q });
       } finally { if (got) await redis(['DEL', KEY + ':lock']); }
     }
-    res.setHeader('Allow', 'GET, POST, DELETE');
+    res.setHeader('Allow', 'GET, POST, PUT, DELETE');
     return res.status(405).json({ ok: false, error: 'Method not allowed.' });
   } catch (err) {
     return res.status(500).json({ ok: false, error: String(err.message || err) });

@@ -1,6 +1,7 @@
 // The office bulletin board: sticky notes with little doodles, shared by everyone.
 // GET    /api/bulletin                                        -> { ok:true, notes:[{ nid, by, uid, color, img, x, y, r, t }] }
 // POST   /api/bulletin { uid, by, color, img, x, y, r }        -> { ok:true, notes }   (img: a small PNG doodle as a data URL)
+// PATCH  /api/bulletin { nid, uid, x, y }                  -> { ok:true, notes }   (move a note; anyone can)
 // DELETE /api/bulletin { nid, uid }                           -> { ok:true, notes }   (only the person who pinned a note can take it down)
 // Keeps the newest 40 notes. Uses the same Upstash Redis storage as the other functions.
 
@@ -46,12 +47,19 @@ export default async function handler(req, res) {
       const notes = await locked(async () => { const q = await load(); q.push(note); const out = q.slice(-MAX); await redis(['SET', KEY, JSON.stringify(out)]); return out; });
       return res.status(200).json({ ok: true, notes });
     }
+    if (req.method === 'PATCH') {                                    // anyone can move a note around the board; it comes to the front
+      const nid = String(body.nid || '').slice(0, 20), x = num(body.x, 0, .86, null), y = num(body.y, 0, .76, null);
+      if (x === null || y === null) return res.status(400).json({ ok: false, error: 'Where to?' });
+      const notes = await locked(async () => { const q = await load(); const k = q.findIndex(n => n.nid === nid); if (k < 0) return q;
+        const n = q.splice(k, 1)[0]; n.x = x; n.y = y; q.push(n); await redis(['SET', KEY, JSON.stringify(q)]); return q; });
+      return res.status(200).json({ ok: true, notes });
+    }
     if (req.method === 'DELETE') {
       const nid = String(body.nid || '').slice(0, 20);
       const notes = await locked(async () => { const q = await load(); const out = q.filter(n => !(n.nid === nid && n.uid === uid)); if (out.length !== q.length) await redis(['SET', KEY, JSON.stringify(out)]); return out; });
       return res.status(200).json({ ok: true, notes });
     }
-    res.setHeader('Allow', 'GET, POST, DELETE');
+    res.setHeader('Allow', 'GET, POST, PATCH, DELETE');
     return res.status(405).json({ ok: false, error: 'Method not allowed.' });
   } catch (err) {
     return res.status(500).json({ ok: false, error: String(err.message || err) });
