@@ -12,7 +12,9 @@ Everyone can **drag the boxes** (the clock and weather column, chat, Who's doing
 
 **Walking around:** after picking their character, anyone can press an arrow key (or use the on-screen pad on a phone) to take over their character and walk around. Stopping on a chair sits in it. A sign over their desk says "Sit here to go back to work!", and sitting back at their own desk hands the character back to its normal day. Guests design a character in a farm-game style character screen (skin, 19 haircuts, 7 shirt styles, pants, shorts or a skirt, 15 accessory choices, and colour sliders for eyes, hair, shirt and pants) and appear at the lift, ready to walk around. They have no tasks and aren't added to Who's doing what. Everyone sees everyone else walking. Anyone walking around can stand at the mirror in the bathroom hall and click **Change my appearance** to restyle their character with the same screen. A teammate's new look, including their shirt colour in Who's doing what, is saved for everyone and stays that way until they change it again. Anyone walking around shows a little walking man next to their name in Who's doing what. After hours, picking a character starts walking straight away, and the character does nothing on its own. When the view is zoomed in, it follows the person walking.
 
-**The Sonos queue:** standing next to either speaker shows **Add to the Sonos queue**. Type a song (and the artist, if you like) and it plays next, or after any songs other people added before it. Every slot nobody fills plays the office shuffle. Click the **Now playing** box to see what's on now and the next five songs.
+**The Sonos queue:** standing next to either speaker shows **Add to the Sonos queue**. Type a song (and the artist, if you like) and it plays next, or after any songs other people added before it. Every slot nobody fills plays the office shuffle. Click the **Now playing** box to see what's on now and the next five songs, and click the cross next to a song someone added to take it out.
+
+**The bulletin board:** standing in front of the corkboard behind the bookshelves shows **Add to bulletin**. It opens the board, where anyone can pin a coloured sticky note with a little doodle on it. People can take down their own notes. The newest notes also show up as tiny squares on the corkboard in the office.
 
 ## What's in here
 
@@ -21,6 +23,7 @@ Everyone can **drag the boxes** (the clock and weather column, chat, Who's doing
 - `api/chat.js`: a small function that keeps the last 200 chat messages. Each person can send at most one message every 1.5 seconds.
 - `api/players.js`: a small function that shares the positions of everyone walking around. People send updates about once a second while they move.
 - `api/looks.js`: a small function that saves teammates' new looks from the bathroom mirror.
+- `api/bulletin.js`: a small function that keeps the sticky notes on the bulletin board (the newest 40).
 - `api/sonos.js`: a small function that keeps the shared Sonos queue. Each person can add one song every 5 seconds, and the queue holds up to 30 songs.
 - `api/online.js`: a small function that keeps track of who has the site open. Each open copy checks in every 20 seconds, and anyone quiet for a minute drops off the list.
 - `package.json`: tells Vercel the function uses modern JavaScript. There are no packages to install.
