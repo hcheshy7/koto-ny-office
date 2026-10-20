@@ -6,15 +6,19 @@ There is also a shared task box, where people add tasks for their character. It 
 
 When someone opens the site, a **"Who is visiting?"** window asks them to pick their character. Someone from outside the team can pick **Guest** and type their name. The **Online now** panel in the bottom right shows who has the site open, and clicking a name follows that person around the office.
 
-The **Chat** box, just above "Who's doing what" on the left, lets everyone online talk to each other. It starts closed; click it to open, then press Enter or Send to post. When a teammate sends a message, their character also says it in a speech bubble in the office for a few seconds.
+The **Chat** box, just above "Who's doing what" on the left, lets everyone online talk to each other. It has three views, switched with the buttons in its header: hidden (the default), just the message box, or the message box with past messages. Press Enter or Send to post. When a teammate sends a message, their character also says it in a speech bubble in the office for a few seconds.
 
 Everyone can **drag the boxes** (the clock and weather column, chat, Who's doing what, Online now, and the key hints) to any spot along the edges of the screen. They always snap to the nearest edge and stay clear of the sign and the welcome banner. Each person's layout is remembered in their own browser.
+
+**Walking around:** after picking their character, anyone can press an arrow key (or use the on-screen pad on a phone) to take over their character and walk around. Stopping on a chair sits in it. A sign over their desk says "Sit here to go back to work!", and sitting back at their own desk hands the character back to its normal day. Guests design a character in a farm-game style character screen (skin, 19 haircuts, 7 shirt styles, pants, shorts or a skirt, 15 accessory choices, and colour sliders for eyes, hair, shirt and pants) and appear at the lift, ready to walk around. They have no tasks and aren't added to Who's doing what. Everyone sees everyone else walking. Anyone walking around can stand at the mirror in the bathroom hall and click **Change my appearance** to restyle their character with the same screen. A teammate's new look, including their shirt colour in Who's doing what, is saved for everyone and stays that way until they change it again.
 
 ## What's in here
 
 - `index.html`: the whole site.
 - `api/tasks.js`: a small function that saves and loads the shared tasks.
 - `api/chat.js`: a small function that keeps the last 200 chat messages. Each person can send at most one message every 1.5 seconds.
+- `api/players.js`: a small function that shares the positions of everyone walking around. People send updates about once a second while they move.
+- `api/looks.js`: a small function that saves teammates' new looks from the bathroom mirror.
 - `api/online.js`: a small function that keeps track of who has the site open. Each open copy checks in every 20 seconds, and anyone quiet for a minute drops off the list.
 - `package.json`: tells Vercel the function uses modern JavaScript. There are no packages to install.
 
