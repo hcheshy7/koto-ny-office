@@ -37,7 +37,7 @@
   #roster h2{cursor:pointer}
   #roster.shut ul{display:none}
   #roster.shut h2{border-bottom:0;margin:0;padding:0}
-  #roster ul{--rh:clamp(8px,calc((100vh - 118px)/var(--n,35)),12px);list-style:none;margin:0;padding:0;font-size:calc(var(--rh)*1.07);line-height:1}   /* one column; rows shrink on short screens so everyone still fits */
+  #roster ul{--rh:clamp(7px,calc((100vh - 230px)/var(--n,35)),12px);list-style:none;margin:0;padding:0;font-size:calc(var(--rh)*1.07);line-height:1}   /* one column; rows shrink on short screens so everyone still fits */
   #roster li{display:flex;gap:4px;align-items:center;white-space:nowrap;cursor:pointer;padding:0 2px;border-radius:3px;height:var(--rh);overflow:hidden}
   #roster li:hover,#roster li.on{background:var(--paper2)}
   #roster .dot{width:7px;height:7px;flex:none;border:1px solid var(--edge2)}
@@ -45,6 +45,7 @@
   #roster .ic{font-size:.75em;width:1.1em;text-align:center;flex:none}
   #roster .tx{font-size:.94em;opacity:.72}
   #roster li.walk .tx,#roster li.walk .ic{opacity:.45}
+  #roster li.ctl .tx{font-weight:700;opacity:1}
   #roster li.away{opacity:.42}
   #wxbox{margin:0 0 0 auto;width:max-content;max-width:250px;background:var(--paper);border:3px solid var(--edge2);border-radius:4px;box-shadow:inset 0 0 0 2px #ffeec2,inset 0 0 0 4px var(--edge),3px 4px 0 rgba(30,10,5,.4);padding:4px 10px 5px;text-align:right}
   #title #wxbox #wx,#title #wxbox #wxsub{color:var(--ink);text-shadow:1px 1px 0 rgba(255,238,194,.9)}#title #wxbox #wxsub{opacity:.8}
@@ -173,9 +174,9 @@
   @media (max-width:700px){#maker{grid-template-columns:1fr;justify-items:center;gap:8px}#maker .mkR{width:100%}#maker .mkL{display:grid;grid-template-columns:auto auto;gap:4px 10px;align-items:center}
     #maker .mkPf{grid-row:span 5}#maker .mkFrame{width:72px;height:104px}#mkPrev{width:45px;height:80px}#maker .mkDice{left:-30px;font-size:20px}#maker .mkTurn{gap:30px}
     #maker .mkVal{width:84px}#maker .mkVal b{font-size:15px}#maker .mkVal span{font-size:12px}#maker .mkArrow{width:28px;height:22px}#maker .mkCol{grid-template-columns:78px 1fr}#maker .mkColL{font-size:14px}}
-  #walkTip{position:fixed;left:50%;transform:translateX(-50%);top:72px;z-index:6;font-size:14px;padding:9px 14px 9px;pointer-events:none;white-space:nowrap}
+  #walkTip{position:fixed;right:14px;bottom:70px;z-index:6;font-size:14px;padding:9px 14px 9px;pointer-events:none;white-space:nowrap}
   #walkTip[hidden]{display:none}
-  @media (max-width:700px){#walkTip{top:auto;bottom:220px;font-size:12px;padding:9px 12px}}
+  @media (max-width:700px){#walkTip{font-size:12px;padding:9px 12px}}
   #whoName input{font:inherit;font-size:24px;color:var(--ink);background:#fff6dc;border:3px solid var(--edge2);border-radius:4px;padding:4px 10px;width:min(320px,80vw);text-align:center}
   #whoName input:focus-visible{outline:2px solid #2f6fe0;outline-offset:2px}
   #whoName .row{display:flex;gap:10px}
@@ -336,27 +337,85 @@
     box-shadow:inset 0 0 0 3px #c96f1c,inset 0 0 0 5px #ffd79a,inset 0 -6px 0 2px #e8962e;font-size:22px;text-shadow:1px 1px 0 #1f5a14;color:#45a832}
   #whoBox.mk #whoGo:active{transform:translateY(1px)}
   #whoBox.mk{padding-bottom:18px}
+
+  /* ===== cosy farm-game look: soft wooden frames, cream paper, a name tag with a tiny icon on every box ===== */
+  :root{--cream:#fff4d8;--cream2:#ffe6b0;--wood:#e39a4b;--woodD:#b8642a;--bark:#5a2408}
+  .panel,#title #svcol,#title #wxbox,#title #np{background:var(--cream) radial-gradient(rgba(214,128,40,.13) 1px,transparent 1.3px) 0 0/7px 7px;
+    border:3px solid var(--bark);border-radius:12px;color:var(--ink);text-shadow:none;
+    box-shadow:inset 0 0 0 3px var(--wood),inset 0 0 0 5px var(--woodD),inset 0 0 0 6px #ffe9bd,0 4px 0 #3a1606,0 7px 12px rgba(20,8,2,.28)}
+  #title{background:none!important;border:0!important;box-shadow:none!important;width:244px}
+  /* name tags */
+  .h,#roster h2 .h{display:inline-flex!important;align-items:center;gap:6px;width:auto;background:#ffcf73;color:var(--ink);border:2px solid var(--bark)!important;border-radius:999px;
+    padding:1px 11px 1px 5px!important;margin:0 0 6px!important;font-size:16px!important;line-height:17px;letter-spacing:.3px;opacity:1!important;text-shadow:none;white-space:nowrap;box-shadow:0 2px 0 rgba(58,22,6,.35)}
+  .pi{display:inline-flex;font-style:normal;line-height:0}.pi svg{display:block}
+  /* top right: clock, weather and music as one tidy stack */
+  #title #svbox{margin:0 0 8px}#title #wxbox,#title #np{margin:0 0 8px;padding:10px 13px 11px}
+  #title #svcol{padding:9px 6px 9px}
+  #title #wx{font-size:17px!important}#title #wxsub{font-size:12px!important;opacity:.75}
+  #title #npT{font-size:18px!important;margin-top:1px}#title #npA{font-size:14px!important;opacity:.85}#title #npB{font-size:12px!important;opacity:.65;margin-top:3px}
+  #icons{border-color:var(--cream2)!important;border-style:dotted!important}
+  #np:hover{filter:none;transform:translateY(-1px)}#np{transition:transform .12s}
+  /* bottom left: chat over Who's doing what, the same width */
+  #chat,#chat.shut,#roster{width:300px;box-sizing:border-box}
+  #roster h2{display:flex;align-items:center;gap:8px;border:0!important;margin:0!important;padding:0!important;font-size:inherit}
+  #roster:not(.shut) h2{margin-bottom:6px!important}#roster h2 .h{margin:0!important}
+  #count{font-size:13px;opacity:.7;white-space:nowrap}
+  #roster li:hover,#roster li.on{background:var(--cream2)}
+  #roster .dot{border-radius:2px}
+  #chatHead .ttl{background:#ffcf73;color:var(--ink);border:2px solid var(--bark);border-radius:999px;padding:1px 11px 1px 4px;font-size:16px;text-shadow:none;box-shadow:0 2px 0 rgba(58,22,6,.35)}
+  #chatHead .ttl .chatIco{width:22px;height:17px}
+  #chat:not(.shut) #chatHead{border-bottom:2px dotted var(--wood)}
+  #chatLog,#chatIn,#saForm input,#whoName input{background:#fffaf0!important;border:2px solid var(--wood)!important;border-radius:8px!important}
+  #chatForm button,#saGo,#whoGo{background:#5fa84e!important;border:2px solid #2d5f22!important;border-radius:8px!important;color:#fff!important;text-shadow:1px 1px 0 #2d5f22!important;box-shadow:inset 0 -3px 0 #3f8a34}
+  #chatForm button:hover,#saGo:hover,#whoGo:hover{filter:brightness(1.07)}
+  #saCancel,#whoBack{border-radius:8px!important;border-color:var(--woodD)!important;background:var(--cream2)!important}
+  #chatHead .views{border-radius:8px}
+  /* bottom right: who's online over the key hints, the same width */
+  #online,#help,#walkTip{width:244px;box-sizing:border-box;min-width:0;max-width:none}
+  #help{text-align:center;font-size:15px;white-space:nowrap;padding:10px 8px!important}
+  #help b{background:var(--cream2);border:2px solid var(--woodD);border-radius:5px;padding:0 4px;font-weight:400}
+  #walkTip{text-align:center;white-space:normal;font-size:14px;line-height:1.1}
+  #online li::before{width:8px;height:8px}
+  #onGuests:empty{display:none}#online ul{margin:0}
+  #online li:hover{background:var(--cream2)}
+  /* welcome banner and pop-ups */
+  #welcome{font-size:26px;padding:9px 24px 10px!important;border-radius:14px}
+  #sonosQ,#sonosAdd{border-radius:14px}
+  #sqList li{border-top:2px dotted var(--wood)!important}#sqList li:first-child{border-top:0!important}
+  #sonosBtn,#mirrorBtn{background:var(--cream);border:3px solid var(--bark);border-radius:999px;box-shadow:inset 0 0 0 2px var(--wood),0 3px 0 #3a1606;padding:4px 14px 5px}
+  #sonosBtn:hover,#mirrorBtn:hover{background:#fffaf0}
+  #pad button{background:var(--cream);border-radius:12px;box-shadow:inset 0 0 0 2px var(--wood),0 3px 0 #3a1606}
+  #whoBox:not(.mk){border-radius:16px}
+  #whoGrid button,#whoGuestRow button{border-radius:10px;background:#fffaf0;border-color:var(--wood)}
+  @media (max-width:700px){
+    #title{width:160px}#title #wxbox,#title #np{padding:8px 11px 9px}#title #npT{font-size:15px!important}
+    .h,#roster h2 .h{font-size:12px!important;padding:0 8px 0 4px!important}
+    #chat{width:calc(100vw - 16px)}#chat.shut,#roster{width:180px}#roster:not(.shut) #count{display:none}
+    #roster ul{--rh:clamp(7px,calc((100vh - 215px)/var(--n,35)),12px)}
+    #online,#help,#walkTip{width:auto;min-width:0}#online{max-width:180px}#help{font-size:12px}
+    #welcome{font-size:16px}
+  }
 </style>
 </head>
 <body>
 <canvas id="view"></canvas>
 <h1 id="name"></h1>
-<div id="title" class="panel"><div id="svbox"><canvas id="dial" width="44" height="26"></canvas><div id="svcol"><div id="clock"></div><div id="icons"><span id="wxic"></span><span id="season"></span></div><div id="time"></div></div></div><div id="wxbox"><div class="h">Weather</div><div id="wx"></div><div id="wxsub"></div></div><div id="np"><div class="h">Now playing</div><div id="npT"></div><div id="npA"></div><div id="npB"></div></div></div>
-<div id="roster" class="panel shut"><h2>Who's doing what <span id="count"></span></h2><ul id="list"></ul></div>
+<div id="title" class="panel"><div id="svbox"><canvas id="dial" width="44" height="26"></canvas><div id="svcol"><div id="clock"></div><div id="icons"><span id="wxic"></span><span id="season"></span></div><div id="time"></div></div></div><div id="wxbox"><div class="h"><i class="pi" data-ic="wxtag"></i>Weather</div><div id="wx"></div><div id="wxsub"></div></div><div id="np"><div class="h"><i class="pi" data-ic="note"></i>Now playing</div><div id="npT"></div><div id="npA"></div><div id="npB"></div></div></div>
+<div id="roster" class="panel shut"><h2><span class="h"><i class="pi" data-ic="list"></i>Who's doing what</span><span id="count"></span></h2><ul id="list"></ul></div>
 <form id="tasks" class="panel" hidden autocomplete="off"><input id="tName" list="tNames" placeholder="Your name" aria-label="Your name" maxlength="20"><datalist id="tNames"></datalist><input id="tNew" placeholder="Add tasks for your character, e.g. sketching posters, calling the printer" aria-label="Add tasks for your character" maxlength="200"><button id="tSave" type="submit">Add</button><div id="tList"></div><div id="tMsg" role="status"></div></form>
 <div id="who" hidden role="dialog" aria-modal="true" aria-labelledby="whoT"><div id="whoBox" class="panel"><h2 id="whoT">Who is visiting?</h2><div id="whoGrid"></div><div id="whoGuestRow"></div><form id="whoName" hidden autocomplete="off"><label for="whoIn">What is your name?</label><input id="whoIn" maxlength="20" placeholder="Your name" required><div id="maker"></div><div class="row"><button type="button" id="whoBack">← Back</button><button type="submit" id="whoGo">Join</button></div></form></div></div>
 <div id="welcome" class="panel" hidden></div>
 <div id="walkTip" class="panel" hidden></div>
 <button id="mirrorBtn" type="button" hidden>Change my appearance</button>
 <button id="sonosBtn" class="popBtn" type="button" hidden>Add to the Sonos queue</button>
-<div id="sonosAdd" class="panel" hidden role="dialog" aria-labelledby="saT"><h3 id="saT">Add to the Sonos queue</h3><form id="saForm" autocomplete="off">
+<div id="sonosAdd" class="panel" hidden role="dialog" aria-labelledby="saT"><h3 id="saT"><span class="h"><i class="pi" data-ic="note"></i>Add to the Sonos queue</span></h3><form id="saForm" autocomplete="off">
 <label>Song<input id="saSong" maxlength="60" required></label><label>Artist<input id="saArtist" maxlength="40"></label>
 <div class="saRow"><button type="button" id="saCancel">Cancel</button><button type="submit" id="saGo">Add to queue</button></div><div id="saMsg" role="status"></div></form></div>
-<div id="sonosQ" class="panel" hidden role="dialog" aria-labelledby="sqT"><div class="sqHead"><h3 id="sqT">Up next on the Sonos</h3><button type="button" id="sqX" aria-label="Close">×</button></div><ol id="sqList"></ol></div>
+<div id="sonosQ" class="panel" hidden role="dialog" aria-labelledby="sqT"><div class="sqHead"><h3 id="sqT"><span class="h"><i class="pi" data-ic="note"></i>Up next on the Sonos</span></h3><button type="button" id="sqX" aria-label="Close">×</button></div><ol id="sqList"></ol></div>
 <div id="pad" aria-label="Walk around"><button class="u" data-k="ArrowUp" aria-label="Up">▲</button><button class="l" data-k="ArrowLeft" aria-label="Left">◀</button><button class="r" data-k="ArrowRight" aria-label="Right">▶</button><button class="d" data-k="ArrowDown" aria-label="Down">▼</button></div>
 <div id="chat" class="panel shut" hidden><div id="chatHead"><span class="ttl"><svg class="chatIco" viewBox="0 0 16 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="12" height="1" fill="#5a2408"/><rect x="1" y="1" width="1" height="1" fill="#5a2408"/><rect x="2" y="1" width="3" height="1" fill="#fff0a0"/><rect x="5" y="1" width="9" height="1" fill="#ffd23f"/><rect x="14" y="1" width="1" height="1" fill="#5a2408"/><rect x="0" y="2" width="1" height="1" fill="#5a2408"/><rect x="1" y="2" width="2" height="1" fill="#fff0a0"/><rect x="3" y="2" width="12" height="1" fill="#ffd23f"/><rect x="15" y="2" width="1" height="1" fill="#5a2408"/><rect x="0" y="3" width="1" height="1" fill="#5a2408"/><rect x="1" y="3" width="1" height="1" fill="#fff0a0"/><rect x="2" y="3" width="2" height="1" fill="#ffd23f"/><rect x="4" y="3" width="1" height="1" fill="#2a0f05"/><rect x="5" y="3" width="1" height="1" fill="#2a0f05"/><rect x="6" y="3" width="4" height="1" fill="#ffd23f"/><rect x="10" y="3" width="1" height="1" fill="#2a0f05"/><rect x="11" y="3" width="1" height="1" fill="#2a0f05"/><rect x="12" y="3" width="3" height="1" fill="#ffd23f"/><rect x="15" y="3" width="1" height="1" fill="#5a2408"/><rect x="0" y="4" width="1" height="1" fill="#5a2408"/><rect x="1" y="4" width="3" height="1" fill="#ffd23f"/><rect x="4" y="4" width="2" height="1" fill="#2a0f05"/><rect x="6" y="4" width="4" height="1" fill="#ffd23f"/><rect x="10" y="4" width="2" height="1" fill="#2a0f05"/><rect x="12" y="4" width="3" height="1" fill="#ffd23f"/><rect x="15" y="4" width="1" height="1" fill="#5a2408"/><rect x="0" y="5" width="1" height="1" fill="#5a2408"/><rect x="1" y="5" width="1" height="1" fill="#ffd23f"/><rect x="2" y="5" width="2" height="1" fill="#ffd23f"/><rect x="4" y="5" width="8" height="1" fill="#ffd23f"/><rect x="12" y="5" width="2" height="1" fill="#ffd23f"/><rect x="14" y="5" width="1" height="1" fill="#ffd23f"/><rect x="15" y="5" width="1" height="1" fill="#5a2408"/><rect x="0" y="6" width="1" height="1" fill="#5a2408"/><rect x="1" y="6" width="4" height="1" fill="#ffd23f"/><rect x="5" y="6" width="1" height="1" fill="#2a0f05"/><rect x="6" y="6" width="4" height="1" fill="#ffd23f"/><rect x="10" y="6" width="1" height="1" fill="#2a0f05"/><rect x="11" y="6" width="4" height="1" fill="#ffd23f"/><rect x="15" y="6" width="1" height="1" fill="#5a2408"/><rect x="0" y="7" width="1" height="1" fill="#5a2408"/><rect x="1" y="7" width="5" height="1" fill="#ffd23f"/><rect x="6" y="7" width="4" height="1" fill="#2a0f05"/><rect x="10" y="7" width="5" height="1" fill="#ffd23f"/><rect x="15" y="7" width="1" height="1" fill="#5a2408"/><rect x="1" y="8" width="1" height="1" fill="#5a2408"/><rect x="2" y="8" width="12" height="1" fill="#ffd23f"/><rect x="14" y="8" width="1" height="1" fill="#5a2408"/><rect x="2" y="9" width="1" height="1" fill="#5a2408"/><rect x="3" y="9" width="2" height="1" fill="#ffd23f"/><rect x="5" y="9" width="9" height="1" fill="#5a2408"/><rect x="2" y="10" width="1" height="1" fill="#5a2408"/><rect x="3" y="10" width="1" height="1" fill="#ffd23f"/><rect x="4" y="10" width="1" height="1" fill="#5a2408"/><rect x="2" y="11" width="2" height="1" fill="#5a2408"/></svg>Chat</span><span id="chatBadge" hidden></span><span class="views" role="group" aria-label="Chat view"><button type="button" data-v="shut" title="Hide the chat" aria-label="Hide the chat"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="4.25" width="10" height="1.6" fill="currentColor"/></svg></button><button type="button" data-v="mini" title="Just the message box" aria-label="Just the message box"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="2.25" width="10" height="1.6" fill="currentColor"/><rect x="1" y="6.25" width="10" height="1.6" fill="currentColor"/></svg></button><button type="button" data-v="full" title="Show past messages" aria-label="Show past messages"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="0.75" width="10" height="1.6" fill="currentColor"/><rect x="1" y="4.25" width="10" height="1.6" fill="currentColor"/><rect x="1" y="7.75" width="10" height="1.6" fill="currentColor"/></svg></button></span></div>
 <div id="chatBody"><ul id="chatLog" aria-live="polite"></ul><form id="chatForm" autocomplete="off"><input id="chatIn" maxlength="200" placeholder="Say something…" aria-label="Chat message"><button type="submit">Send</button></form></div></div>
-<div id="online" class="panel" hidden><div class="h">Online now</div><ul id="onList"></ul><div class="g" id="onGuests"></div></div>
+<div id="online" class="panel" hidden><div class="h"><i class="pi" data-ic="people"></i>Online now</div><ul id="onList"></ul><div class="g" id="onGuests"></div></div>
 <div id="help" class="panel"><b id="kN">N</b> Names · <b id="kL">L</b> List · <b id="kS">S</b> <span id="sndL">Sound off</span></div>
 
 <script>
@@ -754,8 +813,14 @@ const shade=(x,y,w,h)=>{if(CUR){CUR.shades.push([x,y,w,h]);return}oval(OF,x+w/2,
   const door=(dx,dy)=>{px(g,dx-1,dy-1,14,25,'#7a4320');px(g,dx,dy,12,24,'#c48a4c');px(g,dx,dy,12,1,'#ddb07a');px(g,dx+2,dy+3,8,7,'#b57a3e');px(g,dx+2,dy+13,8,8,'#b57a3e');
     px(g,dx+9,dy+12,2,2,'#ffd166');px(g,dx+3,dy-6,6,4,'#f4f2ec');px(g,dx+4,dy-5,4,2,'#2f5fb8')};                                    // a wooden door with a little sign
   door(2*TS+2,2*TS-8);door(5*TS+2,2*TS-8);
-  {const x=TS+2,y=2*TS-7;px(g,x-1,y-1,13,19,'#3a1f12');px(g,x,y,11,17,'#c98a48');px(g,x,y,11,1,'#e0a866');px(g,x+1,y+1,9,15,'#7a4320');   // a mirror in the left corner, by the first door
-   px(g,x+2,y+2,7,13,'#bfe6fb');px(g,x+2,y+2,7,4,'#dff3fd');px(g,x+3,y+8,1,3,'#ffffff');px(g,x+6,y+3,2,1,'#ffffff');px(g,x+2,y+12,7,3,'#a9d8f0')}
+  {const mirror=(x,y)=>{const D='#2b2f36';                         // a bathroom mirror: rounded silver frame, shiny glass, a little shelf underneath
+     px(g,x,y-1,11,1,D);px(g,x-1,y,13,16,D);px(g,x,y+16,11,1,D);
+     px(g,x,y,11,16,'#d7dde3');px(g,x+1,y,9,1,'#f4f7fa');px(g,x,y+1,1,14,'#eef2f5');px(g,x+10,y+1,1,14,'#9aa3ad');px(g,x+1,y+15,9,1,'#9aa3ad');
+     px(g,x+1,y+1,9,14,'#8fbcd6');px(g,x+1,y+1,9,5,'#c4e6f6');px(g,x+1,y+6,9,4,'#a9d4ea');px(g,x+1,y+12,9,3,'#7fb0cc');
+     for(let k=0;k<5;k++)px(g,x+2+k,y+8-k,1,1,'#ffffff');for(let k=0;k<3;k++)px(g,x+5+k,y+11-k,1,1,'#eaf8ff');px(g,x+8,y+2,1,1,'#ffffff');
+     px(g,x-2,y+17,15,1,D);px(g,x-2,y+18,15,2,'#e8eef2');px(g,x-2,y+18,15,1,'#ffffff');px(g,x-2,y+20,15,1,'#8e979f');
+     px(g,x,y+16,2,2,'#7fd3c4');px(g,x+8,y+15,2,3,'#f2a7c0');px(g,x+8,y+14,1,1,D)};               // a soap and a little bottle on the shelf
+   mirror(TS+2,2*TS-8);mirror(6*TS+1,2*TS-8)}
   {const x=7*TS,y=3*TS;px(g,x+4,y,8,16,'#7a4320');px(g,x+5,y,6,16,'#c48a4c');px(g,x+5,y,1,16,'#ddb07a');px(g,x+9,y+7,1,2,'#ffd166')}   // the third door, in the side wall
   {const x=54,y=2*TS-14;px(g,x-1,y-1,22,16,'#121116');px(g,x,y,20,14,'#fbfaf6');                                         // a smiley-face poster, centred between the doors
    oval(g,x+10,y+7,5.5,5.5,'#1d1c21');oval(g,x+10,y+7,4.5,4.5,'#ffd23f');px(g,x+8,y+5,1,2,'#1d1c21');px(g,x+12,y+5,1,2,'#1d1c21');
@@ -2196,24 +2261,31 @@ const clockText=ms=>{const d=new Date(ms),P={};if(clockFmt)for(const p of clockF
 const wxEl=document.getElementById('wx'),wxSub=document.getElementById('wxsub');
 wxEl.parentNode.title='Weather for '+PLACE.name+' — data from Open-Meteo.com';
 // little pixel pictures for the clock card (instead of emoji)
-const PIXC={Y:'#f4c430',O:'#ee8b2c',o:'#a8541c',M:'#f4e3a0',W:'#f7f8fb',G:'#b8c0cc',D:'#5e6472',B:'#6fb6ea',R:'#e2574c',P:'#e8559a',g:'#3f8f4e',L:'#e8962e',T:'#7a4a20',K:'#4b1a0e'};
-const PIX={sun:['Y...Y...Y','.Y.....Y.','...YYY...','..YYYYY..','Y.YYYYY.Y','..YYYYY..','...YYY...','.Y.....Y.','Y...Y...Y'],
+const PIXC={Y:'#f4c430',O:'#ee8b2c',o:'#a8541c',M:'#f4e3a0',W:'#f7f8fb',G:'#b8c0cc',D:'#5e6472',B:'#6fb6ea',R:'#e2574c',P:'#e8559a',g:'#3f8f4e',L:'#e8962e',T:'#7a4a20',K:'#4b1a0e',S:'#f2c39a',C:'#fff8e6',V:'#8a5cd0',v:'#c3a6f5',r:'#f08a80',b:'#9fd2f5'};
+const PIX={note:['............','.....VVVVVVV','.....VvvvvvV','.....VVVVVVV','.....V.....V','.....V.....V','.....V.....V','...VVV...VVV','..VvVV..VvVV','..VVVV..VVVV','...VV....VV.','............'],
+  people:['..TTT....KKK..','.TTTTT..KKKKK.','.SKSKS..SKSKS.','.SSSSS..SSSSS.','..SrS....SrS..','.RRRRR..BBBBB.','RRRRRRRBBBBBBB','RRRRRRRBBBBBBB','RRRRRRRBBBBBBB'],
+  list:['....GGGG....','.TTTGWWGTTT.','.TCCCCCCCCT.','.TCCgCCCCCT.','.TgCgCBBBBT.','.TCgCCCCCCT.','.TCCCCCCCCT.','.TCCgCCCCCT.','.TgCgCBBBBT.','.TCgCCCCCCT.','.TCCCCCCCCT.','.TTTTTTTTTT.'],
+  wxtag:['............','.......YY...','......YYYY..','...WWWYYYY..','..WWWWWWYY..','.WWWWWWWWWY.','WWWWWWWWWWW.','WWWWWWWWWWWW','.GGGGGGGGGG.','............'],
+  sun:['....YY....','.Y......Y.','...YYYY...','..YMMYYY..','Y.YMYYYY.Y','Y.YYYYYY.Y','..YYYYOY..','...YYYY...','.Y......Y.','....YY....'],
   moon:['...MMM...','..MMM....','.MMM.....','.MMM.....','.MMM.....','.MMMM....','..MMMMMM.','...MMMM..','.........'],
   cloud:['.........','...WWW...','..WWWWW..','.WWWWWWW.','WWWWWWWWW','WWWWWWWWW','.GGGGGGG.','.........','.........'],
   partly:['Y..Y.....','.YYY.....','YYYYY....','.YYYWWW..','Y.YWWWWW.','..WWWWWWW','.WWWWWWWW','.GGGGGGG.','.........'],
-  fog:['.........','GGGGGGG..','.........','..GGGGGGG','.........','GGGGGGG..','.........','..GGGGGGG','.........'],
+  fog:['...WWW...','.WWWWWWW.','WWWWWWWWW','.GGGGGGG.','.........','GGGGGG...','.........','..GGGGGGG','.........','GGGGGGG..'],
   rain:['...WWW...','..WWWWW..','.WWWWWWW.','WWWWWWWWW','.GGGGGGG.','.B..B..B.','B..B..B..','.B..B..B.','.........'],
   storm:['...DDD...','..DDDDD..','.DDDDDDD.','DDDDDDDDD','.DDDYDDD.','...YY....','..YYYY...','....Y....','...Y.....'],
   snow:['....B....','.B..B..B.','..B.B.B..','...BBB...','BBBBBBBBB','...BBB...','..B.B.B..','.B..B..B.','....B....'],
-  pumpkin:['....g....','...g.....','.OOOOOOO.','OOoOOOoOO','OOOOOOOOO','OoOOOOOoO','OOOOOOOOO','.OOOOOOO.','.........'],
-  leaf:['......LL.','....LLLL.','...LLLLL.','..LLLLLL.','.LLLLLL..','.LLLLL...','.LLL.....','g........','.........'],
+  pumpkin:['....gg.....','.....g.....','..OOOOOOO..','.OOoOOOoOO.','OOYYOoOYYOO','OOYOOoOOYOO','OOOOOoOOOOO','OOYOYOYOYOO','OOOYOYOYOOO','.OOOOOOOOO.','..OOOOOOO..'],
+  leaf:['.....L.....','....LLL....','.L..LLL..L.','.LL.LoL.LL.','LLLLLoLLLLL','.LLLooLLLL.','..LLLoLLL..','.LLLLoLLLL.','.LLL.o.LLL.','.....T.....','.....T.....'],
   tree:['....Y....','...ggg...','..ggggg..','...ggg...','..ggRgg..','.ggggggg.','gggRggggg','....T....','....T....'],
-  heart:['.RR...RR.','RRRR.RRRR','RRRRRRRRR','RRRRRRRRR','.RRRRRRR.','..RRRRR..','...RRR...','....R....','.........'],
+  heart:['.RR...RR.','RWrR.RRRR','RrRRRRRRR','RRRRRRRRR','.RRRRRRR.','..RRRRR..','...RRR...','....R....','.........'],
   tulip:['..P.P.P..','..PPPPP..','..PPPPP..','...PPP...','....g....','..g.g.g..','...ggg...','....g....','.........'],
   rainbow:['..RRRRR..','.ROOOOOR.','ROYYYYYOR','OYgggggYO','YgB...BgY','gB.....Bg','B.......B','.........','.........'],
   sunflower:['...YYY...','..YYYYY..','.YYTTTYY.','.YYTTTYY.','..YYYYY..','...YYY...','....g....','..ggg....','....g....']};
-const pixSvg=(n,px=2)=>{const G=PIX[n];let r='';G.forEach((row,y)=>{for(let x=0;x<row.length;){const ch=row[x];if(ch==='.'){x++;continue}let w=1;while(row[x+w]===ch)w++;r+=`<rect x="${x}" y="${y}" width="${w}" height="1" fill="${PIXC[ch]}"/>`;x+=w}});
-  return `<svg viewBox="0 0 9 9" width="${9*px}" height="${9*px}" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`};
+const pixSvg=(n,px=2)=>{const G=PIX[n],h=G.length,w=Math.max(...G.map(r=>r.length)),at=(x,y)=>y>=0&&y<h&&x>=0&&x<G[y].length&&G[y][x]!=='.';let r='';   // a dark outline goes round every shape
+  for(let y=-1;y<=h;y++)for(let x=-1;x<=w;x++)if(!at(x,y)&&(at(x-1,y)||at(x+1,y)||at(x,y-1)||at(x,y+1)))r+=`<rect x="${x+1}" y="${y+1}" width="1" height="1" fill="#4b1a0e"/>`;
+  G.forEach((row,y)=>{for(let x=0;x<row.length;){const ch=row[x];if(ch==='.'){x++;continue}let k=1;while(row[x+k]===ch)k++;r+=`<rect x="${x+1}" y="${y+1}" width="${k}" height="1" fill="${PIXC[ch]}"/>`;x+=k}});
+  return `<svg viewBox="0 0 ${w+2} ${h+2}" width="${(w+2)*px}" height="${(h+2)*px}" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`};
+document.querySelectorAll('.pi[data-ic]').forEach(e=>{e.innerHTML=pixSvg(e.dataset.ic,1.5);e.title=e.parentNode.textContent.trim()});   // the little icons on each box's name tag
 function wxHud(){
   const[kind,,label]=wxNow(),night=cur.dark>.5,r=reading();
   const icn={clear:night?'moon':'sun',cloudy:night?'cloud':'partly',overcast:'cloud',fog:'fog',drizzle:'rain',rain:'rain',storm:'storm',snow:'snow'}[kind],ic='';
@@ -2585,7 +2657,7 @@ const listEl=document.getElementById('list'),rows=chars.filter(c=>!c.def.staff).
 });
 listEl.style.setProperty('--n',chars.length);                      // lets the list size its rows so everyone fits in one column
 const rosterEl=document.getElementById('roster');
-function toggleList(){rosterEl.classList.toggle('shut');if(cam.auto)fit()}
+function toggleList(){rosterEl.classList.toggle('shut');if(innerWidth<=700&&!rosterEl.classList.contains('shut')&&typeof chatView==='function'&&!chatEl.classList.contains('shut'))chatView('shut');if(cam.auto)fit()}   // on phones, the list and the chat take turns
 rosterEl.querySelector('h2').addEventListener('click',toggleList);
 const clockEl=document.getElementById('clock'),timeEl=document.getElementById('time'),wxicEl=document.getElementById('wxic'),seasonEl=document.getElementById('season'),dialCv=document.getElementById('dial');
 let dialKey='';
@@ -2602,12 +2674,11 @@ function drawDial(frac,night){                                    // a little ha
   for(let t=0;t<=L;t+=.5){const x=Math.round(cx+Math.cos(a)*t),y=Math.round(cy-Math.sin(a)*t);g.fillRect(x,y,t>L-3?2:1,t>L-3?2:1)}
   g.fillStyle='#5a2408';g.fillRect(cx-2,cy-2,4,3);g.fillStyle='#e0a866';g.fillRect(cx-1,cy-1,2,1);
 }
-const WALKER='<svg viewBox="0 0 7 9" width="9" height="12" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 0h2v2H3zM2 2h3v3H2zM1 3h1v1H1zM5 3h1v1H5zM2 5h1v1H2zM4 5h1v2H4zM1 6h1v2H1zM5 7h1v1H5zM0 8h1v1H0zM6 8h1v1H6z" fill="#4b1a0e"/></svg>';   // a little walking man
 function hud(){
   for(const r of rows){
     const ctl=PL.ctl.has(r.c),away=!!r.c.away&&!ctl,walking=!away&&!ctl&&r.c.state==='walk',say=tidy(ctl?'Walking around':away?awayText(r.c):r.c.say),t=(walking?'→ ':'')+say;
-    if(r.say!==t){r.say=t;r.ic.innerHTML=ctl?WALKER:'';r.tx.textContent=t;r.li.title=r.c.def.name+': '+t}
-    r.li.classList.toggle('walk',walking);r.li.classList.toggle('away',away);
+    if(r.say!==t){r.say=t;r.ic.innerHTML='';r.tx.textContent=t;r.li.title=r.c.def.name+': '+t}
+    r.li.classList.toggle('walk',walking);r.li.classList.toggle('ctl',ctl);r.li.classList.toggle('away',away);
     r.li.classList.toggle('on',r.c===follow);
   }
   const[day,time]=clockText(Date.now());clockEl.textContent=day;timeEl.textContent=time;      // the time in the office's own time zone
@@ -2920,9 +2991,13 @@ if(location.protocol!=='file:'){openWho();setInterval(beat,20000);document.addEv
 /* ---------- live chat: messages are kept by /api/chat; each open copy checks for new ones every few seconds ---------- */
 const CH={url:'/api/chat',last:0,unread:0,busy:false,ready:false};
 const chatEl=document.getElementById('chat'),chatLog=document.getElementById('chatLog'),chatIn=document.getElementById('chatIn');
-const placeChat=()=>{if(chatEl.dataset.docked)return;const r=document.getElementById('roster').getBoundingClientRect(),h=chatEl.offsetHeight||40;   // just above the "Who's doing what" list; beside it if the open list leaves no room
-  if(r.top-16>=h){chatEl.style.left='';chatEl.style.setProperty('--chatB',Math.round(innerHeight-r.top+8)+'px')}
-  else{chatEl.style.left=Math.round(r.right+8)+'px';chatEl.style.setProperty('--chatB','14px')}};
+const placeChat=()=>{if(chatEl.dataset.docked)return;const r=document.getElementById('roster').getBoundingClientRect();   // just above the "Who's doing what" list, never over the logo; beside the list if there's no room
+  const logo=document.getElementById('name').getBoundingClientRect(),room=r.top-8-(logo.bottom+10);
+  chatLog.style.height='';chatEl.style.width='';let h=chatEl.offsetHeight||40;
+  if(h>room&&chatEl.classList.contains('full')){const lh=parseFloat(getComputedStyle(chatLog).height),cut=Math.min(lh-60,h-room);if(cut>0){chatLog.style.height=(lh-cut)+'px';h=chatEl.offsetHeight}}   // shrink the message list to fit
+  if(h<=room){chatEl.style.left='';chatEl.style.setProperty('--chatB',Math.round(innerHeight-r.top+8)+'px')}
+  else{chatEl.style.left=Math.round(r.right+8)+'px';chatEl.style.setProperty('--chatB',innerWidth<=700?'8px':'14px');
+    const w=innerWidth-r.right-16;chatEl.style.width=w<330?Math.max(150,w)+'px':''}};
 placeChat();if(window.ResizeObserver){const ro=new ResizeObserver(placeChat);ro.observe(document.getElementById('roster'));ro.observe(chatEl)}addEventListener('resize',placeChat);
 const hhmm=t=>new Date(t).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}).toLowerCase().replace(' ','');
 function chatAdd(m,fresh){
@@ -2951,6 +3026,7 @@ function chatView(v){                                              // three view
   for(const b of chatEl.querySelectorAll('.views button'))b.classList.toggle('on',b.dataset.v===v);
   if(v==='full'){CH.unread=0;showBadge();chatLog.scrollTop=chatLog.scrollHeight}
   if(v!=='shut')setTimeout(()=>chatIn.focus(),30);
+  if(v!=='shut'&&innerWidth<=700&&!rosterEl.classList.contains('shut'))toggleList();
 }
 for(const b of chatEl.querySelectorAll('.views button'))b.addEventListener('click',e=>{e.stopPropagation();chatView(b.dataset.v)});
 document.getElementById('chatHead').addEventListener('click',e=>{if(!e.target.closest('button')&&chatEl.classList.contains('shut'))chatView('mini')});
@@ -3089,9 +3165,10 @@ document.getElementById('whoName').addEventListener('submit',e=>{
 },true);
 document.getElementById('whoBack').addEventListener('click',e=>{if(MK.mode!=='guest'){e.stopImmediatePropagation();closeMaker()}},true);
 function closeMaker(){document.getElementById('who').hidden=true;MK.mode='guest';document.getElementById('whoBox').classList.remove('mk')}
+const NO_BEARD=new Set(['Mo']);                                     // people who never get a beard or mustache, even from a saved look
 function applyTeamLook(c,l){                                       // a teammate's new look: their sprite, and their colour in Who's doing what
   const k=JSON.stringify(l);if(c.lookKey===k)return;c.lookKey=k;
-  c.def.look=Object.assign({},spriteLook(l),{top:l.top,bottom:l.bottom});c.spr=makeSprites(c.def.look);
+  c.def.look=Object.assign({},spriteLook(l),{top:l.top,bottom:l.bottom});if(NO_BEARD.has(c.def.name)){c.def.look.beard=false;c.def.look.mustache=false}c.spr=makeSprites(c.def.look);
 }
 async function saveTeamLook(name,l){try{const m=JSON.parse(localStorage.getItem('kotoNY.looks')||'{}');m[name]=l;localStorage.setItem('kotoNY.looks',JSON.stringify(m))}catch(_){}try{await fetch('/api/looks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,look:l,id:ON.id})})}catch(_){}}
 async function pullLooks(){if(location.protocol==='file:')return;try{const r=await fetch('/api/looks',{cache:'no-store'});const j=await r.json();
@@ -3109,16 +3186,29 @@ function startWalking(){
   const c=meChar(),el=SPOTS.elevator[0];let x=el.i+.5,y=el.j+.5,sit=false,dir='S',up=0;
   if(c&&!c.away){x=c.x;y=c.y;sit=!!c.sit;dir=c.dir;up=c.up||0}
   PL.me={id:ON.id,who:ON.name||ON.guest,guest:!ON.name,char:c,look:ON.name?null:cleanLook(MYLOOK),x,y,rx:x,ry:y,dir,sit,up,mv:false,puppet:true,since:performance.now(),home:0};
-  if(c)PL.ctl.add(c);follow=PL.me;cam.auto=false;cam.z=Math.max(cam.z,Math.round(cam.fit*2));tipText();PL.netT=0;
+  if(c)PL.ctl.add(c);if(!cam.auto&&cam.z>cam.fit*1.15)follow=PL.me;tipText();   // no zooming in: the view only follows you if you've zoomed in yourself
+  PL.netT=0;
 }
 function stopWalking(){                                            // back at your desk: your character carries on with its day
-  const me=PL.me;if(!me)return;PL.me=null;if(me.char){PL.ctl.delete(me.char);if(!me.char.away)setFollow(me.char)}else follow=null;
+  const me=PL.me;if(!me)return;PL.me=null;if(me.char){PL.ctl.delete(me.char);if(follow===me)follow=me.char.away?null:me.char}else if(follow===me)follow=null;
   tipText();sendMove(true);
 }
 const touchy=()=>matchMedia('(hover:none)').matches;
+function placeTip(){const t=document.getElementById('walkTip'),h=document.getElementById('help');
+  const others=[...document.querySelectorAll('.dock')].filter(e=>e!==h&&e!==t);for(const e of others)e.style.translate='';   // boxes it pushed out of the way go back
+  const on=document.getElementById('online');                       // bottom right: Online now sits just above the key hints (and the desk note, when it shows)
+  if(on&&!on.dataset.docked&&!h.dataset.docked){const hr=h.getBoundingClientRect(),gap=innerWidth<=700?6:8;let top=hr.top;
+    if(!t.hidden){t.style.right='auto';t.style.bottom='auto';t.style.left=Math.round(hr.right-t.offsetWidth)+'px';t.style.top=Math.round(hr.top-gap-t.offsetHeight)+'px';top=hr.top-gap-t.offsetHeight}
+    on.style.bottom=Math.round(innerHeight-top+gap)+'px';return}
+  if(t.hidden||!h)return;   // sits just above the key hints box, wherever it's docked
+  const r=h.getBoundingClientRect(),w=t.offsetWidth,ht=t.offsetHeight;let top=r.top-ht-8;if(top<8)top=r.bottom+8;
+  t.style.left=Math.round(Math.max(8,Math.min(innerWidth-w-8,r.right-w)))+'px';t.style.top=Math.round(top)+'px';t.style.right='auto';t.style.bottom='auto';
+  const tr=t.getBoundingClientRect();for(const e of others){if(e.hidden||!e.getClientRects().length)continue;const r=e.getBoundingClientRect();   // a box in the way (like Online now) moves up to make room
+    if(r.right<=tr.left||r.left>=tr.right||r.bottom<=tr.top||r.top>=tr.bottom)continue;const up=r.top<tr.top?r.bottom-tr.top+8:0;if(up>0)e.style.translate='0 '+(-Math.round(up))+'px'}}
+addEventListener('resize',placeTip);setInterval(placeTip,500);
 function tipText(){const t=document.getElementById('walkTip');
-  if(PL.me&&PL.me.char&&!PL.me.home&&!offHours(PL.me.char)){t.textContent='Sit at your desk to go back to work';t.hidden=false}
-  else t.hidden=true}   // guests get no hints
+  if(PL.me&&PL.me.char&&!PL.me.home&&!offHours(PL.me.char)){t.textContent='Sit at your desk to go back to work';t.hidden=false;placeTip()}
+  else{t.hidden=true;placeTip()}}   // guests get no hints
 const KEYDIR={ArrowUp:[0,-1,'N'],ArrowDown:[0,1,'S'],ArrowLeft:[-1,0,'W'],ArrowRight:[1,0,'E']};
 function keyOn(k){if(!KEYDIR[k])return;PL.keys=PL.keys.filter(x=>x!==k);PL.keys.push(k);if(!PL.me)startWalking()}
 function keyOff(k){PL.keys=PL.keys.filter(x=>x!==k)}
@@ -3128,6 +3218,7 @@ addEventListener('keyup',e=>keyOff(e.key));addEventListener('blur',()=>{PL.keys=
 for(const bt of document.querySelectorAll('#pad button')){const k=bt.dataset.k;
   bt.addEventListener('pointerdown',e=>{e.preventDefault();bt.classList.add('on');try{bt.setPointerCapture(e.pointerId)}catch(_){}keyOn(k)});
   for(const ev of['pointerup','pointercancel','lostpointercapture'])bt.addEventListener(ev,()=>{bt.classList.remove('on');keyOff(k)})}
+const MIRRORS=[[1.5,3.5],[6.5,3.5]];
 const walkable=(i,j)=>inb(i,j)&&(walk[ix(i,j)]||!!seatAt[ix(i,j)]);   // floor, plus chairs (you can step into a chair to sit)
 function playStep(dt){
   document.getElementById('pad').classList.toggle('show',matchMedia('(hover:none)').matches&&!!(ON.name||ON.guest)&&document.getElementById('who').hidden);
@@ -3147,9 +3238,9 @@ function playStep(dt){
       if(seat&&(me.idle=(me.idle||0)+dt)>.2){me.x=ti+.5;me.y=tj+.5;me.sit=true;me.dir=seat.dir;me.up=seat.up||0;
         const c=me.char;if(c&&c.desk&&c.desk.i===ti&&c.desk.j===tj&&!offHours(c)){me.home=performance.now();tipText()}}
     }
-    if(me.home){const c=me.char;if(offHours(c)){me.home=0;tipText()}else if(!c||(c.go==='desk'&&c.state==='act'&&!c.away)||performance.now()-me.home>45000)stopWalking()}
+    if(me.home){const c=me.char;if(offHours(c)){me.home=0;tipText()}else if(performance.now()-me.home>350)stopWalking()}
     if(me.char&&(me.offT=(me.offT||0)+dt)>2){me.offT=0;tipText()}   // the banner follows the time of day
-    if(me.mv&&follow!==me&&cam.z>cam.fit*1.15)follow=me;              // zoomed in: the camera keeps up with you   // wait for your character to sit back down, then hand it over
+    if(me.mv&&follow!==me&&!cam.auto&&cam.z>cam.fit*1.15)follow=me;              // zoomed in: the camera keeps up with you   // wait for your character to sit back down, then hand it over
     me.rx=me.x;me.ry=me.y;
   }
   for(const r of PL.remote.values()){const k=Math.min(1,dt*8);r.rx+=(r.x-r.rx)*k;r.ry+=(r.y-r.ry)*k;r.mvv=Math.abs(r.x-r.rx)+Math.abs(r.y-r.ry)>.02}
@@ -3166,7 +3257,7 @@ function drawPuppet(p){
 }
 function puppetLabels(fs,hits,placed){
   const me=PL.me;
-  {const btn=document.getElementById('mirrorBtn'),near=me&&!me.sit&&!me.mv&&document.getElementById('who').hidden&&Math.abs(me.x-1.5)+Math.abs(me.y-3.5)<.9;   // standing at the mirror in the bathroom hall
+  {const btn=document.getElementById('mirrorBtn'),near=me&&!me.sit&&!me.mv&&document.getElementById('who').hidden&&MIRRORS.some(([mx,my])=>Math.abs(me.x-mx)+Math.abs(me.y-my)<.9);   // standing at either mirror in the bathroom hall
    if(near){const[fx,fy]=charXY(me);btn.style.left=Math.round(sx(fx)/dpr)+'px';btn.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(btn.hidden===!!near)btn.hidden=!near;
    const sb=document.getElementById('sonosBtn'),nearS=me&&!me.mv&&document.getElementById('who').hidden&&document.getElementById('sonosAdd').hidden&&SPEAKERS.some(([i,j])=>Math.abs(me.x-(i+.5))+Math.abs(me.y-(j+.5))<1.7);   // next to a speaker
    if(nearS){const[fx,fy]=charXY(me);sb.style.left=Math.round(sx(fx)/dpr)+'px';sb.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(sb.hidden===!!nearS)sb.hidden=!nearS}
@@ -3258,7 +3349,7 @@ function frame(t){
 resync();                                                          // work out the office as it is right now
 for(const c of chars){c.rx=c.x;c.ry=c.y}
 hud();resize();requestAnimationFrame(frame);
-window.__office={SQ,NP,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
+window.__office={SQ,NP,PIX,pixSvg,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
 })();
 </script>
 </body>
