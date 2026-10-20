@@ -92,6 +92,63 @@
   @media (max-width:1180px){#tasks{left:300px;right:14px;transform:none;width:auto;bottom:66px}}
   @media (max-width:700px){#tasks{left:8px;right:8px;bottom:8px}#tasks input,#tasks button{font-size:15px}#tName{width:6.5em}
     body.tasking #roster{bottom:118px}body.tasking #help{bottom:118px}}
+  /* "Who is visiting?" picker and the online-now panel */
+  #who{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(30,12,6,.55);padding:16px}
+  #who[hidden]{display:none}
+  #whoBox{position:relative;max-width:760px;width:100%;max-height:calc(100vh - 32px);display:flex;flex-direction:column;padding:16px 18px 14px}
+  #whoBox h2{margin:0 0 10px;font-size:34px;font-weight:400;text-align:center;letter-spacing:1px}
+  #whoBox p{margin:0 0 10px;text-align:center;font-size:17px;opacity:.8}
+  #whoGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;overflow:auto;padding:4px}
+  #whoGuestRow{display:flex;justify-content:center;padding:6px 4px 2px}#whoGuestRow button{width:calc((100% - 30px)/6)}
+  #whoGrid button,#whoGuestRow button{font:inherit;color:var(--ink);background:#fff3d3;border:2px solid var(--edge);border-radius:4px;cursor:pointer;padding:4px 2px 3px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:16px;line-height:1}
+  #whoGrid button:hover,#whoGrid button:focus-visible,#whoGuestRow button:hover,#whoGuestRow button:focus-visible{background:#ffe9b0;border-color:var(--edge2);outline:none;transform:translateY(-1px)}
+  #whoGrid button.me,#whoGuestRow button.me{border-color:#2f8f4e;box-shadow:0 0 0 2px #7ad48f}
+  #whoGrid canvas,#whoGuestRow canvas{width:54px;height:54px;image-rendering:pixelated}
+  #whoName{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0 6px}
+  #whoName[hidden],#whoGrid[hidden],#whoGuestRow[hidden],#whoSub[hidden]{display:none!important}
+  #whoName label{font-size:28px}
+  #whoName input{font:inherit;font-size:24px;color:var(--ink);background:#fff6dc;border:3px solid var(--edge2);border-radius:4px;padding:4px 10px;width:min(320px,80vw);text-align:center}
+  #whoName input:focus-visible{outline:2px solid #2f6fe0;outline-offset:2px}
+  #whoName .row{display:flex;gap:10px}
+  #whoName button{font:inherit;font-size:19px;border-radius:4px;cursor:pointer;padding:4px 16px;border:2px solid var(--edge2)}
+  #whoGo{background:#a8541c;color:#fff6dc;text-shadow:1px 1px 0 #5a2408}#whoBack{background:#fff3d3;color:var(--ink)}
+  #whoGuestRow button.guest{background:#efe3c4;border-style:dashed}
+  #online li.vis::before{background:#f2b632;box-shadow:0 0 0 1px #8a5a08}
+  #online li .tag{font-size:12px;opacity:.65}
+  #welcome{top:14px;left:50%;transform:translateX(-50%);padding:7px 22px 8px;font-size:30px;white-space:nowrap;z-index:5}
+  #welcome[hidden]{display:none}
+  @media (max-width:700px){#welcome{top:auto;bottom:112px;font-size:18px;padding:4px 12px}}
+  #chat{left:14px;bottom:var(--chatB,72px);width:min(340px,calc(100vw - 28px));padding:0;display:flex;flex-direction:column;z-index:6}
+  #chat.shut{width:auto}
+  #chat[hidden]{display:none}
+  #chatHead{font:inherit;font-size:19px;color:var(--ink);background:none;border:0;cursor:pointer;display:flex;align-items:center;gap:8px;padding:7px 14px;text-align:left;text-shadow:inherit}
+  #chatHead .tog{margin-left:auto;font-size:13px;opacity:.6}
+  #chat:not(.shut) #chatHead{border-bottom:2px dashed var(--edge)}#chat:not(.shut) #chatHead .tog{transform:rotate(180deg)}
+  #chatBadge{background:#c0392b;color:#fff;border-radius:9px;font-size:13px;padding:0 6px;line-height:17px;text-shadow:none}
+  #chatBadge[hidden]{display:none}
+  #chatBody{display:flex;flex-direction:column}#chat.shut #chatBody{display:none}
+  #chatLog{list-style:none;margin:0;padding:6px 14px;height:150px;overflow-y:auto;font-size:17px;line-height:1.2}
+  #chatLog li{margin:0 0 4px;word-wrap:break-word}
+  #chatLog .who{font-weight:700}#chatLog .who.g{color:#9a5a08}#chatLog .tm{font-size:12px;opacity:.55;margin-left:4px}
+  #chatLog .empty{opacity:.6;font-style:italic}
+  #chatForm{display:flex;gap:6px;padding:6px 10px 10px}
+  #chatIn{flex:1;min-width:0;font:inherit;font-size:17px;color:var(--ink);background:#fff6dc;border:2px solid var(--edge);border-radius:3px;padding:3px 8px}
+  #chatIn:focus-visible,#chatForm button:focus-visible,#chatHead:focus-visible{outline:2px solid #2f6fe0;outline-offset:1px}
+  #chatForm button{font:inherit;font-size:17px;color:#fff6dc;background:#a8541c;border:2px solid var(--edge2);border-radius:3px;padding:2px 14px;cursor:pointer;text-shadow:1px 1px 0 #5a2408}
+  @media (max-width:700px){#chat{left:8px;width:calc(100vw - 16px)}#chat.shut{width:auto}#chatLog{height:30vh}}
+  .dock{cursor:grab;touch-action:none}.dock.dragging{cursor:grabbing;opacity:.92;transition:none!important;z-index:40!important}
+  .dock input,.dock textarea,#roster ul,#chatLog,#onList{cursor:auto;touch-action:auto}
+  #online{right:14px;bottom:66px;padding:8px 12px 9px;font-size:16px;min-width:150px;max-width:230px}
+  #online[hidden]{display:none}
+  #online .h{font-size:13px;opacity:.75;border-bottom:2px dashed var(--edge);padding-bottom:2px;margin-bottom:4px;letter-spacing:.5px}
+  #online ul{list-style:none;margin:0;padding:0;max-height:38vh;overflow:auto}
+  #online li{display:flex;align-items:center;gap:6px;line-height:1.15;cursor:pointer;border-radius:3px;padding:0 3px}
+  #online li:hover{background:var(--paper2)}
+  #online li::before{content:'';width:7px;height:7px;border-radius:50%;background:#3fbf5a;box-shadow:0 0 0 1px #1e6b30;flex:none}
+  #online li.you{font-weight:700}
+  #online .g{font-size:14px;opacity:.75;margin-top:3px}
+  #online .chg{font:inherit;font-size:13px;background:none;border:0;color:var(--ink);text-decoration:underline;cursor:pointer;padding:0;margin-top:4px;opacity:.8}
+  @media (max-width:700px){body.tasking #online{bottom:170px}#online{right:8px;bottom:58px;font-size:14px;min-width:0;max-width:150px}#whoGrid{gap:4px}#whoGrid button,#whoGuestRow button{font-size:12px}#whoGrid canvas,#whoGuestRow canvas{width:36px;height:36px}#whoGuestRow button{width:calc((100% - 20px)/6)}#whoBox h2{font-size:28px}}
 </style>
 </head>
 <body>
@@ -100,6 +157,11 @@
 <div id="title" class="panel"><div id="svbox"><canvas id="dial" width="44" height="26"></canvas><div id="svcol"><div id="clock"></div><div id="icons"><span id="wxic"></span><span id="season"></span></div><div id="time"></div></div></div><div id="wxbox"><div class="h">☁️ WEATHER</div><div id="wx"></div><div id="wxsub"></div></div><div id="np"><div class="h">🎵 NOW PLAYING</div><div id="npT"></div><div id="npA"></div><div id="npB"></div></div></div>
 <div id="roster" class="panel shut"><h2>Who's doing what <span id="count"></span></h2><ul id="list"></ul></div>
 <form id="tasks" class="panel" hidden autocomplete="off"><input id="tName" list="tNames" placeholder="Your name" aria-label="Your name" maxlength="20"><datalist id="tNames"></datalist><input id="tNew" placeholder="Add tasks for your character, e.g. sketching posters, calling the printer" aria-label="Add tasks for your character" maxlength="200"><button id="tSave" type="submit">Add</button><div id="tList"></div><div id="tMsg" role="status"></div></form>
+<div id="who" hidden role="dialog" aria-modal="true" aria-labelledby="whoT"><div id="whoBox" class="panel"><h2 id="whoT">Who is visiting?</h2><div id="whoGrid"></div><div id="whoGuestRow"></div><form id="whoName" hidden autocomplete="off"><label for="whoIn">What is your name?</label><input id="whoIn" maxlength="20" placeholder="Your name" required><div class="row"><button type="button" id="whoBack">← Back</button><button type="submit" id="whoGo">Join</button></div></form></div></div>
+<div id="welcome" class="panel" hidden></div>
+<div id="chat" class="panel shut" hidden><button id="chatHead" type="button" aria-expanded="false">💬 Chat <span id="chatBadge" hidden></span><span class="tog">▲</span></button>
+<div id="chatBody"><ul id="chatLog" aria-live="polite"></ul><form id="chatForm" autocomplete="off"><input id="chatIn" maxlength="200" placeholder="Say something…" aria-label="Chat message"><button type="submit">Send</button></form></div></div>
+<div id="online" class="panel" hidden><div class="h">🟢 ONLINE NOW</div><ul id="onList"></ul><div class="g" id="onGuests"></div></div>
 <div id="help" class="panel"><b id="kN">N</b> names · <b id="kL">L</b> list · <b id="kS">S</b> <span id="sndL">🔇 sound off</span></div>
 
 <script>
@@ -130,7 +192,7 @@ const OFFICE_FLOOR = 5;   // which storey of the building the office is on (1 = 
 const LAYOUT = {"plant@6,7":{"d":[36,8]},"plant@6,20":{"d":[36,-15]},"plant@23,5":{"d":[-11,0]},"shelf@7,7":{"c":"#dc9c52"},"shelf@12,7":{"c":"#dc9c52"},"bookcase@15,8":{"c":"#dc9c52"},"coffeetable@26,8":{"c":"#dc9c52"},"armchair@24,9":{"c":"#efe6d2"},"armchair@28,9":{"c":"#efe6d2"},"couch@37,8":{"c":"#3a3d46"},"couch@37,12":{"c":"#3a3d46"},"coffeetable@39,9":{"c":"#dc9c52"},"coffeetable@39,13":{"c":"#dc9c52"},"armchair@41,15":{"d":[0,-1]},"chair@35,18":{"d":[0,-1]},"armchair@41,18":{"d":[1,-1],"c":"#f2c14e"},"armchair@42,19":{"d":[0,1],"c":"#f2c14e"},"fridge@18,1":{"d":[4,0],"c":"#6f7480"},"counter@20,1":{"d":[-2,0]},"roundtable@2,8":{"c":"#ffffff"},"chair@1,8":{"c":"#f07f2a"},"chair@1,9":{"c":"#f07f2a"},"chair@4,8":{"c":"#f07f2a"},"chair@4,9":{"c":"#f07f2a"},"roundtable@2,13":{"c":"#ffffff"},"chair@1,13":{"c":"#f07f2a"},"chair@1,14":{"c":"#f07f2a"},"chair@4,13":{"c":"#f07f2a"},"chair@4,14":{"c":"#f07f2a"},"roundtable@2,18":{"c":"#ffffff"},"chair@1,18":{"c":"#f07f2a"},"chair@1,19":{"c":"#f07f2a"},"chair@4,18":{"c":"#f07f2a"},"chair@4,19":{"c":"#f07f2a"},"chair@31,1":{"c":"#5aa652"},"chair@32,1":{"c":"#5aa652"},"chair@31,5":{"c":"#5aa652"},"chair@32,5":{"c":"#5aa652"},"chair@33,2":{"c":"#5aa652"},"chair@33,3":{"c":"#5aa652"},"chair@33,4":{"c":"#5aa652"},"chair@38,1":{"c":"#5aa652"},"chair@39,1":{"c":"#5aa652"},"chair@40,1":{"c":"#5aa652"},"chair@41,1":{"c":"#5aa652"},"chair@38,5":{"c":"#5aa652"},"chair@39,5":{"c":"#5aa652"},"chair@40,5":{"c":"#5aa652"},"chair@41,5":{"c":"#5aa652"}};
 const WEATHER = "live";
 // Shared custom tasks: saved by the little /api/tasks function on Vercel, so everyone who opens the site sees the same tasks
-const TASKS_URL = "/api/tasks"; // "live" = whatever it is really doing outside right now; or always show one of:
+const TASKS_URL = "";   // the shared task box is switched off for now (set to "/api/tasks" to bring it back) // "live" = whatever it is really doing outside right now; or always show one of:
                         //   clear | cloudy | overcast | fog | drizzle | rain | storm | snow
 const PLACE = {name:"Broome St, NYC", lat:40.7202, lon:-73.9958, tz:"America/New_York"};   // where the office is (368 Broome St)
 
@@ -2123,16 +2185,18 @@ function render(){
     const[x0,y0,x1,y1]=WC_ROOMS[hoverWC][0],t=o?o.def.name+' is in here!':'🚻 vacant';
     const X=sx((x0+x1)/2-WX0),Y=sy(y0+(y1-y0)*.55-OZ-WY0);ctx.font=FONT(fs);bubble(X,Y,t,fs);
     const w=(ctx.measureText(t).width+fs*.8)/2+2;placed.push([X-w,Y-fs*1.6,X+w,Y])}
-  const rank=c=>(c===follow||c===hover)?0:(c.state==='act'?1:2);
+  const chatOn=c=>c.chatUntil>performance.now();
+  const rank=c=>chatOn(c)?-1:(c===follow||c===hover)?0:(c.state==='act'?1:2);
   for(const c of chars.filter(c=>!c.away&&!(c.act&&c.act.wc&&c.state==='act')).sort((p,q)=>rank(p)-rank(q)||p.idx-q.idx)){
     const[fx,fy]=charXY(c),X=sx(fx);let Y=sy(fy-32-raiseOf(c));
     if(X<-90||X>cw+90||Y<-20||Y>ch+90)continue;
-    const focus=c===hover||c===follow;
+    const focus=c===hover||c===follow||chatOn(c);
     if(showNames||focus){
       ctx.font=FONT(fs*.9);const w=ctx.measureText(c.def.name).width/2+fs*.2,r=[X-w,Y-fs*.9,X+w,Y+fs*.05];
       if(!focus&&hits(...r))continue;
       label(c.def.name,X,Y-fs*.4,fs*.9,c===follow?'#ffe36e':'#ffffff');placed.push(r);Y-=fs*.95;
     }
+    if(chatOn(c)){const t='💬 '+c.chatSay;ctx.font=FONT(fs);const w=(ctx.measureText(t).width+fs*.8)/2+2;bubble(X,Y,t,fs);placed.push([X-w,Y-fs*1.6,X+w,Y]);continue}   // what they just said in the chat
     if(c.state==='walk'&&!(mondayActive()&&/time for the meeting/.test(c.say)))continue;
     const t=(c.bub<3.5||focus)?c.say:(c.go==='desk'&&!(c.act&&c.act.phones)?'':c.icon);     // at a desk the little icon would just be clutter
     if(!t)continue;
@@ -2545,6 +2609,127 @@ if(TASKS_URL){
     document.getElementById('tNew').value='';saveTasks(name,all.slice(0,6),'Added for '+name+'. Everyone will see it within 30 seconds.')});
   pullTasks();setInterval(pullTasks,30000);
 }
+/* ---------- "Who is visiting?" and who's online: each open copy checks in every 20 seconds ---------- */
+const ON={id:'',name:null,guest:null,url:'/api/online',timer:0};
+try{ON.id=localStorage.getItem('kotoNY.id')||'';if(!ON.id){ON.id=Math.random().toString(36).slice(2,12);localStorage.setItem('kotoNY.id',ON.id)}}catch(_){ON.id=Math.random().toString(36).slice(2,12)}
+function portrait(c){const cv=document.createElement('canvas');cv.width=18;cv.height=18;const g=cv.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(c.spr.fstand,0,1,18,18,0,0,18,18);return cv}
+function openWho(){
+  const grid=document.getElementById('whoGrid');grid.textContent='';let last=null;try{last=localStorage.getItem('kotoNY.name')}catch(_){}
+  for(const c of chars.filter(c=>!c.def.staff).sort((p,q)=>p.def.name.localeCompare(q.def.name))){
+    const bt=document.createElement('button');bt.type='button';bt.append(portrait(c),document.createTextNode(c.def.name));if(c.def.name===last)bt.className='me';
+    bt.addEventListener('click',()=>pickWho(c.def.name));grid.appendChild(bt)}
+  {const bt=document.createElement('button');bt.type='button';bt.className='guest'+(last==='~guest'?' me':'');bt.append(guestPortrait(),document.createTextNode('Guest'));   // someone from outside the team
+   bt.addEventListener('click',askName);const row=document.getElementById('whoGuestRow');row.textContent='';row.appendChild(bt)}
+  showStep(false);document.getElementById('who').hidden=false;setTimeout(()=>{(grid.querySelector('.me')||grid.querySelector('button')).focus()},30);
+}
+function guestPortrait(){const c=chars.find(c=>!c.def.staff),cv=document.createElement('canvas');cv.width=18;cv.height=18;const g=cv.getContext('2d');g.imageSmoothingEnabled=false;
+  g.drawImage(c.spr.fstand,0,1,18,18,0,0,18,18);g.globalCompositeOperation='source-in';g.fillStyle='#8c7a63';g.fillRect(0,0,18,18);g.globalCompositeOperation='source-over';
+  g.fillStyle='#ffd23f';for(const[x,y,w,h]of[[7,4,4,1],[11,5,1,2],[9,7,2,1],[9,8,1,2],[9,11,1,1]])g.fillRect(x,y,w,h);return cv}   // a mystery silhouette with a "?"
+function showStep(naming){document.getElementById('whoGrid').hidden=naming;document.getElementById('whoGuestRow').hidden=naming;document.getElementById('whoName').hidden=!naming;
+  document.getElementById('whoT').textContent=naming?'Welcome!':'Who is visiting?'}
+function askName(){showStep(true);const i=document.getElementById('whoIn');let g='';try{g=localStorage.getItem('kotoNY.guest')||''}catch(_){}i.value=g;setTimeout(()=>i.focus(),30)}
+document.getElementById('whoBack').addEventListener('click',()=>{showStep(false);(document.querySelector('#whoGuestRow .guest')||{}).focus?.()});
+document.getElementById('whoName').addEventListener('submit',e=>{e.preventDefault();const n=document.getElementById('whoIn').value.replace(/[\u0000-\u001f<>|]/g,'').replace(/\s+/g,' ').trim().slice(0,20);
+  if(!n){document.getElementById('whoIn').focus();return}try{localStorage.setItem('kotoNY.guest',n);localStorage.setItem('kotoNY.name','~guest')}catch(_){}
+  ON.name=null;ON.guest=n;document.getElementById('who').hidden=true;setFollow(null);setWelcome();beat()});
+function pickWho(name){
+  ON.name=name;ON.guest=null;document.getElementById('who').hidden=true;setWelcome();
+  if(name){try{localStorage.setItem('kotoNY.name',name)}catch(_){}const t=document.getElementById('tName');if(t){t.value=name;if(typeof taskUI==='function')taskUI()}
+    const c=chars.find(c=>c.def.name===name);if(c&&!c.away)setFollow(c)}
+  beat();
+}
+function setWelcome(){const w=document.getElementById('welcome'),n=ON.name||ON.guest;w.textContent=n?'Welcome, '+n+'!':'';w.hidden=!n;if(typeof applyDock==='function')for(const id in DOCK.saved){const el=document.getElementById(id);if(el)applyDock(el)}}
+function showOnline(j){
+  const box=document.getElementById('online'),ul=document.getElementById('onList');if(!j||!j.ok){box.hidden=true;return}
+  ul.textContent='';const people=[...new Set(j.people||[])].sort((a,b)=>(b===ON.name)-(a===ON.name)||a.localeCompare(b)),visitors=[...new Set(j.visitors||[])].sort((a,b)=>(b===ON.guest)-(a===ON.guest)||a.localeCompare(b));
+  for(const n of people){const li=document.createElement('li');li.textContent=n+(n===ON.name?' (you)':'');if(n===ON.name)li.className='you';
+    li.addEventListener('click',()=>{const c=chars.find(c=>c.def.name===n);if(c&&!c.away)setFollow(follow===c?null:c)});ul.appendChild(li)}
+  for(const n of visitors){const li=document.createElement('li');li.className='vis';li.textContent=n+' ';const t=document.createElement('span');t.className='tag';t.textContent=n===ON.guest?'(guest · you)':'(guest)';li.appendChild(t);ul.appendChild(li)}
+  const g=j.guests||0;document.getElementById('onGuests').textContent=g?('+ '+g+' still picking'):(people.length||visitors.length?'':'nobody yet');
+  box.hidden=false;
+}
+async function beat(){
+  try{const r=await fetch(ON.url,{method:'POST',body:JSON.stringify({id:ON.id,name:ON.name,guest:ON.guest}),headers:{'Content-Type':'application/json'}});showOnline(await r.json())}catch(_){showOnline(null)}
+}
+document.getElementById('who').addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('whoName').hidden){if(ON.guest){document.getElementById('who').hidden=true;beat()}else if(ON.name)pickWho(ON.name)}});
+window.addEventListener('pagehide',()=>{try{navigator.sendBeacon(ON.url,new Blob([JSON.stringify({id:ON.id,name:ON.name,guest:ON.guest,leave:true})],{type:'application/json'}))}catch(_){}});
+if(location.protocol!=='file:'){openWho();setInterval(beat,20000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat()})}
+/* ---------- live chat: messages are kept by /api/chat; each open copy checks for new ones every few seconds ---------- */
+const CH={url:'/api/chat',last:0,unread:0,busy:false,ready:false};
+const chatEl=document.getElementById('chat'),chatLog=document.getElementById('chatLog'),chatIn=document.getElementById('chatIn');
+const placeChat=()=>{if(chatEl.dataset.docked)return;const r=document.getElementById('roster').getBoundingClientRect(),h=chatEl.offsetHeight||40;   // just above the "Who's doing what" list; beside it if the open list leaves no room
+  if(r.top-16>=h){chatEl.style.left='';chatEl.style.setProperty('--chatB',Math.round(innerHeight-r.top+8)+'px')}
+  else{chatEl.style.left=Math.round(r.right+8)+'px';chatEl.style.setProperty('--chatB','14px')}};
+placeChat();if(window.ResizeObserver){const ro=new ResizeObserver(placeChat);ro.observe(document.getElementById('roster'));ro.observe(chatEl)}addEventListener('resize',placeChat);
+const hhmm=t=>new Date(t).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}).toLowerCase().replace(' ','');
+function chatAdd(m,fresh){
+  const empty=chatLog.querySelector('.empty');if(empty)empty.remove();
+  const li=document.createElement('li'),w=document.createElement('span'),tm=document.createElement('span');
+  w.className='who'+(m.guest?' g':'');w.textContent=m.who+(m.guest?' (guest)':'')+': ';tm.className='tm';tm.textContent=hhmm(m.t);
+  li.append(w,document.createTextNode(m.text),tm);chatLog.appendChild(li);while(chatLog.children.length>120)chatLog.firstChild.remove();
+  if(fresh){const c=!m.guest&&chars.find(c=>c.def.name===m.who);if(c&&!c.away){c.chatSay=m.text.length>42?m.text.slice(0,40)+'…':m.text;c.chatUntil=performance.now()+8000}   // their character says it in the office too
+    const mine=m.id===ON.id;if(!mine&&chatEl.classList.contains('shut')){CH.unread++;showBadge()}}
+}
+function showBadge(){const b=document.getElementById('chatBadge');b.hidden=!CH.unread;b.textContent=CH.unread>9?'9+':String(CH.unread)}
+async function chatPull(){
+  if(CH.busy)return;CH.busy=true;
+  try{const r=await fetch(CH.url+'?since='+CH.last,{cache:'no-store'});const j=await r.json();
+    if(j&&j.ok){chatEl.hidden=false;const near=chatLog.scrollHeight-chatLog.scrollTop-chatLog.clientHeight<40;
+      for(const m of j.messages||[])if(m.t>CH.last){chatAdd(m,CH.ready);CH.last=m.t}
+      if(!CH.ready){CH.ready=true;if(!chatLog.children.length){const li=document.createElement('li');li.className='empty';li.textContent='No messages yet. Say hi!';chatLog.appendChild(li)}}
+      if(near||!CH.seen){chatLog.scrollTop=chatLog.scrollHeight;CH.seen=true}}}catch(_){}
+  CH.busy=false;
+}
+function chatToggle(open){const o=open??chatEl.classList.contains('shut');chatEl.classList.toggle('shut',!o);document.getElementById('chatHead').setAttribute('aria-expanded',String(o));
+  if(o){CH.unread=0;showBadge();chatLog.scrollTop=chatLog.scrollHeight;setTimeout(()=>chatIn.focus(),30)}}
+document.getElementById('chatHead').addEventListener('click',()=>chatToggle());
+document.getElementById('chatForm').addEventListener('submit',async e=>{
+  e.preventDefault();const text=chatIn.value.trim();if(!text)return;
+  if(!ON.name&&!ON.guest){openWho();return}
+  chatIn.value='';chatIn.disabled=true;
+  try{const r=await fetch(CH.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:ON.id,name:ON.name,guest:ON.guest,text})});const j=await r.json();
+    if(!j.ok){chatIn.value=text;chatIn.placeholder=j.error||'That didn’t send. Try again.'}else await chatPull()}catch(_){chatIn.value=text;chatIn.placeholder='That didn’t send. Check your connection.'}
+  chatIn.disabled=false;chatIn.focus();
+});
+chatIn.addEventListener('keydown',e=>{if(e.key==='Escape'){chatIn.blur();chatToggle(false)}});
+if(location.protocol!=='file:'){chatPull();(function tick(){setTimeout(()=>{if(!document.hidden)chatPull();tick()},chatEl.classList.contains('shut')?10000:3000)})()}
+/* ---------- move the boxes around: drag any of them along the edges of the screen (they always snap back to an edge) ---------- */
+const DOCK={m:14,saved:{}};
+try{DOCK.saved=JSON.parse(localStorage.getItem('kotoNY.dock')||'{}')||{}}catch(_){}
+function applyDock(el){                                             // put a box back where its owner left it, clamped to the screen
+  const d=DOCK.saved[el.id];if(!d)return;const m=innerWidth<=700?8:DOCK.m,w=el.offsetWidth,h=el.offsetHeight,st=el.style;
+  st.transform='none';st.left=st.right=st.top=st.bottom='auto';el.dataset.docked=d.side;st[d.side]=m+'px';
+  const vert=d.side==='left'||d.side==='right',[a,b,size,span]=vert?['top','bottom',h,innerHeight]:['left','right',w,innerWidth];
+  st[d.anchor===b?b:a]=Math.max(m,Math.min(span-size-m,d.off))+'px';   // measured from whichever end it's nearer, so it grows away from that end
+  for(const pid of['name','welcome']){const pe=document.getElementById(pid);if(!pe||pe.hidden)continue;   // never on top of the sign or the welcome banner: slide along the edge past it
+    const p=pe.getBoundingClientRect(),r=el.getBoundingClientRect();if(r.right<=p.left||r.left>=p.right||r.bottom<=p.top||r.top>=p.bottom)continue;
+    st[b]='auto';const after=(vert?p.bottom:p.right)+8,before=(vert?p.top:p.left)-size-8;
+    st[a]=(after+size<=span-m?after:Math.max(m,before))+'px'}
+}
+function makeDock(el){
+  el.classList.add('dock');let st=null;
+  el.addEventListener('pointerdown',e=>{
+    if(e.button>0||e.target.closest('input,textarea,#roster ul,#chatLog,#onList,select'))return;
+    const r=el.getBoundingClientRect();st={x:e.clientX,y:e.clientY,dx:e.clientX-r.left,dy:e.clientY-r.top,moved:false,id:e.pointerId};e.stopPropagation();
+  });
+  addEventListener('pointermove',e=>{
+    if(!st||e.pointerId!==st.id)return;
+    if(!st.moved){if(Math.abs(e.clientX-st.x)+Math.abs(e.clientY-st.y)<6)return;st.moved=true;el.classList.add('dragging');try{el.setPointerCapture(e.pointerId)}catch(_){}}
+    const s2=el.style;s2.transform='none';s2.right=s2.bottom='auto';
+    s2.left=Math.max(0,Math.min(innerWidth-el.offsetWidth,e.clientX-st.dx))+'px';s2.top=Math.max(0,Math.min(innerHeight-el.offsetHeight,e.clientY-st.dy))+'px';
+  });
+  addEventListener('pointerup',e=>{
+    if(!st||e.pointerId!==st.id)return;const was=st.moved;st=null;if(!was)return;
+    el.classList.remove('dragging');const r=el.getBoundingClientRect();
+    const dist={left:r.left,right:innerWidth-r.right,top:r.top,bottom:innerHeight-r.bottom},side=Object.keys(dist).sort((a,b)=>dist[a]-dist[b])[0];   // snap to the nearest edge
+    const vert=side==='left'||side==='right',lowEnd=vert?(r.top+r.height/2>innerHeight/2):(r.left+r.width/2>innerWidth/2);
+    DOCK.saved[el.id]={side,anchor:vert?(lowEnd?'bottom':'top'):(lowEnd?'right':'left'),off:vert?(lowEnd?innerHeight-r.bottom:r.top):(lowEnd?innerWidth-r.right:r.left)};try{localStorage.setItem('kotoNY.dock',JSON.stringify(DOCK.saved))}catch(_){}
+    applyDock(el);el.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault()},{capture:true,once:true});   // a drag isn't a click
+  });
+}
+for(const id of['title','roster','help','online','chat']){const el=document.getElementById(id);if(el){makeDock(el);applyDock(el)}}
+addEventListener('resize',()=>{for(const id in DOCK.saved){const el=document.getElementById(id);if(el)applyDock(el)}});
+if(window.ResizeObserver){const ro=new ResizeObserver(es=>{for(const e of es)if(DOCK.saved[e.target.id])applyDock(e.target)});for(const id of['title','roster','online','chat'])ro.observe(document.getElementById(id))}
 /* ---------- go ---------- */
 let last=0,hudT=0;
 function frame(t){
