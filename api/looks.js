@@ -6,7 +6,7 @@
 const PEOPLE = ["Aleks","Alex","Arthur","David","Emma","Kayla","Mo","Jimmy","Hannah Ca","Hannah Ch","Jada","Simran","Laura","Kiera","Ru","Emilie","Rachel","Neat","Divya","Luke","Katie","LaDawn","Bryce","Alexis","Andreina","Anna","Blake","Goda","Hailey","Jenny","Kim","Lindsey","Maddy","Qichelle","Thalia","Lucy"];
 const KEY = 'koto:looks';
 const STYLES = ['short','sidepart','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','long','wavy','mullet','ponytail','pigtails','bun','braids','bald'];
-const TOPS = ['tee','stripes','hoodie','collar','sweater','jacket','overalls'], BOTTOMS = ['pants','shorts','skirt'], ACCS = 15;
+const TOPS = ['tee','graphic','stripes','tank','collar','flannel','hoodie','sweater','turtleneck','vest','cardigan','jacket','overalls'], BOTTOMS = ['pants','joggers','shorts','skirt','longskirt'], ACCS = 30;
 const hex = v => /^#[0-9a-f]{6}$/i.test(String(v)) ? String(v) : null;
 function cleanLook(l) {
   l = l || {};

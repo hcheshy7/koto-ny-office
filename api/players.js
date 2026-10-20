@@ -6,7 +6,7 @@ const PEOPLE = ["Aleks","Alex","Arthur","David","Emma","Kayla","Mo","Jimmy","Han
 const KEY = 'koto:players';
 const STALE = 8000;
 const STYLES = ['short','sidepart','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','long','wavy','mullet','ponytail','pigtails','bun','braids','bald'];
-const TOPS = ['tee','stripes','hoodie','collar','sweater','jacket','overalls'], BOTTOMS = ['pants','shorts','skirt'], ACCS = 15;
+const TOPS = ['tee','graphic','stripes','tank','collar','flannel','hoodie','sweater','turtleneck','vest','cardigan','jacket','overalls'], BOTTOMS = ['pants','joggers','shorts','skirt','longskirt'], ACCS = 30;
 const hex = v => /^#[0-9a-f]{6}$/i.test(String(v)) ? String(v) : null;
 function cleanLook(l) {
   l = l || {};
