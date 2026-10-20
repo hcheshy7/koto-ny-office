@@ -123,6 +123,26 @@
   #pad button{font:inherit;font-size:20px;color:var(--ink);background:#ffdf9a;border:3px solid var(--edge2);border-radius:8px;padding:0;touch-action:none;user-select:none;-webkit-user-select:none}
   #pad button:active,#pad button.on{background:#f4bf70}
   #pad .u{grid-area:1/2}#pad .l{grid-area:2/1}#pad .r{grid-area:2/3}#pad .d{grid-area:3/2}
+  #sonosBtn{position:fixed;z-index:8;transform:translate(-50%,-100%);font:inherit;font-size:17px;color:var(--ink);background:#ffdf9a;border:3px solid var(--edge2);border-radius:6px;padding:4px 12px;cursor:pointer;white-space:nowrap;box-shadow:3px 4px 0 rgba(30,10,5,.4)}
+  #sonosBtn[hidden]{display:none}#sonosBtn:hover{background:#ffe9b0}
+  #sonosAdd{left:50%;top:50%;transform:translate(-50%,-50%);z-index:45;width:min(340px,calc(100vw - 32px));padding:18px 20px 16px}
+  #sonosAdd[hidden],#sonosQ[hidden]{display:none}
+  #sonosAdd h3,#sonosQ h3{margin:0 0 10px;font-size:22px;font-weight:400}
+  #saForm{display:flex;flex-direction:column;gap:8px}
+  #saForm label{display:flex;flex-direction:column;gap:2px;font-size:16px}
+  #saForm input{font:inherit;font-size:18px;color:var(--ink);background:#fff6dc;border:2px solid var(--edge);border-radius:4px;padding:3px 9px}
+  #saForm input:focus-visible{outline:2px solid #2f6fe0;outline-offset:1px}
+  .saRow{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+  .saRow button{font:inherit;font-size:17px;border-radius:4px;padding:3px 12px;cursor:pointer;border:2px solid var(--edge2)}
+  #saCancel{background:#fff3d3;color:var(--ink)}#saGo{background:#a8541c;color:#fff6dc;text-shadow:1px 1px 0 #5a2408}
+  #saMsg{font-size:15px;min-height:1em}
+  #sonosQ{z-index:45;width:min(300px,calc(100vw - 32px));padding:14px 16px 12px}
+  .sqHead{display:flex;align-items:center;justify-content:space-between}.sqHead h3{margin:0!important}
+  #sqX{font:inherit;font-size:24px;line-height:1;background:none;border:0;color:var(--ink);cursor:pointer;padding:0 4px}
+  #sqList{margin:8px 0 0;padding:0;list-style:none;font-size:16px;line-height:1.15}
+  #sqList li{padding:5px 0;border-top:2px dashed var(--edge)}#sqList li:first-child{border-top:0}
+  #sqList .t{font-size:17px}#sqList .s{font-size:13px;opacity:.75}#sqList .now{font-size:12px;letter-spacing:.5px;opacity:.7}
+  #np{cursor:pointer}#np:hover{filter:brightness(1.04)}
   #mirrorBtn{position:fixed;z-index:8;transform:translate(-50%,-100%);font:inherit;font-size:17px;color:var(--ink);background:#ffdf9a;border:3px solid var(--edge2);border-radius:6px;padding:4px 12px;cursor:pointer;white-space:nowrap;box-shadow:3px 4px 0 rgba(30,10,5,.4);animation:mirrorPop .25s ease-out}
   #mirrorBtn[hidden]{display:none}#mirrorBtn:hover{background:#ffe9b0}
   @keyframes mirrorPop{from{transform:translate(-50%,-80%);opacity:0}}
@@ -321,18 +341,23 @@
 <body>
 <canvas id="view"></canvas>
 <h1 id="name"></h1>
-<div id="title" class="panel"><div id="svbox"><canvas id="dial" width="44" height="26"></canvas><div id="svcol"><div id="clock"></div><div id="icons"><span id="wxic"></span><span id="season"></span></div><div id="time"></div></div></div><div id="wxbox"><div class="h">☁️ WEATHER</div><div id="wx"></div><div id="wxsub"></div></div><div id="np"><div class="h">🎵 NOW PLAYING</div><div id="npT"></div><div id="npA"></div><div id="npB"></div></div></div>
+<div id="title" class="panel"><div id="svbox"><canvas id="dial" width="44" height="26"></canvas><div id="svcol"><div id="clock"></div><div id="icons"><span id="wxic"></span><span id="season"></span></div><div id="time"></div></div></div><div id="wxbox"><div class="h">Weather</div><div id="wx"></div><div id="wxsub"></div></div><div id="np"><div class="h">Now playing</div><div id="npT"></div><div id="npA"></div><div id="npB"></div></div></div>
 <div id="roster" class="panel shut"><h2>Who's doing what <span id="count"></span></h2><ul id="list"></ul></div>
 <form id="tasks" class="panel" hidden autocomplete="off"><input id="tName" list="tNames" placeholder="Your name" aria-label="Your name" maxlength="20"><datalist id="tNames"></datalist><input id="tNew" placeholder="Add tasks for your character, e.g. sketching posters, calling the printer" aria-label="Add tasks for your character" maxlength="200"><button id="tSave" type="submit">Add</button><div id="tList"></div><div id="tMsg" role="status"></div></form>
 <div id="who" hidden role="dialog" aria-modal="true" aria-labelledby="whoT"><div id="whoBox" class="panel"><h2 id="whoT">Who is visiting?</h2><div id="whoGrid"></div><div id="whoGuestRow"></div><form id="whoName" hidden autocomplete="off"><label for="whoIn">What is your name?</label><input id="whoIn" maxlength="20" placeholder="Your name" required><div id="maker"></div><div class="row"><button type="button" id="whoBack">← Back</button><button type="submit" id="whoGo">Join</button></div></form></div></div>
 <div id="welcome" class="panel" hidden></div>
 <div id="walkTip" class="panel" hidden></div>
-<button id="mirrorBtn" type="button" hidden>🪞 Change my appearance</button>
+<button id="mirrorBtn" type="button" hidden>Change my appearance</button>
+<button id="sonosBtn" class="popBtn" type="button" hidden>Add to the Sonos queue</button>
+<div id="sonosAdd" class="panel" hidden role="dialog" aria-labelledby="saT"><h3 id="saT">Add to the Sonos queue</h3><form id="saForm" autocomplete="off">
+<label>Song<input id="saSong" maxlength="60" required></label><label>Artist<input id="saArtist" maxlength="40"></label>
+<div class="saRow"><button type="button" id="saCancel">Cancel</button><button type="submit" id="saGo">Add to queue</button></div><div id="saMsg" role="status"></div></form></div>
+<div id="sonosQ" class="panel" hidden role="dialog" aria-labelledby="sqT"><div class="sqHead"><h3 id="sqT">Up next on the Sonos</h3><button type="button" id="sqX" aria-label="Close">×</button></div><ol id="sqList"></ol></div>
 <div id="pad" aria-label="Walk around"><button class="u" data-k="ArrowUp" aria-label="Up">▲</button><button class="l" data-k="ArrowLeft" aria-label="Left">◀</button><button class="r" data-k="ArrowRight" aria-label="Right">▶</button><button class="d" data-k="ArrowDown" aria-label="Down">▼</button></div>
 <div id="chat" class="panel shut" hidden><div id="chatHead"><span class="ttl"><svg class="chatIco" viewBox="0 0 16 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="12" height="1" fill="#5a2408"/><rect x="1" y="1" width="1" height="1" fill="#5a2408"/><rect x="2" y="1" width="3" height="1" fill="#fff0a0"/><rect x="5" y="1" width="9" height="1" fill="#ffd23f"/><rect x="14" y="1" width="1" height="1" fill="#5a2408"/><rect x="0" y="2" width="1" height="1" fill="#5a2408"/><rect x="1" y="2" width="2" height="1" fill="#fff0a0"/><rect x="3" y="2" width="12" height="1" fill="#ffd23f"/><rect x="15" y="2" width="1" height="1" fill="#5a2408"/><rect x="0" y="3" width="1" height="1" fill="#5a2408"/><rect x="1" y="3" width="1" height="1" fill="#fff0a0"/><rect x="2" y="3" width="2" height="1" fill="#ffd23f"/><rect x="4" y="3" width="1" height="1" fill="#2a0f05"/><rect x="5" y="3" width="1" height="1" fill="#2a0f05"/><rect x="6" y="3" width="4" height="1" fill="#ffd23f"/><rect x="10" y="3" width="1" height="1" fill="#2a0f05"/><rect x="11" y="3" width="1" height="1" fill="#2a0f05"/><rect x="12" y="3" width="3" height="1" fill="#ffd23f"/><rect x="15" y="3" width="1" height="1" fill="#5a2408"/><rect x="0" y="4" width="1" height="1" fill="#5a2408"/><rect x="1" y="4" width="3" height="1" fill="#ffd23f"/><rect x="4" y="4" width="2" height="1" fill="#2a0f05"/><rect x="6" y="4" width="4" height="1" fill="#ffd23f"/><rect x="10" y="4" width="2" height="1" fill="#2a0f05"/><rect x="12" y="4" width="3" height="1" fill="#ffd23f"/><rect x="15" y="4" width="1" height="1" fill="#5a2408"/><rect x="0" y="5" width="1" height="1" fill="#5a2408"/><rect x="1" y="5" width="1" height="1" fill="#ffd23f"/><rect x="2" y="5" width="2" height="1" fill="#ffd23f"/><rect x="4" y="5" width="8" height="1" fill="#ffd23f"/><rect x="12" y="5" width="2" height="1" fill="#ffd23f"/><rect x="14" y="5" width="1" height="1" fill="#ffd23f"/><rect x="15" y="5" width="1" height="1" fill="#5a2408"/><rect x="0" y="6" width="1" height="1" fill="#5a2408"/><rect x="1" y="6" width="4" height="1" fill="#ffd23f"/><rect x="5" y="6" width="1" height="1" fill="#2a0f05"/><rect x="6" y="6" width="4" height="1" fill="#ffd23f"/><rect x="10" y="6" width="1" height="1" fill="#2a0f05"/><rect x="11" y="6" width="4" height="1" fill="#ffd23f"/><rect x="15" y="6" width="1" height="1" fill="#5a2408"/><rect x="0" y="7" width="1" height="1" fill="#5a2408"/><rect x="1" y="7" width="5" height="1" fill="#ffd23f"/><rect x="6" y="7" width="4" height="1" fill="#2a0f05"/><rect x="10" y="7" width="5" height="1" fill="#ffd23f"/><rect x="15" y="7" width="1" height="1" fill="#5a2408"/><rect x="1" y="8" width="1" height="1" fill="#5a2408"/><rect x="2" y="8" width="12" height="1" fill="#ffd23f"/><rect x="14" y="8" width="1" height="1" fill="#5a2408"/><rect x="2" y="9" width="1" height="1" fill="#5a2408"/><rect x="3" y="9" width="2" height="1" fill="#ffd23f"/><rect x="5" y="9" width="9" height="1" fill="#5a2408"/><rect x="2" y="10" width="1" height="1" fill="#5a2408"/><rect x="3" y="10" width="1" height="1" fill="#ffd23f"/><rect x="4" y="10" width="1" height="1" fill="#5a2408"/><rect x="2" y="11" width="2" height="1" fill="#5a2408"/></svg>Chat</span><span id="chatBadge" hidden></span><span class="views" role="group" aria-label="Chat view"><button type="button" data-v="shut" title="Hide the chat" aria-label="Hide the chat"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="4.25" width="10" height="1.6" fill="currentColor"/></svg></button><button type="button" data-v="mini" title="Just the message box" aria-label="Just the message box"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="2.25" width="10" height="1.6" fill="currentColor"/><rect x="1" y="6.25" width="10" height="1.6" fill="currentColor"/></svg></button><button type="button" data-v="full" title="Show past messages" aria-label="Show past messages"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="0.75" width="10" height="1.6" fill="currentColor"/><rect x="1" y="4.25" width="10" height="1.6" fill="currentColor"/><rect x="1" y="7.75" width="10" height="1.6" fill="currentColor"/></svg></button></span></div>
 <div id="chatBody"><ul id="chatLog" aria-live="polite"></ul><form id="chatForm" autocomplete="off"><input id="chatIn" maxlength="200" placeholder="Say something…" aria-label="Chat message"><button type="submit">Send</button></form></div></div>
-<div id="online" class="panel" hidden><div class="h">🟢 ONLINE NOW</div><ul id="onList"></ul><div class="g" id="onGuests"></div></div>
-<div id="help" class="panel"><b id="kN">N</b> names · <b id="kL">L</b> list · <b id="kS">S</b> <span id="sndL">🔇 sound off</span></div>
+<div id="online" class="panel" hidden><div class="h">Online now</div><ul id="onList"></ul><div class="g" id="onGuests"></div></div>
+<div id="help" class="panel"><b id="kN">N</b> Names · <b id="kL">L</b> List · <b id="kS">S</b> <span id="sndL">Sound off</span></div>
 
 <script>
 (()=>{
@@ -1562,6 +1587,7 @@ function findPath(si,sj,ti,tj){
   return path.reverse();
 }
 
+const tidy=t=>{t=String(t??'').replace(/[\p{Extended_Pictographic}\uFE0F\u200D\u20E3\u2600-\u27BF]/gu,'').replace(/\s+/g,' ').trim();return t?t[0].toUpperCase()+t.slice(1):t};   // no emoji, sentence case
 /* ---------- the cast ---------- */
 const resv=new Map();
 const free=(c,i,j)=>{const o=resv.get(ix(i,j));return !o||o===c};
@@ -1576,10 +1602,7 @@ const chars=COWORKERS.map((d,n)=>{
   setSay(c,c.act.say||'');
   return c;
 });
-function setSay(c,text,who){
-  c.say=text.replace('{name}',who||'someone');
-  const m=c.say.match(/^(\S+)\s/);c.icon=m&&/[^\x00-\x7f]/.test(m[1])?m[1]:'';
-}
+function setSay(c,text,who){c.say=tidy(String(text).replace('{name}',who||'someone'));c.icon=''}
 // ---- what fits the time of day (New York time) ----
 const TAGS={wc:'wc',focus:'work',delivery:'work',unbox:'work',sketch:'work',feedback:'work',sonosPick:'fun',dogPics:'fun',catPics:'fun',meme:'fun',slackEmoji:'fun',orderLunch:'order',desk:'work',deskLunch:'lunch',coffee:'drink',tea:'drink',drink:'drink',snack:'snack',heatLunch:'lunch',lunch:'lunch',chat:'social',kitchen:'social',gossip:'social',
   meeting:'meeting',sync:'meeting',present:'meeting',oneOnOne:'meeting',call:'call',quietCall:'call',couch:'relax',window:'relax',stroll:'relax'};
@@ -1642,7 +1665,7 @@ const JOHNNY={def:{name:'Johnny'},guard:true,idx:99,speed:2.4,away:true,street:n
 function johnnyOn(){if(!workday())return false;const h=nyHour();let last=0;for(const c of chars)if(!c.def.staff)last=Math.max(last,hoursOf(c).l);return h>=8.25&&h<last+.05}
 function johnnyStep(dt){const J=JOHNNY;if(J.street){streetStep(J,dt);return}
   if(!J.away){const slot=Math.floor(SIM.t/240000),s0=slot*240000;                // every now and then, at his post, he whistles a little tune to himself
-    if(hsh(slot+7,dateVal*3+1)<.045&&SIM.t-s0<20000&&SIM.t>=J.sayUntil){J.say='♪ whistling a tune ♫';J.sayUntil=s0+20000;J.whistle=slot}}
+    if(hsh(slot+7,dateVal*3+1)<.045&&SIM.t-s0<20000&&SIM.t>=J.sayUntil){J.say='Whistling a tune';J.sayUntil=s0+20000;J.whistle=slot}}
   if(J.away){if(johnnyOn())startStreet(J,true)}else if(!johnnyOn()){J.away=true;startStreet(J,false)}}
 // Getting to and from work: people walk along the sidewalks from all directions to the front door (bottom right of the building), then ride up.
 const FRONT=[719,264],LANE_M=373,LANE_B=724;                        // the door, the middle of the Mott St sidewalk and of the Broome St sidewalk (street pixels)
@@ -1784,7 +1807,7 @@ function arrive(c){
   if(a.home){goneHome(c);return}
   if(a.out){c.state='act';c.dir='N';c.t=999;return}            // wait at the lift for the other person
   if(a.next)c.next=ACTIVITIES[a.next];
-  if(/Sonos/.test(c.say))newTrack(c.def.name,/throwback/.test(c.say),SIM.t/500+c.idx*7919);
+  if(/Sonos/.test(c.say)&&!NP.user)newTrack(c.def.name,/throwback/i.test(c.say),SIM.t/500+c.idx*7919);
   c.t=rand(sec[0],sec[1])*STAY;c.bub=0;
   if(c.go==='pace'||c.go==='vacuum'){c.state='pace';paceLeg(c);return}
   c.state='act';c.dir=s.dir||c.dir;c.sit=!!s.sit;c.up=s.sit?(seatAt[ix(s.i,s.j)]||{up:0}).up:0;
@@ -1812,7 +1835,7 @@ function update(dt){
   {let n=0;for(const c of chars)if(!c.away&&c.state==='act'&&c.go==='kitchen')n++;kitchenLone=n===1}
   johnnyStep(dt);
   const mm=mondayActive();if(mm&&!mmWas)mmSession++;mmWas=mm;
-  {const sl=Math.floor(SIM.t/210000);if(sl!==NP.slot){NP.slot=sl;newTrack(null,undefined,sl)}}   // a new song every three and a half minutes
+  {const sl=Math.floor(SIM.t/210000);if(sl!==NP.slot){NP.slot=sl;playSlot(sl)}}   // a new song every three and a half minutes
   for(const c of chars){
     c.bub+=dt;
     if(c.away){if(c.street){streetStep(c,dt);continue}
@@ -1838,17 +1861,17 @@ function update(dt){
     const o=c.pair;if(!o||o.away||o.act!==c.act||o.pair!==c){c.pair=null;c.t=0;choose(c)}else if(o.state==='act')goOut(c,o)}
   {const guest=new Map();for(const v of chars)if(!v.away&&v.state==='act'&&v.go&&v.go.startsWith('visit')&&v.spot&&v.spot.who){const h=chars.find(o=>o.def.name===v.spot.who);if(h&&!guest.has(h))guest.set(h,v)}
    for(const h of chars){const v=guest.get(h);
-     if(v&&h.state==='act'){const want=mirrorSay(v,h);if(h.say!==want){if(h.ownSay==null)h.ownSay=h.say;h.say=want;const m=want.match(/^(\S+)\s/);h.icon=m&&/[^\x00-\x7f]/.test(m[1])?m[1]:'';h.bub=0}if(h.t<3)h.t=3}   // stay put while they're there
+     if(v&&h.state==='act'){const want=tidy(mirrorSay(v,h));if(h.say!==want){if(h.ownSay==null)h.ownSay=h.say;h.say=want;h.icon='';h.bub=0}if(h.t<3)h.t=3}   // stay put while they're there
      else if(h.ownSay!=null){if(h.state==='act')setSay(h,h.ownSay);h.ownSay=null}}}
   if(mondayActive())for(const c of chars){                          // meeting time: everyone calls it out on the way over, then it just says "meeting"
     if(c.away||c.held||c.def.staff||(c.act&&(c.act.wc||c.act.out)))continue;
     const want=c.act===MONDAY&&c.state!=='walk'?(mmPreview?'📣 meeting':MONDAY.say):'🗣️ time for the meeting!';
-    if(c.say!==want){const fresh=!/meeting/.test(c.say);setSay(c,want);if(fresh)c.bub=0}}
+    if(c.say!==tidy(want)){const fresh=!/meeting/i.test(c.say);setSay(c,want);if(fresh)c.bub=0}}
   for(const c of chars)if(c.act===ACTIVITIES.oneOnOne&&c.state==='act'){   // one-on-ones start and finish together
     const o=c.pair;if(!o||o.away||o.act!==ACTIVITIES.oneOnOne||o.pair!==c){if(c.t>2)c.t=rand(0,2)}else if(o.state==='walk'&&c.t<6)c.t=6}
   for(const c of chars)if(c.act===ACTIVITIES.kitchen&&c.state==='act'){   // it's only a kitchen catch-up if someone else is in there too
     const o=chars.find(o=>o!==c&&!o.away&&o.state==='act'&&o.go==='kitchen');
-    const want=o?'😄 kitchen catch-up with '+o.def.name:ACTIVITIES.kitchen.say;if(c.say!==want)setSay(c,want)}
+    const want=o?'😄 kitchen catch-up with '+o.def.name:ACTIVITIES.kitchen.say;if(c.say!==tidy(want))setSay(c,want)}
 }
 
 
@@ -1884,7 +1907,7 @@ function drawWalker(c){                                            // someone on
   const x=Math.round(c.rsx),y=Math.round(c.rsy),still=!c.street||c.street.wait,an=performance.now()/1000;
   const v=c.sdir==='S'?'f':c.sdir==='N'?'b':c.sdir==='E'?'s':'w',pose=still?'stand':['walkA','stand','walkB','stand'][Math.floor(an*9+c.idx*.37)%4];
   b.fillStyle='rgba(40,20,30,.28)';b.fillRect(x-6,y-2,12,3);b.fillRect(x-4,y-3,8,5);b.drawImage(c.spr[v+pose],x-9,y-31);if(c.def&&c.def.staff)drawUniform(x-9,y-31,v,false);
-  if(c===JOHNNY&&SIM.t<c.sayUntil&&/whistling/.test(c.say)&&v==='f'){                 // whistling: lips pursed, little notes floating off
+  if(c===JOHNNY&&SIM.t<c.sayUntil&&/whistling/i.test(c.say)&&v==='f'){                 // whistling: lips pursed, little notes floating off
     b.fillStyle='#4a2418';b.fillRect(x-1,y-19,2,2);b.fillStyle='#2a120c';b.fillRect(x-1,y-19,1,1);
     for(let k=0;k<3;k++){const ph=(an*.7+k/3)%1,nx=x+9+Math.round(ph*8+Math.sin((ph+k)*7)*1.5),ny=y-18-Math.round(ph*16);
       b.globalAlpha=Math.max(0,1-ph*1.15);for(const[dx,dy,col]of[[1,1,'rgba(40,15,5,.55)'],[0,0,k%2?'#ffd23f':'#ffffff']]){b.fillStyle=col;
@@ -2172,9 +2195,28 @@ const clockText=ms=>{const d=new Date(ms),P={};if(clockFmt)for(const p of clockF
   return[P.weekday+'. '+P.day,P.hour+':'+P.minute+' '+String(P.dayPeriod).toLowerCase()]};
 const wxEl=document.getElementById('wx'),wxSub=document.getElementById('wxsub');
 wxEl.parentNode.title='Weather for '+PLACE.name+' — data from Open-Meteo.com';
+// little pixel pictures for the clock card (instead of emoji)
+const PIXC={Y:'#f4c430',O:'#ee8b2c',o:'#a8541c',M:'#f4e3a0',W:'#f7f8fb',G:'#b8c0cc',D:'#5e6472',B:'#6fb6ea',R:'#e2574c',P:'#e8559a',g:'#3f8f4e',L:'#e8962e',T:'#7a4a20',K:'#4b1a0e'};
+const PIX={sun:['Y...Y...Y','.Y.....Y.','...YYY...','..YYYYY..','Y.YYYYY.Y','..YYYYY..','...YYY...','.Y.....Y.','Y...Y...Y'],
+  moon:['...MMM...','..MMM....','.MMM.....','.MMM.....','.MMM.....','.MMMM....','..MMMMMM.','...MMMM..','.........'],
+  cloud:['.........','...WWW...','..WWWWW..','.WWWWWWW.','WWWWWWWWW','WWWWWWWWW','.GGGGGGG.','.........','.........'],
+  partly:['Y..Y.....','.YYY.....','YYYYY....','.YYYWWW..','Y.YWWWWW.','..WWWWWWW','.WWWWWWWW','.GGGGGGG.','.........'],
+  fog:['.........','GGGGGGG..','.........','..GGGGGGG','.........','GGGGGGG..','.........','..GGGGGGG','.........'],
+  rain:['...WWW...','..WWWWW..','.WWWWWWW.','WWWWWWWWW','.GGGGGGG.','.B..B..B.','B..B..B..','.B..B..B.','.........'],
+  storm:['...DDD...','..DDDDD..','.DDDDDDD.','DDDDDDDDD','.DDDYDDD.','...YY....','..YYYY...','....Y....','...Y.....'],
+  snow:['....B....','.B..B..B.','..B.B.B..','...BBB...','BBBBBBBBB','...BBB...','..B.B.B..','.B..B..B.','....B....'],
+  pumpkin:['....g....','...g.....','.OOOOOOO.','OOoOOOoOO','OOOOOOOOO','OoOOOOOoO','OOOOOOOOO','.OOOOOOO.','.........'],
+  leaf:['......LL.','....LLLL.','...LLLLL.','..LLLLLL.','.LLLLLL..','.LLLLL...','.LLL.....','g........','.........'],
+  tree:['....Y....','...ggg...','..ggggg..','...ggg...','..ggRgg..','.ggggggg.','gggRggggg','....T....','....T....'],
+  heart:['.RR...RR.','RRRR.RRRR','RRRRRRRRR','RRRRRRRRR','.RRRRRRR.','..RRRRR..','...RRR...','....R....','.........'],
+  tulip:['..P.P.P..','..PPPPP..','..PPPPP..','...PPP...','....g....','..g.g.g..','...ggg...','....g....','.........'],
+  rainbow:['..RRRRR..','.ROOOOOR.','ROYYYYYOR','OYgggggYO','YgB...BgY','gB.....Bg','B.......B','.........','.........'],
+  sunflower:['...YYY...','..YYYYY..','.YYTTTYY.','.YYTTTYY.','..YYYYY..','...YYY...','....g....','..ggg....','....g....']};
+const pixSvg=(n,px=2)=>{const G=PIX[n];let r='';G.forEach((row,y)=>{for(let x=0;x<row.length;){const ch=row[x];if(ch==='.'){x++;continue}let w=1;while(row[x+w]===ch)w++;r+=`<rect x="${x}" y="${y}" width="${w}" height="1" fill="${PIXC[ch]}"/>`;x+=w}});
+  return `<svg viewBox="0 0 9 9" width="${9*px}" height="${9*px}" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`};
 function wxHud(){
   const[kind,,label]=wxNow(),night=cur.dark>.5,r=reading();
-  const ic={clear:night?'🌙':'☀️',cloudy:night?'☁️':'⛅',overcast:'☁️',fog:'🌫️',drizzle:'🌦️',rain:'🌧️',storm:'⛈️',snow:'❄️'}[kind];
+  const icn={clear:night?'moon':'sun',cloudy:night?'cloud':'partly',overcast:'cloud',fog:'fog',drizzle:'rain',rain:'rain',storm:'storm',snow:'snow'}[kind],ic='';
   let main,sub;
   if(pv.kind){main=ic+' '+label;sub='preview · W for live'}
   else if(live.ok){main=ic+' '+(live.temp==null?'':Math.round(live.temp)+'°F  ')+label;sub='live · Open-Meteo · as of '+clockText(live.at)[1]}
@@ -2183,14 +2225,14 @@ function wxHud(){
   else if(navigator.onLine===false){main='📡 no internet connection';sub='will try again in a minute'}
   else{main='📡 weather offline';sub=live.tried?'open in a browser tab · retrying':'checking the weather…'}
   if(pv.tod)sub+=' · '+pv.tod+' (T)';
-  const wi=document.getElementById('wxic');if(wi&&wi.textContent!==ic){wi.textContent=ic;wi.title=label||KNAME[kind]}
-  if(wxEl.textContent!==main)wxEl.textContent=main;if(wxSub.textContent!==sub)wxSub.textContent=sub;
+  const wi=document.getElementById('wxic');if(wi&&wi.dataset.ic!==icn){wi.dataset.ic=icn;wi.innerHTML=pixSvg(icn);wi.title=label||KNAME[kind]}
+  main=tidy(main);sub=tidy(sub);if(wxEl.textContent!==main)wxEl.textContent=main;if(wxSub.textContent!==sub)wxSub.textContent=sub;
 }
 wxStep(0);loadWeather();
 
 /* ---------- seasonal decorations: they change by themselves through the year (S previews each one) ---------- */
 const SEASONS=['halloween','fall','holiday','winter','valentine','spring','pride','summer'];
-const SEASON_ICON={halloween:'🎃',fall:'🍂',holiday:'🎄',winter:'❄️',valentine:'💘',spring:'🌷',pride:'🌈',summer:'🌻'};
+const SEASON_ICON={halloween:'pumpkin',fall:'leaf',holiday:'tree',winter:'snow',valentine:'heart',spring:'tulip',pride:'rainbow',summer:'sunflower'};
 const SEASON_NAME={halloween:'Halloween',fall:'Fall',holiday:'Holiday',winter:'Winter',valentine:"Valentine's",spring:'Spring',pride:'Pride',summer:'Summer'};
 let mdAt=0,mdVal=[9,13],decoClock=0;
 function nyMonthDay(){const now=Date.now();if(now-mdAt<60000)return mdVal;mdAt=now;
@@ -2322,14 +2364,18 @@ const OLDIES=[['September','Earth, Wind & Fire',1978],['Dancing Queen','ABBA',19
   ['Hips Don\'t Lie','Shakira',2006],['Umbrella','Rihanna',2007],['Paper Planes','M.I.A.',2007],['Gold Digger','Kanye West',2005],['1901','Phoenix',2009],['Time to Pretend','MGMT',2007],
   ['Rolling in the Deep','Adele',2010],['Somebody That I Used to Know','Gotye',2011],['Uptown Funk','Mark Ronson ft. Bruno Mars',2014],['Gangnam Style','PSY',2012]];
 const SONOS_FANS=['Mo','Goda','Luke','Hannah Ch'];                  // the people most likely to have queued it
-function newTrack(by,old,seed){
+function pickTrack(by,old,seed,recent){                             // the shuffle: a song for this slot that hasn't played lately
   const rr=mulberry((seed||0)*2654435761>>>0),pk=a=>a[rr()*a.length|0];
   if(!by){const here=chars.filter(c=>!c.away&&!c.def.staff),pool=[];for(const c of here){pool.push(c);if(SONOS_FANS.includes(c.def.name))pool.push(c,c)}
     if(pool.length)by=pk(pool).def.name;if(old===undefined)old=rr()<.5}     // half the time something older
-  const list=old?OLDIES:SONGS;let s;for(let k=0;k<20;k++){s=pk(list);if(!NP.recent.includes(s[0]))break}
-  NP.recent.push(s[0]);if(NP.recent.length>12)NP.recent.shift();
-  NP.title=s[0];NP.artist=s[1];NP.year=s[2]||0;NP.by=by||'';
+  const list=old?OLDIES:SONGS;let s;for(let k=0;k<20;k++){s=pk(list);if(!recent.includes(s[0]))break}
+  recent.push(s[0]);if(recent.length>12)recent.shift();
+  return{title:s[0],artist:s[1],year:s[2]||0,by:by||''};
 }
+function newTrack(by,old,seed){const t=pickTrack(by,old,seed,NP.recent);NP.title=t.title;NP.artist=t.artist;NP.year=t.year;NP.by=t.by;NP.user=false}
+const SQ={list:[]};                                                 // songs people have added at the speakers, each booked into its own slot
+const queuedFor=sl=>SQ.list.find(q=>q.slot===sl);
+function playSlot(sl){const q=queuedFor(sl);if(q){NP.title=q.title;NP.artist=q.artist||'';NP.year=0;NP.by=q.by;NP.user=true}else newTrack(null,undefined,sl)}
 newTrack();
 function awayText(c){if(c.out)return c.say;if(c.street)return c.street.inbound?'🚶 on the way in':'🚶 heading home';if(!workday())return'🏠 off today';return nyHour()<hoursOf(c).a?'🌅 not in yet':'🏠 gone home'}
 
@@ -2396,7 +2442,7 @@ function render(){
     if(c.out&&c.say){ctx.font=FONT(fs);const bw=(ctx.measureText(c.say).width+fs*.8)/2+2,br=[X-bw,Y-fs*2.55,X+bw,Y-fs*.95];if(!hits(...br)){bubble(X,Y-fs*.95,c.say,fs);placed.push(br)}}}
   if(hoverWC>=0){                                                   // pointing at a bathroom: say who's in there
     const sp=SPOTS.wc[hoverWC],o=chars.find(c=>!c.away&&c.spot===sp&&c.act&&c.act.wc&&c.state==='act');
-    const[x0,y0,x1,y1]=WC_ROOMS[hoverWC][0],t=o?o.def.name+' is in here!':'🚻 vacant';
+    const[x0,y0,x1,y1]=WC_ROOMS[hoverWC][0],t=o?o.def.name+' is in here!':'Vacant';
     const X=sx((x0+x1)/2-WX0),Y=sy(y0+(y1-y0)*.55-OZ-WY0);ctx.font=FONT(fs);bubble(X,Y,t,fs);
     const w=(ctx.measureText(t).width+fs*.8)/2+2;placed.push([X-w,Y-fs*1.6,X+w,Y])}
   const chatOn=c=>c.chatUntil>performance.now();
@@ -2411,8 +2457,8 @@ function render(){
       if(!focus&&hits(...r))continue;
       label(c.def.name,X,Y-fs*.4,fs*.9,c===follow?'#ffe36e':'#ffffff');placed.push(r);Y-=fs*.95;
     }
-    if(chatOn(c)){const t='💬 '+c.chatSay;ctx.font=FONT(fs);const w=(ctx.measureText(t).width+fs*.8)/2+2;bubble(X,Y,t,fs);placed.push([X-w,Y-fs*1.6,X+w,Y]);continue}   // what they just said in the chat
-    if(c.state==='walk'&&!(mondayActive()&&/time for the meeting/.test(c.say)))continue;
+    if(chatOn(c)){const t=c.chatSay;ctx.font=FONT(fs);const w=(ctx.measureText(t).width+fs*.8)/2+2;bubble(X,Y,t,fs);placed.push([X-w,Y-fs*1.6,X+w,Y]);continue}   // what they just said in the chat
+    if(c.state==='walk'&&!(mondayActive()&&/time for the meeting/i.test(c.say)))continue;
     const t=(c.bub<3.5||focus)?c.say:(c.go==='desk'&&!(c.act&&c.act.phones)?'':c.icon);     // at a desk the little icon would just be clutter
     if(!t)continue;
     ctx.font=FONT(fs);const w=(ctx.measureText(t).width+fs*.8)/2+2,r=[X-w,Y-fs*1.6,X+w,Y];
@@ -2556,12 +2602,11 @@ function drawDial(frac,night){                                    // a little ha
   for(let t=0;t<=L;t+=.5){const x=Math.round(cx+Math.cos(a)*t),y=Math.round(cy-Math.sin(a)*t);g.fillRect(x,y,t>L-3?2:1,t>L-3?2:1)}
   g.fillStyle='#5a2408';g.fillRect(cx-2,cy-2,4,3);g.fillStyle='#e0a866';g.fillRect(cx-1,cy-1,2,1);
 }
+const WALKER='<svg viewBox="0 0 7 9" width="9" height="12" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 0h2v2H3zM2 2h3v3H2zM1 3h1v1H1zM5 3h1v1H5zM2 5h1v1H2zM4 5h1v2H4zM1 6h1v2H1zM5 7h1v1H5zM0 8h1v1H0zM6 8h1v1H6z" fill="#4b1a0e"/></svg>';   // a little walking man
 function hud(){
   for(const r of rows){
-    const away=!!r.c.away&&!PL.ctl.has(r.c),walking=!away&&r.c.state==='walk'&&!PL.ctl.has(r.c),say=PL.ctl.has(r.c)?'🕹️ walking around':away?awayText(r.c):r.c.say,t=(walking?'→ ':'')+say;
-    if(r.say!==t){r.say=t;const m=say.match(/^(\S+)\s/),ic=m&&/[^\x00-\x7f]/.test(m[1])?m[1]:'',txt=ic?say.slice(ic.length).trim():say;
-      r.ic.textContent=ic||'·';r.tx.textContent=(walking?'→ ':'')+txt;r.li.title=r.c.def.name+': '+t}
-    {const col=(r.c.def.look&&r.c.def.look.shirt)||'#888';if(r.dotCol!==col){r.dotCol=col;r.dot.style.background=col}}
+    const ctl=PL.ctl.has(r.c),away=!!r.c.away&&!ctl,walking=!away&&!ctl&&r.c.state==='walk',say=tidy(ctl?'Walking around':away?awayText(r.c):r.c.say),t=(walking?'→ ':'')+say;
+    if(r.say!==t){r.say=t;r.ic.innerHTML=ctl?WALKER:'';r.tx.textContent=t;r.li.title=r.c.def.name+': '+t}
     r.li.classList.toggle('walk',walking);r.li.classList.toggle('away',away);
     r.li.classList.toggle('on',r.c===follow);
   }
@@ -2569,9 +2614,9 @@ function hud(){
   {let hh=12,mm=0,mon=9;try{const P={};for(const p of new Intl.DateTimeFormat('en-US',{timeZone:PLACE.tz,hour:'numeric',minute:'numeric',month:'numeric',hourCycle:'h23'}).formatToParts(new Date()))P[p.type]=+p.value;hh=P.hour%24;mm=P.minute;mon=P.month-1}catch(_){}
    const f=Math.max(0,Math.min(1,((hh<6?hh+24:hh)+mm/60-6)/20)),k=Math.round(f*200)+'';if(k!==dialKey){dialKey=k;drawDial(f)}
    const se=pv.season||seasonOf(...nyMonthDay());if(se!==DECO.season)applySeason(se);
-   seasonEl.textContent=SEASON_ICON[se];seasonEl.title=SEASON_NAME[se]+' decorations'+(pv.season?' (preview: E for live)':'')}
+   seasonEl.innerHTML=pixSvg(SEASON_ICON[se]);seasonEl.title=SEASON_NAME[se]+' decorations'+(pv.season?' (preview: E for live)':'')}
   {const team=chars.filter(c=>!c.def.staff),n=team.filter(c=>!c.away).length;countEl.textContent='· '+n+' of '+team.length+' in'}
-  {const any=musicOn(),T=any?NP.title:'Sonos is off',A=any?NP.artist+(NP.year?' · '+NP.year:''):'nobody\u2019s in',B=any&&NP.by?'queued by '+NP.by:'';
+  {const any=musicOn(),T=any?NP.title:'Sonos is off',A=any?NP.artist+(NP.year?' · '+NP.year:''):'Nobody\u2019s in',B=any&&NP.by?'Queued by '+NP.by:'';
    const el=id=>document.getElementById(id);if(el('npT').textContent!==T){el('npT').textContent=T;el('npA').textContent=A;el('npB').textContent=B;el('npB').style.display=B?'':'none'}}
   wxHud();
   if(pv.season&&!wxSub.textContent.includes('(E)'))wxSub.textContent+=' · '+SEASON_NAME[pv.season]+' (E)';
@@ -2718,7 +2763,7 @@ function playPiece(at,moodName,rng){                                   // 16 bar
 }
 function sndTick(){
   if(!SND.on||!SND.C||SND.C.state!=='running')return;
-  {const J=JOHNNY;if(J.whistle!=null&&J.whistle!==J.played&&SIM.t<J.sayUntil&&/whistling/.test(J.say)){J.played=J.whistle;whistleTune(J.whistle)}}
+  {const J=JOHNNY;if(J.whistle!=null&&J.whistle!==J.played&&SIM.t<J.sayUntil&&/whistling/i.test(J.say)){J.played=J.whistle;whistleTune(J.whistle)}}
   const now=SND.C.currentTime,[kind]=wxNow(),night=cur.dark>.5,wet=cur.rain,snow=cur.snow,storm=cur.storm;
   SND.rainG.gain.setTargetAtTime(Math.min(.8,wet*wet*.65+storm*.2),now,1.2);SND.dropG.gain.setTargetAtTime(wet>.03?Math.min(.6,.2+wet*.35+storm*.08):0,now,1.2);
   if((kind==='storm'||kind==='fog')&&due('whale',now,14+Math.random()*14))whale(now+.2);   // whales, only in storms and fog
@@ -2742,7 +2787,7 @@ function whistleTune(seed){                                          // Johnny's
     g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.03);g.gain.setValueAtTime(.03,t+len*.7);g.gain.linearRampToValueAtTime(0,t+len);
     o.connect(g);g.connect(SND.master);o.start(t);o.stop(t+len+.05);v.start(t);v.stop(t+len+.05);t+=len+.02}
 }
-const sndLbl=()=>{const e=document.getElementById('sndL');if(e)e.textContent=SND.on?'🔊 sound on':'🔇 sound off'};
+const sndLbl=()=>{const e=document.getElementById('sndL');if(e)e.textContent=SND.on?'Sound on':'Sound off'};
 function sndToggle(){
   SND.on=!SND.on;
   if(SND.on){if(!SND.C&&!sndBuild()){SND.on=false;sndLbl();return}SND.C.resume();SND.next={}}
@@ -2853,7 +2898,7 @@ function pickWho(name){
   if(typeof PL!=='undefined'&&PL.me)stopWalking();
   ON.name=name;ON.guest=null;document.getElementById('who').hidden=true;setWelcome();
   if(name){try{localStorage.setItem('kotoNY.name',name)}catch(_){}const t=document.getElementById('tName');if(t){t.value=name;if(typeof taskUI==='function')taskUI()}
-    const c=chars.find(c=>c.def.name===name);if(c&&!c.away)setFollow(c)}
+    const c=chars.find(c=>c.def.name===name);if(c&&!c.away)setFollow(c);if(offHours(c)&&typeof startWalking==='function')startWalking()}
   beat();
 }
 function setWelcome(){const w=document.getElementById('welcome'),n=ON.name||ON.guest;w.textContent=n?'Welcome, '+n+'!':'';w.hidden=!n;if(typeof applyDock==='function')for(const id in DOCK.saved){const el=document.getElementById(id);if(el)applyDock(el)}}
@@ -2889,7 +2934,7 @@ function chatAdd(m,fresh){
   if(fresh){const c=!m.guest&&chars.find(c=>c.def.name===m.who);if(c&&!c.away){c.chatSay=m.text.length>42?m.text.slice(0,40)+'…':m.text;c.chatUntil=performance.now()+8000}   // their character says it in the office too
     const mine=m.id===ON.id;if(!mine&&!chatEl.classList.contains('full')){CH.unread++;showBadge()}}
 }
-function chatProblem(msg){chatEl.hidden=false;if(CH.ready)return;chatLog.textContent='';const li=document.createElement('li');li.className='empty';li.textContent='⚠️ '+msg;chatLog.appendChild(li)}   // show the box anyway, with what's wrong
+function chatProblem(msg){chatEl.hidden=false;if(CH.ready)return;chatLog.textContent='';const li=document.createElement('li');li.className='empty';li.textContent=msg;chatLog.appendChild(li)}   // show the box anyway, with what's wrong
 function showBadge(){const b=document.getElementById('chatBadge');b.hidden=!CH.unread;chatEl.classList.toggle('unread',!!CH.unread);b.textContent=CH.unread>9?'9+':String(CH.unread)}
 async function chatPull(){
   if(CH.busy)return;CH.busy=true;
@@ -3058,6 +3103,7 @@ document.getElementById('mirrorBtn').addEventListener('click',openMirror);
 
 // --- taking control ---
 const meChar=()=>ON.name?chars.find(c=>c.def.name===ON.name):null;
+const offHours=c=>!!c&&!onSite(c);                                   // outside their working hours (or a weekend): walking is the only mode
 function startWalking(){
   if(PL.me||(!ON.name&&!ON.guest))return;
   const c=meChar(),el=SPOTS.elevator[0];let x=el.i+.5,y=el.j+.5,sit=false,dir='S',up=0;
@@ -3071,7 +3117,7 @@ function stopWalking(){                                            // back at yo
 }
 const touchy=()=>matchMedia('(hover:none)').matches;
 function tipText(){const t=document.getElementById('walkTip');
-  if(PL.me&&PL.me.char&&!PL.me.home){t.textContent='Sit at your desk to go back to work';t.hidden=false}
+  if(PL.me&&PL.me.char&&!PL.me.home&&!offHours(PL.me.char)){t.textContent='Sit at your desk to go back to work';t.hidden=false}
   else t.hidden=true}   // guests get no hints
 const KEYDIR={ArrowUp:[0,-1,'N'],ArrowDown:[0,1,'S'],ArrowLeft:[-1,0,'W'],ArrowRight:[1,0,'E']};
 function keyOn(k){if(!KEYDIR[k])return;PL.keys=PL.keys.filter(x=>x!==k);PL.keys.push(k);if(!PL.me)startWalking()}
@@ -3099,9 +3145,11 @@ function playStep(dt){
       const ti=Math.floor(me.x),tj=Math.floor(me.y),seat=seatAt[ix(ti,tj)];
       me.x+=(ti+.5-me.x)*Math.min(1,dt*10);me.y+=(tj+.5-me.y)*Math.min(1,dt*10);
       if(seat&&(me.idle=(me.idle||0)+dt)>.2){me.x=ti+.5;me.y=tj+.5;me.sit=true;me.dir=seat.dir;me.up=seat.up||0;
-        const c=me.char;if(c&&c.desk&&c.desk.i===ti&&c.desk.j===tj){me.home=performance.now();tipText()}}
+        const c=me.char;if(c&&c.desk&&c.desk.i===ti&&c.desk.j===tj&&!offHours(c)){me.home=performance.now();tipText()}}
     }
-    if(me.home){const c=me.char;if(!c||(c.go==='desk'&&c.state==='act'&&!c.away)||performance.now()-me.home>45000)stopWalking()}   // wait for your character to sit back down, then hand it over
+    if(me.home){const c=me.char;if(offHours(c)){me.home=0;tipText()}else if(!c||(c.go==='desk'&&c.state==='act'&&!c.away)||performance.now()-me.home>45000)stopWalking()}
+    if(me.char&&(me.offT=(me.offT||0)+dt)>2){me.offT=0;tipText()}   // the banner follows the time of day
+    if(me.mv&&follow!==me&&cam.z>cam.fit*1.15)follow=me;              // zoomed in: the camera keeps up with you   // wait for your character to sit back down, then hand it over
     me.rx=me.x;me.ry=me.y;
   }
   for(const r of PL.remote.values()){const k=Math.min(1,dt*8);r.rx+=(r.x-r.rx)*k;r.ry+=(r.y-r.ry)*k;r.mvv=Math.abs(r.x-r.rx)+Math.abs(r.y-r.ry)>.02}
@@ -3119,8 +3167,10 @@ function drawPuppet(p){
 function puppetLabels(fs,hits,placed){
   const me=PL.me;
   {const btn=document.getElementById('mirrorBtn'),near=me&&!me.sit&&!me.mv&&document.getElementById('who').hidden&&Math.abs(me.x-1.5)+Math.abs(me.y-3.5)<.9;   // standing at the mirror in the bathroom hall
-   if(near){const[fx,fy]=charXY(me);btn.style.left=Math.round(sx(fx)/dpr)+'px';btn.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(btn.hidden===!!near)btn.hidden=!near}
-  if(me&&me.char&&me.char.desk&&!me.home){                          // a sign over your desk pointing at your chair
+   if(near){const[fx,fy]=charXY(me);btn.style.left=Math.round(sx(fx)/dpr)+'px';btn.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(btn.hidden===!!near)btn.hidden=!near;
+   const sb=document.getElementById('sonosBtn'),nearS=me&&!me.mv&&document.getElementById('who').hidden&&document.getElementById('sonosAdd').hidden&&SPEAKERS.some(([i,j])=>Math.abs(me.x-(i+.5))+Math.abs(me.y-(j+.5))<1.7);   // next to a speaker
+   if(nearS){const[fx,fy]=charXY(me);sb.style.left=Math.round(sx(fx)/dpr)+'px';sb.style.top=Math.round(sy(fy-40)/dpr)+'px'}if(sb.hidden===!!nearS)sb.hidden=!nearS}
+  if(me&&me.char&&me.char.desk&&!me.home&&!offHours(me.char)){     // an arrow over your desk pointing at your chair
     const d=me.char.desk,X=sx(d.i*TS+8-WX0),Y=sy(d.j*TS-22-OZ-WY0),a=fs*.95,bob=Math.sin(performance.now()/260)*fs*.18;   // a bobbing yellow arrow over your chair
     ctx.lineWidth=Math.max(2,fs/7);ctx.strokeStyle='#5a2408';ctx.fillStyle='#ffd23f';
     ctx.beginPath();ctx.moveTo(X-a*.45,Y-a*1.4+bob);ctx.lineTo(X+a*.45,Y-a*1.4+bob);ctx.lineTo(X+a*.45,Y-a*.4+bob);ctx.lineTo(X+a,Y-a*.4+bob);ctx.lineTo(X,Y+a*.5+bob);ctx.lineTo(X-a,Y-a*.4+bob);ctx.lineTo(X-a*.45,Y-a*.4+bob);ctx.closePath();ctx.fill();ctx.stroke();
@@ -3129,8 +3179,8 @@ function puppetLabels(fs,hits,placed){
   for(const p of puppets()){const[fx,fy]=charXY(p),X=sx(fx);let Y=sy(fy-32-(p.sit?p.up:0));
     const nm=p.who+(p.guest?' (guest)':'');ctx.font=FONT(fs*.9);const w=ctx.measureText(nm).width/2+fs*.2;
     label(nm,X,Y-fs*.4,fs*.9,p===me?'#ffe36e':p.guest?'#ffd9a0':'#ffffff');placed.push([X-w,Y-fs*.9,X+w,Y+fs*.05]);
-    const c=p.char;if(c&&c.chatUntil>performance.now()){const t='💬 '+c.chatSay;ctx.font=FONT(fs);bubble(X,Y-fs*.95,t,fs)}
-    else if(p.chatUntil>performance.now()){ctx.font=FONT(fs);bubble(X,Y-fs*.95,'💬 '+p.chatSay,fs)}}
+    const c=p.char;if(c&&c.chatUntil>performance.now()){ctx.font=FONT(fs);bubble(X,Y-fs*.95,c.chatSay,fs)}
+    else if(p.chatUntil>performance.now()){ctx.font=FONT(fs);bubble(X,Y-fs*.95,p.chatSay,fs)}}
 }
 // --- sharing positions with everyone else ---
 async function sendMove(leave){
@@ -3151,6 +3201,42 @@ function takePlayers(list){
 }
 window.__pl=PL;
 addEventListener('pagehide',()=>{if(PL.me)try{navigator.sendBeacon(PL.url,new Blob([JSON.stringify({id:ON.id,leave:true})],{type:'application/json'}))}catch(_){}});
+/* ---------- the Sonos queue: add songs at a speaker; tap the Now playing card to see what's coming up ---------- */
+const SPEAKERS=[[16,7],[35,7]];
+async function pullSonos(){if(location.protocol==='file:')return;try{const r=await fetch('/api/sonos',{cache:'no-store'});const j=await r.json();if(j&&j.ok)takeSonos(j.queue)}catch(_){}}
+function takeSonos(list){SQ.list=Array.isArray(list)?list:[];const q=queuedFor(NP.slot);if(q&&!(NP.user&&NP.title===q.title))playSlot(NP.slot);if(!document.getElementById('sonosQ').hidden)showQueue()}
+pullSonos();setInterval(()=>{if(!document.hidden)pullSonos()},20000);
+function upcoming(n){                                                // what the next few slots will play: songs people added, and the shuffle in between
+  const out=[],recent=NP.recent.slice();
+  for(let k=1;out.length<n&&k<40;k++){const sl=NP.slot+k,q=queuedFor(sl);
+    if(q)out.push({title:q.title,artist:q.artist,by:q.by,user:true});
+    else{const t=pickTrack(null,undefined,sl,recent);out.push(Object.assign(t,{user:false}))}}
+  return out}
+function showQueue(){
+  const ol=document.getElementById('sqList');ol.textContent='';
+  const add=(t,sub,now)=>{const li=document.createElement('li');if(now){const n=document.createElement('div');n.className='now';n.textContent='Now playing';li.appendChild(n)}
+    const a=document.createElement('div');a.className='t';a.textContent=t;const b=document.createElement('div');b.className='s';b.textContent=sub;li.append(a,b);ol.appendChild(li)};
+  if(musicOn())add(NP.title+(NP.artist?' – '+NP.artist:''),NP.by?'Queued by '+NP.by:'Shuffle',true);else add('The Sonos is off','Nobody’s in',true);
+  for(const t of upcoming(5))add(t.title+(t.artist?' – '+t.artist:''),t.user?'Queued by '+t.by:'Shuffle');
+}
+function openQueue(){const q=document.getElementById('sonosQ'),r=document.getElementById('np').getBoundingClientRect();showQueue();pullSonos();q.hidden=false;
+  q.style.top=Math.round(Math.min(innerHeight-q.offsetHeight-10,r.bottom+8))+'px';q.style.left=Math.round(Math.max(10,Math.min(innerWidth-q.offsetWidth-10,r.right-q.offsetWidth)))+'px'}
+document.getElementById('np').addEventListener('click',e=>{e.stopPropagation();const q=document.getElementById('sonosQ');if(q.hidden)openQueue();else q.hidden=true});
+document.getElementById('sqX').addEventListener('click',()=>{document.getElementById('sonosQ').hidden=true});
+addEventListener('pointerdown',e=>{const q=document.getElementById('sonosQ');if(!q.hidden&&!q.contains(e.target)&&!document.getElementById('np').contains(e.target))q.hidden=true});
+function openSonosAdd(){const b=document.getElementById('sonosAdd');b.hidden=false;document.getElementById('saMsg').textContent='';document.getElementById('saSong').value='';document.getElementById('saArtist').value='';PL.keys=[];setTimeout(()=>document.getElementById('saSong').focus(),30)}
+document.getElementById('sonosBtn').addEventListener('click',openSonosAdd);
+document.getElementById('saCancel').addEventListener('click',()=>{document.getElementById('sonosAdd').hidden=true});
+document.getElementById('sonosAdd').addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('sonosAdd').hidden=true});
+document.getElementById('saForm').addEventListener('submit',async e=>{
+  e.preventDefault();const title=document.getElementById('saSong').value.trim(),artist=document.getElementById('saArtist').value.trim(),msg=document.getElementById('saMsg');
+  if(!title)return;const go=document.getElementById('saGo');go.disabled=true;msg.textContent='Adding…';
+  try{const r=await fetch('/api/sonos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,artist,by:ON.name||ON.guest||'Someone',id:ON.id})});const j=await r.json();
+    if(j&&j.ok){takeSonos(j.queue);const mine=SQ.list.filter(q=>q.slot>NP.slot),pos=mine.findLastIndex(q=>q.title===title&&q.by===(ON.name||ON.guest));
+      msg.textContent=pos<=0?'Added. It plays next.':'Added. It’s number '+(pos+1)+' in the queue.';setTimeout(()=>{document.getElementById('sonosAdd').hidden=true},1600)}
+    else msg.textContent=(j&&j.error)||'That didn’t work. Try again.'}catch(_){msg.textContent='That didn’t work. Check your connection.'}
+  go.disabled=false;
+});
 /* ---------- go ---------- */
 let last=0,hudT=0;
 function frame(t){
@@ -3172,7 +3258,7 @@ function frame(t){
 resync();                                                          // work out the office as it is right now
 for(const c of chars){c.rx=c.x;c.ry=c.y}
 hud();resize();requestAnimationFrame(frame);
-window.__office={JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
+window.__office={SQ,NP,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
 })();
 </script>
 </body>
