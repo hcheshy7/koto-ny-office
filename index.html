@@ -123,6 +123,7 @@
   #pad.show{display:grid}
   #pad button{font:inherit;font-size:20px;color:var(--ink);background:#ffdf9a;border:3px solid var(--edge2);border-radius:8px;padding:0;touch-action:none;user-select:none;-webkit-user-select:none}
   #pad button:active,#pad button.on{background:#f4bf70}
+  #pad .c{grid-area:2/2;background:#ffd6e5;font-size:20px}
   #pad .u{grid-area:1/2}#pad .l{grid-area:2/1}#pad .r{grid-area:2/3}#pad .d{grid-area:3/2}
   #sonosBtn{position:fixed;z-index:8;transform:translate(-50%,-100%);font:inherit;font-size:17px;color:var(--ink);background:#ffdf9a;border:3px solid var(--edge2);border-radius:6px;padding:4px 12px;cursor:pointer;white-space:nowrap;box-shadow:3px 4px 0 rgba(30,10,5,.4)}
   #sonosBtn[hidden]{display:none}#sonosBtn:hover{background:#ffe9b0}
@@ -579,7 +580,7 @@
 <label>Song<input id="saSong" maxlength="60" required></label><label>Artist<input id="saArtist" maxlength="40"></label>
 <div class="saRow"><button type="button" id="saCancel">Cancel</button><button type="submit" id="saGo">Add to queue</button></div><div id="saMsg" role="status"></div></form></div>
 <div id="sonosQ" class="panel" hidden role="dialog" aria-labelledby="sqT"><div class="sqHead"><h3 id="sqT"><span class="h"><i class="pi" data-ic="note"></i>Sonos queue</span></h3><button type="button" id="sqX" aria-label="Close">×</button></div><ol id="sqList"></ol></div>
-<div id="pad" aria-label="Walk around"><button class="u" data-k="ArrowUp" aria-label="Up">▲</button><button class="l" data-k="ArrowLeft" aria-label="Left">◀</button><button class="r" data-k="ArrowRight" aria-label="Right">▶</button><button class="d" data-k="ArrowDown" aria-label="Down">▼</button></div>
+<div id="pad" aria-label="Walk around"><button class="u" data-k="ArrowUp" aria-label="Up">▲</button><button class="l" data-k="ArrowLeft" aria-label="Left">◀</button><button class="r" data-k="ArrowRight" aria-label="Right">▶</button><button class="d" data-k="ArrowDown" aria-label="Down">▼</button><button class="c" id="padDance" type="button" aria-label="Dance">♪</button></div>
 <div id="chat" class="panel shut" hidden><div id="chatHead"><span class="ttl"><svg class="chatIco" viewBox="0 0 16 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="12" height="1" fill="#5a2408"/><rect x="1" y="1" width="1" height="1" fill="#5a2408"/><rect x="2" y="1" width="3" height="1" fill="#fff0a0"/><rect x="5" y="1" width="9" height="1" fill="#ffd23f"/><rect x="14" y="1" width="1" height="1" fill="#5a2408"/><rect x="0" y="2" width="1" height="1" fill="#5a2408"/><rect x="1" y="2" width="2" height="1" fill="#fff0a0"/><rect x="3" y="2" width="12" height="1" fill="#ffd23f"/><rect x="15" y="2" width="1" height="1" fill="#5a2408"/><rect x="0" y="3" width="1" height="1" fill="#5a2408"/><rect x="1" y="3" width="1" height="1" fill="#fff0a0"/><rect x="2" y="3" width="2" height="1" fill="#ffd23f"/><rect x="4" y="3" width="1" height="1" fill="#2a0f05"/><rect x="5" y="3" width="1" height="1" fill="#2a0f05"/><rect x="6" y="3" width="4" height="1" fill="#ffd23f"/><rect x="10" y="3" width="1" height="1" fill="#2a0f05"/><rect x="11" y="3" width="1" height="1" fill="#2a0f05"/><rect x="12" y="3" width="3" height="1" fill="#ffd23f"/><rect x="15" y="3" width="1" height="1" fill="#5a2408"/><rect x="0" y="4" width="1" height="1" fill="#5a2408"/><rect x="1" y="4" width="3" height="1" fill="#ffd23f"/><rect x="4" y="4" width="2" height="1" fill="#2a0f05"/><rect x="6" y="4" width="4" height="1" fill="#ffd23f"/><rect x="10" y="4" width="2" height="1" fill="#2a0f05"/><rect x="12" y="4" width="3" height="1" fill="#ffd23f"/><rect x="15" y="4" width="1" height="1" fill="#5a2408"/><rect x="0" y="5" width="1" height="1" fill="#5a2408"/><rect x="1" y="5" width="1" height="1" fill="#ffd23f"/><rect x="2" y="5" width="2" height="1" fill="#ffd23f"/><rect x="4" y="5" width="8" height="1" fill="#ffd23f"/><rect x="12" y="5" width="2" height="1" fill="#ffd23f"/><rect x="14" y="5" width="1" height="1" fill="#ffd23f"/><rect x="15" y="5" width="1" height="1" fill="#5a2408"/><rect x="0" y="6" width="1" height="1" fill="#5a2408"/><rect x="1" y="6" width="4" height="1" fill="#ffd23f"/><rect x="5" y="6" width="1" height="1" fill="#2a0f05"/><rect x="6" y="6" width="4" height="1" fill="#ffd23f"/><rect x="10" y="6" width="1" height="1" fill="#2a0f05"/><rect x="11" y="6" width="4" height="1" fill="#ffd23f"/><rect x="15" y="6" width="1" height="1" fill="#5a2408"/><rect x="0" y="7" width="1" height="1" fill="#5a2408"/><rect x="1" y="7" width="5" height="1" fill="#ffd23f"/><rect x="6" y="7" width="4" height="1" fill="#2a0f05"/><rect x="10" y="7" width="5" height="1" fill="#ffd23f"/><rect x="15" y="7" width="1" height="1" fill="#5a2408"/><rect x="1" y="8" width="1" height="1" fill="#5a2408"/><rect x="2" y="8" width="12" height="1" fill="#ffd23f"/><rect x="14" y="8" width="1" height="1" fill="#5a2408"/><rect x="2" y="9" width="1" height="1" fill="#5a2408"/><rect x="3" y="9" width="2" height="1" fill="#ffd23f"/><rect x="5" y="9" width="9" height="1" fill="#5a2408"/><rect x="2" y="10" width="1" height="1" fill="#5a2408"/><rect x="3" y="10" width="1" height="1" fill="#ffd23f"/><rect x="4" y="10" width="1" height="1" fill="#5a2408"/><rect x="2" y="11" width="2" height="1" fill="#5a2408"/></svg>Chat</span><span id="chatBadge" hidden></span><span class="views" role="group" aria-label="Chat view"><button type="button" data-v="shut" title="Hide the chat" aria-label="Hide the chat"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="4.25" width="10" height="1.6" fill="currentColor"/></svg></button><button type="button" data-v="mini" title="Just the message box" aria-label="Just the message box"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="2.25" width="10" height="1.6" fill="currentColor"/><rect x="1" y="6.25" width="10" height="1.6" fill="currentColor"/></svg></button><button type="button" data-v="full" title="Show past messages" aria-label="Show past messages"><svg viewBox="0 0 12 10" width="13" height="11" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="0.75" width="10" height="1.6" fill="currentColor"/><rect x="1" y="4.25" width="10" height="1.6" fill="currentColor"/><rect x="1" y="7.75" width="10" height="1.6" fill="currentColor"/></svg></button></span></div>
 <div id="chatBody"><ul id="chatLog" aria-live="polite"></ul><form id="chatForm" autocomplete="off"><input id="chatIn" maxlength="200" placeholder="Say something…" aria-label="Chat message"><button type="submit">Send</button></form></div></div>
 <div id="online" class="panel" hidden><div class="h"><i class="pi" data-ic="people"></i>Online now</div><ul id="onList"></ul><div class="g" id="onGuests"></div></div>
@@ -678,14 +679,14 @@ const PEOPLE = [
   {name:"Mo", desk:24, skin:"#e8b48c", hair:"#3d2616", style:"long", eyes:"#3a2212", earrings:true, shirt:"#263d7a", pants:"#566d99", does:["couch","drink","sync",{go:"visit",say:"😂 cracking jokes",secs:[40, 90]},{go:"desk",say:"🎵 adding throwbacks to the Sonos queue",secs:[30, 70]},{go:"desk",say:"🖼️ grading everyone's memes",secs:[60, 120]},{go:["visit:Andreina","visit:Kayla"],say:"🐶 talking about dogs with {name}",secs:[60,120]},{go:"desk",say:"🖼️ making a meme",secs:[40, 90]}]},
   {name:"Jimmy", desk:22, skin:"#f6d2ad", hair:"#f3e7b8", style:"bob", eyes:"#3a2212", sunglasses:true, shirt:"#f4b6c8", pants:"#4d0001", does:[{go:"visit:Arthur",say:"🤭 giggling with {name}",secs:[30,60],w:0.12},"coffee","stroll","meeting",{go:"desk",say:"🎞️ animating",secs:[120, 240]},{go:"fridge",say:"🥛 drinking milk",secs:[30, 70]},"sync",{go:["visit:Thalia","visit:Hannah Ch"],say:"🎞️ reviewing animation with {name}",secs:[60, 120]},{go:["visit:Thalia","visit:Hannah Ch"],say:"🎬 giving motion notes to {name}",secs:[50, 100]},{go:"desk",say:"🎛️ planning motion work",secs:[90, 180]},"feedback",{go:"desk",say:"🤬 cursing at After Effects",secs:[20, 45],w:0.4}]},
   {name:"Hannah Ca", desk:40, skin:"#e8b48c", hair:"#1c1820", style:"shoulder", eyes:"#3a2212", streak:"#d6473c", earrings:true, shirt:"#1f9a96", pants:"#141c21", does:["oneOnOne","tea","window",{go:"desk",say:"📊 planning resourcing",secs:[120, 240]},{go:["roomA", "roomB", "roomC"],say:"📊 planning resourcing",secs:[120, 220]},{go:"visit",say:"🗓️ checking in with {name} on their workload",secs:[40, 80]}]},
-  {name:"Hannah Ch", desk:23, skin:"#f2c9a1", hair:"#e6c15a", style:"long", eyes:"#6ba1ff", streak:"#f3e7b8", earrings:true, shirt:"#c8a2e8", pants:"#312142", does:["meeting","chat","snack",{go:"desk",say:"🎞️ animating",secs:[120, 240]},{go:"desk",say:"🎵 adding throwbacks to the Sonos queue",secs:[30, 70]},{go:"visit:Jimmy",say:"😜 bugging Jimmy",secs:[40, 90]},{go:"desk",say:"🖍️ storyboarding",secs:[90, 180]},{go:"desk",say:"🤬 cursing at After Effects",secs:[20, 45],w:0.4}]},
+  {name:"Hannah Ch", desk:23, skin:"#f2c9a1", hair:"#e6c15a", style:"wavy", eyes:"#6ba1ff", streak:"#f3e7b8", earrings:true, shirt:"#c8a2e8", pants:"#312142", does:["meeting","chat","snack",{go:"desk",say:"🎞️ animating",secs:[120, 240]},{go:"desk",say:"🎵 adding throwbacks to the Sonos queue",secs:[30, 70]},{go:"visit:Jimmy",say:"😜 bugging Jimmy",secs:[40, 90]},{go:"desk",say:"🖍️ storyboarding",secs:[90, 180]},{go:"desk",say:"🤬 cursing at After Effects",secs:[20, 45],w:0.4}]},
   {name:"Jada", desk:28, skin:"#f2c9a1", hair:"#422918", style:"wavy", eyes:"#5c361c", shirt:"#8f8077", pants:"#000000", does:["heatLunch","lunch","kitchen"]},
   {name:"Simran", desk:27, skin:"#f2c9a1", hair:"#6b4226", style:"curly", eyes:"#3a2212", glasses:true, shirt:"#6b4128", pants:"#000000", does:["coffee",{go:"desk",say:"👀 reviewing designs",secs:[90, 180]},{go:FEEDBACK_ON,say:"🎨 art directing {name}",secs:[50, 100]},{go:["roomA","roomB","roomC","smallMeeting"],say:"🖼️ running a design crit",secs:[120, 240]},{go:["visit:David","visit:Kim","visit:Alexis"],say:"🧭 directors' catch-up with {name}",secs:[40, 90]},"feedback"]},
   {name:"Laura", desk:16, skin:"#f2c9a1", hair:"#c0452a", style:"long", eyes:"#3a2212", earrings:true, shirt:"#a3161f", pants:"#000000", does:["sync","present","tea",{go:"pace",say:"📞 calling potential clients",secs:[60, 150]},{go:"desk",say:"📝 writing a proposal",secs:[90, 180]}]},
-  {name:"Kiera", desk:34, skin:"#f2c9a1", hair:"#e6c15a", style:"curlylong", eyes:"#693d20", earrings:true, shirt:"#6a3fb5", pants:"#ad8ebf", does:["call","coffee","chat",{go:"pace",say:"📞 on a call with a client",secs:[60, 150]},{go:"desk",say:"✉️ emailing clients",secs:[60, 120]},{go:"desk",say:"📅 updating project timelines",secs:[60, 120]},{go:["roomA","roomB","roomC"],say:"🤝 client check-in",secs:[90, 180]},{go:["visit:Ru","visit:Bryce","visit:Anna","visit:Lindsey","visit:Qichelle"],say:"📋 syncing on accounts with {name}",secs:[40, 90]}]},
+  {name:"Kiera", desk:34, skin:"#f2c9a1", hair:"#e6c15a", style:"long", eyes:"#693d20", earrings:true, shirt:"#6a3fb5", pants:"#ad8ebf", does:["call","coffee","chat",{go:"pace",say:"📞 on a call with a client",secs:[60, 150]},{go:"desk",say:"✉️ emailing clients",secs:[60, 120]},{go:"desk",say:"📅 updating project timelines",secs:[60, 120]},{go:["roomA","roomB","roomC"],say:"🤝 client check-in",secs:[90, 180]},{go:["visit:Ru","visit:Bryce","visit:Anna","visit:Lindsey","visit:Qichelle"],say:"📋 syncing on accounts with {name}",secs:[40, 90]}]},
   {name:"Ru", desk:37, skin:"#e8b48c", hair:"#e6c15a", style:"long", eyes:"#3f7ae0", shirt:"#8ee0b8", pants:"#5a4a3a", does:["couch","snack","stroll",{go:"pace",say:"📞 on a call with a client",secs:[60, 150]},{go:"desk",say:"✉️ emailing clients",secs:[60, 120]},{go:"desk",say:"📅 updating project timelines",secs:[60, 120]},{go:["roomA","roomB","roomC"],say:"🤝 client check-in",secs:[90, 180]},{go:["visit:Bryce","visit:Kiera","visit:Anna","visit:Lindsey","visit:Qichelle"],say:"📋 syncing on accounts with {name}",secs:[40, 90]}]},
   {name:"Emilie", desk:25, skin:"#f2c9a1", hair:"#472c1a", style:"braids", eyes:"#4f2e19", earrings:true, shirt:"#00a17b", pants:"#123632", does:[{go:"visit:Goda",say:"🐸 talking about frogs with {name}",secs:[40,80],w:0.45},"meeting","oneOnOne","drink",{go:"snacks",say:"🍪 restocking the snacks",secs:[60, 120]},{go:"bookshelf",say:"🗂️ organising",secs:[60, 140]},{go:"desk",say:"📋 planning",secs:[90, 200]},{go:"kitchen",say:"🧽 tidying the kitchen",secs:[40, 80]}]},
-  {name:"Rachel", desk:9, skin:"#e8b48c", hair:"#1c1820", style:"curlylong", eyes:"#3a2212", shirt:"#f2e05a", pants:"#41427d", does:["kitchen","chat","window",{go:"visit:Aleks",say:"💬 talking digital with Aleks",secs:[90, 180],w:2},{go:"desk",say:"📱 testing a website",secs:[60, 120]}]},
+  {name:"Rachel", desk:9, skin:"#e8b48c", hair:"#1c1820", style:"long", eyes:"#3a2212", shirt:"#f2e05a", pants:"#41427d", does:["kitchen","chat","window",{go:"visit:Aleks",say:"💬 talking digital with Aleks",secs:[90, 180],w:2},{go:"desk",say:"📱 testing a website",secs:[60, 120]}]},
   {name:"Neat", desk:2, skin:"#e8b48c", hair:"#1c1820", style:"long", eyes:"#3a2212", shirt:"#2f6fe0", pants:"#0d0d45", does:["quietCall","tea"]},
   {name:"Divya", desk:5, role:"copy", skin:"#c99068", hair:"#3d2616", style:"long", eyes:"#3a2212", shirt:"#7a7a2c", pants:"#0f1114", does:["sync","coffee","lunch",{go:"desk",say:"✍️ writing headlines",secs:[120, 240],w:2},{go:"desk",say:"📝 drafting website copy",secs:[120, 240],w:1.5},
     {go:"desk",say:"🔤 workshopping taglines",secs:[90, 180],w:1.2},{go:"desk",say:"📖 proofreading a deck",secs:[90, 180]},{go:"desk",say:"🗣️ writing a brand voice guide",secs:[120, 240],w:0.8},
@@ -693,7 +694,7 @@ const PEOPLE = [
     {go:["visit:Simran","visit:David","visit:Kim","visit:Alexis"],say:"💬 going over copy with {name}",secs:[50, 110],w:0.8},
     {go:["visit:Lucy","visit:Maddy","visit:Katie"],say:"🧭 talking messaging with {name}",secs:[50, 110],w:0.6}]},
   {name:"Luke", desk:1, skin:"#f2c9a1", hair:"#6b4226", style:"bald", eyes:"#5c361c", shirt:"#b8336a", pants:"#403429", does:["present","meeting","coffee",{go:"desk",say:"🎵 adding throwbacks to the Sonos queue",secs:[30, 70]}]},
-  {name:"Katie", desk:31, skin:"#f6d2ad", hair:"#e6c15a", style:"wavy", eyes:"#5185e0", earrings:true, shirt:"#b0502a", pants:"#3d1d1e", does:["chat","snack","couch",{go:"desk",say:"🔍 researching the market",secs:[90, 180]},{go:"desk",say:"📝 writing a strategy brief",secs:[90, 180]},{go:["visit:Lucy","visit:Maddy"],say:"🧠 brainstorming with {name}",secs:[60, 120]},{go:["roomA","roomB","roomC","smallMeeting"],say:"🗺️ mapping out a brand strategy",secs:[120, 240]}]},
+  {name:"Katie", desk:31, skin:"#f6d2ad", hair:"#e6c15a", style:"curlylong", eyes:"#5185e0", earrings:true, shirt:"#b0502a", pants:"#3d1d1e", does:["chat","snack","couch",{go:"desk",say:"🔍 researching the market",secs:[90, 180]},{go:"desk",say:"📝 writing a strategy brief",secs:[90, 180]},{go:["visit:Lucy","visit:Maddy"],say:"🧠 brainstorming with {name}",secs:[60, 120]},{go:["roomA","roomB","roomC","smallMeeting"],say:"🗺️ mapping out a brand strategy",secs:[120, 240]}]},
   {name:"LaDawn", desk:39, skin:"#9a6038", hair:"#30211a", style:"afro", eyes:"#29180d", earrings:true, shirt:"#3fc6d6", pants:"#030036", does:["oneOnOne","kitchen","coffee",{go:"pace",say:"📞 calling clients",secs:[60, 150]},{go:"cornerRoom",say:"📞 calling another Koto studio",secs:[90, 180]},{go:"desk",say:"✉️ emailing clients",secs:[60, 120]}]},
   {name:"Bryce", desk:36, skin:"#ab7145", hair:"#1c1820", style:"buzz", eyes:"#3a2212", mustache:true, shirt:"#8a3f7e", pants:"#3a3a44", does:["call","drink","meeting",{go:"pace",say:"📞 on a call with a client",secs:[60, 150]},{go:"desk",say:"✉️ emailing clients",secs:[60, 120]},{go:"desk",say:"📅 updating project timelines",secs:[60, 120]},{go:["roomA","roomB","roomC"],say:"🤝 client check-in",secs:[90, 180]},{go:["visit:Ru","visit:Kiera","visit:Anna","visit:Lindsey","visit:Qichelle"],say:"📋 syncing on accounts with {name}",secs:[40, 90]}]},
   {name:"Alexis", desk:17, skin:"#f2c9a1", hair:"#6b4226", style:"ponytail", eyes:"#2f6fe0", shirt:"#9fb88a", pants:"#222e28", does:["tea","sync",{go:"desk",say:"💡 shaping creative direction",secs:[90, 180]},{go:"bigMeeting",say:"🗣️ leading a creative review",secs:[120, 240]},{go:"visit",say:"💬 talking concepts with {name}",secs:[50, 100]},{go:["visit:Simran","visit:David","visit:Kim"],say:"🧭 directors' catch-up with {name}",secs:[40, 90]},"feedback"]},
@@ -1619,12 +1620,13 @@ function extraBits(P,L,v){                                         // headphones
     else if(v==='f'){P(3,14,10,2,c);P(3,15,10,1,sh);P(5,14,1,2,st);P(10,14,1,2,st);P(9,16,2,4,c);P(9,17,2,1,st);P(9,19,2,1,st);P(10,16,1,4,sh)}
     else if(!longHair){P(3,14,10,2,c);P(3,15,10,1,sh);P(6,14,1,2,st);P(9,14,1,2,st)}}
   if(L.necklace&&v!=='b'){const gd='#f2c14e';if(v==='f'){P(5,15,1,1,gd);P(6,16,4,1,gd);P(10,15,1,1,gd);P(7,17,2,1,'#7fd3c4')}else P(9,15,1,2,gd)}
-  if(L.headband){const c='#ff8fb1';if(v==='s'){P(3,3,8,1,c);P(2,4,2,1,c)}else{P(3,3,10,1,c);P(2,4,1,1,c);P(13,4,1,1,c)}}
+  if(L.headband){const c='#1d1c21',h='#3e3c46';if(v==='s'){P(3,2,8,2,c);P(2,4,2,2,c);P(4,2,5,1,h)}else{P(4,2,8,1,c);P(3,3,10,2,c);P(2,4,1,2,c);P(13,4,1,2,c);P(5,2,5,1,h)}}
   if(L.flower){const p='#ff9ec4',y='#ffd23f';const[x,yy]=v==='f'?[11,4]:v==='s'?[3,4]:[3,5];P(x,yy,3,3,p);P(x+1,yy-1,1,1,p);P(x+1,yy+3,1,1,p);P(x-1,yy+1,1,1,p);P(x+3,yy+1,1,1,p);P(x+1,yy+1,1,1,y)}
   if(L.bow){const c='#ff5f8f',k=mix(c,-.3);const x=v==='s'?2:v==='b'?2:10;P(x,1,2,3,c);P(x+3,1,2,3,c);P(x+2,2,1,1,k);P(x,2,1,1,mix(c,.25));P(x+4,2,1,1,mix(c,-.15))}
-  if(L.headphones){const c=L.shirt?mix(L.shirt,-.1):'#3d7be0';
-    if(v==='s'){P(4,1,6,1,D);P(3,2,1,6,D);P(5,8,3,4,D);P(6,9,1,2,c)}
-    else{P(3,1,10,1,D);P(2,2,1,6,D);P(13,2,1,6,D);P(0,8,3,4,D);P(13,8,3,4,D);P(1,9,1,2,c);P(14,9,1,2,c)}}
+  if(L.headphones){const c='#1d1c21',cH='#4a4752',pad='#33303a',band='#1d1c21',bh='#47444f';   // black over-ear headphones: a padded band and round cups
+    if(v==='s'){P(5,0,5,1,band);P(4,1,1,1,band);P(10,1,1,1,band);P(6,0,3,1,bh);P(4,2,1,5,band);P(4,7,5,5,band);P(5,8,3,3,pad);P(5,8,1,1,cH);P(6,9,1,1,'#5b5866')}
+    else{P(4,0,8,1,band);P(5,0,6,1,bh);P(3,1,1,1,band);P(12,1,1,1,band);P(2,2,1,5,band);P(13,2,1,5,band);
+      P(0,7,3,5,band);P(13,7,3,5,band);P(0,8,2,3,pad);P(14,8,2,3,pad);P(0,8,1,1,cH);P(15,8,1,1,cH);P(2,8,1,3,cH);P(13,8,1,3,cH)}}
 }
 function drawHat(g,P,L,v){                                         // hats that sit on the head: a knitted beanie with a cuff and pom-pom, or a baseball cap with a brim
   const c=L.hat,hi=mix(c,.22),sh=mix(c,-.22),dk=mix(c,-.42),side=v==='s';
@@ -1649,7 +1651,30 @@ function drawHat(g,P,L,v){                                         // hats that 
     else{P(2,5,10,1,sh);P(10,5,6,1,dk);P(11,4,4,1,sh)}             // side: the brim sticks out in front
   }
 }
-function paintChar(g,L,view,pose,blink){
+function paintChar(g,L,view,pose,blink){paintCharBase(g,L,view,pose,blink);shadeHair(g,L,view)}
+const CURL=['.hh.','h..s','h..s','.ss.'],WAVE=[0,0,1,1,0,0,-1,-1];
+function shadeHair(g,L,view){                                      // gives every hairstyle depth: a soft shine on top, strands, darker ends and edges
+  const hair=L.hair||'#5a3825';if((L.style||'')==='bald')return;
+  const [r,gg,b]=parse(hair),img=g.getImageData(0,0,16,30),d=img.data,W=16,H=30;
+  const isHair=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&d[(y*W+x)*4+3]>200&&d[(y*W+x)*4]===r&&d[(y*W+x)*4+1]===gg&&d[(y*W+x)*4+2]===b;
+  const empty=(x,y)=>x<0||y<0||x>=W||y>=H||d[(y*W+x)*4+3]<10;
+  const hs=parse(mix(hair,-.2)),hd=parse(mix(hair,-.32)),hm=parse(mix(hair,.14)),hh=parse(mix(hair,.3));
+  const out=[],st=(L.style||''),curly=/^(curly|curlylong|afro)$/.test(st),wavy=st==='wavy';
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(!isHair(x,y))continue;let c=null;
+    const top=y<=4,long=y>=9;
+    if(top&&((y===1&&x>=5&&x<=7)||(y===2&&x>=4&&x<=6)))c=hh;                          // shine where the light hits the crown
+    else if(top&&((y===1&&x===8)||(y===2&&x===7)||(y===3&&x>=4&&x<=6)))c=hm;
+    else if(empty(x-1,y)||empty(x+1,y))c=y>6?hs:null;                                  // rounder edges
+    if(curly&&!c&&y>1){const by=y%4,bx=(x+(Math.floor(y/4)%2)*2)%4,m=CURL[by][bx];c=m==='h'?(y<6?hh:hm):m==='s'?hs:null}   // little ring-shaped curls
+    else if(wavy&&!c&&y>=5){const w=WAVE[y%8],sx=(x+w+30)%3;c=sx===0?hs:sx===1&&y%4===1?hm:null}   // strands that wiggle down
+    else if(long&&!c&&st!=='braids'&&((x+Math.floor(y/3))%4===0))c=hs;                                // strands in longer hair
+    if(!isHair(x,y+1)&&!empty(x,y+1)&&y<12&&!c)c=hs;                                   // the fringe throws a little shadow on the face
+    if(long&&empty(x,y+1)&&st!=='braids')c=hd;                                                       // darker tips
+    if(c)out.push([x,y,c])}
+  for(const[x,y,c]of out){const k=(y*W+x)*4;d[k]=c[0];d[k+1]=c[1];d[k+2]=c[2]}
+  g.putImageData(img,0,0);
+}
+function paintCharBase(g,L,view,pose,blink){
   const P=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h)};
   const skin=L.skin||'#f6d2ad',hair=L.hair||'#5a3825',shirt=L.shirt||'#4a90d9',pants=L.pants||'#2f3b52',shoe=L.shoes||'#5a3a2a';
   const skinS=mix(skin,-.13),hairH=mix(hair,.3),hairS=mix(hair,-.2),shirtS=mix(shirt,-.2),shirtH=mix(shirt,.22),pantsS=mix(pants,-.22),pantsH=mix(pants,.14),shoeS=mix(shoe,-.3),fh=mix(hair,-.35);
@@ -1657,15 +1682,20 @@ function paintChar(g,L,view,pose,blink){
   const iris=L.eyes||'#5a3418',DARK='#2a1a22',lip=mix(skin,-.36);
   const style=(L.style||'short').toLowerCase(),bald=style==='bald',sit=pose==='sit',wa=pose==='walkA',wb=pose==='walkB';
   const H=(x,y,w,h)=>P(x,y,w,h,hair),HS=(x,y,w,h)=>P(x,y,w,h,hairS),HH=(x,y,w,h)=>P(x,y,w,h,hairH);
-  const head=()=>{if(bald){P(6,1,4,1,skin);P(4,2,8,1,skin)}P(4,3,8,1,skin);P(3,4,10,1,skin);P(2,5,12,8,skin);P(3,13,10,1,skin);P(3,13,1,1,skinS);P(12,13,1,1,skinS)};
+  const plait=(x,y0,y1)=>{                                        // a thick three-strand braid: little woven segments, a hair tie, and a soft tuft at the end
+    for(let y=y0;y<y1;y++){const k=(y-y0)%2;if(k===0){H(x,y,2,1);HS(x+2,y,1,1);HH(x,y,1,1)}else{HS(x,y,1,1);H(x+1,y,2,1);HH(x+1,y,1,1)}}
+    P(x,y1,3,1,'#e8559a');P(x,y1,1,1,'#ff8fb8');H(x,y1+1,3,1);HS(x+1,y1+2,1,1);H(x,y1+2,1,1);H(x+2,y1+2,1,1)};
+  const head=()=>{P(4,3,8,1,skin);P(3,4,10,1,skin);P(2,5,12,8,skin);P(3,13,10,1,skin);P(3,13,1,1,skinS);P(12,13,1,1,skinS)};
   if(view==='f'){
     // hair that falls behind the head and shoulders
-    if(style==='long'){H(1,6,14,14);H(2,20,12,1);HS(1,15,1,5);HS(14,15,1,5);HS(4,19,1,2);HS(11,19,1,2)}
-    if(style==='curlylong'){H(0,5,16,15);H(1,20,14,1);HS(0,10,1,2);HS(15,14,1,2);HS(2,19,2,1);HS(11,20,2,1);HH(1,8,1,1);HH(14,11,1,1)}
+    if(style==='long'||style==='bangs'||style==='halfup'){H(1,6,14,14);H(2,20,12,1);HS(1,15,1,5);HS(14,15,1,5);HS(4,19,1,2);HS(11,19,1,2)}
+    if(style==='shag'){H(1,6,14,9);H(1,15,2,1);H(4,15,2,1);H(10,15,2,1);H(13,15,2,1);HS(1,13,1,2);HS(14,12,1,3)}
+    if(style==='locs'){H(1,7,14,6);for(let x=1;x<15;x+=2){H(x,13,1,6+(x*7)%3);HS(x+1,13,1,5+(x*5)%3)}}
+    if(style==='curlylong'){H(0,5,16,15);H(1,20,3,1);H(5,20,3,1);H(9,20,2,1);H(12,20,3,1);H(2,21,1,1);H(6,21,1,1);H(13,21,1,1)}
     if(style==='bob'){H(1,6,14,9);HS(1,14,2,1);HS(13,14,2,1)}
     if(style==='ponytail'){H(13,6,3,4);H(14,10,2,5);HS(15,13,1,2)}
     if(style==='shoulder'){H(1,6,14,10);HS(1,15,2,1);HS(13,15,2,1)}
-    if(style==='wavy'){H(1,6,14,14);H(2,20,12,1);for(let y=7;y<20;y+=3){HS(0,y,1,2);HS(15,y+1,1,2)}HS(4,20,1,1);HS(11,20,1,1)}
+    if(style==='wavy'){H(1,6,14,14);for(let y=7;y<20;y++){const w=Math.round(Math.sin(y/1.7));if(w>0)H(0,y,1,1);if(w<0)H(15,y,1,1)}H(2,20,3,1);H(6,20,4,1);H(11,20,3,1);H(3,21,1,1);H(12,21,1,1)}
     if(style==='afro'){oval(g,8,7,8.5,7.5,hair);HH(2,3,2,1);HH(12,4,1,1);HS(1,10,1,2);HS(14,11,1,2)}
     if(style==='pigtails'){H(0,8,3,7);H(13,8,3,7);HS(0,13,3,2);HS(13,13,3,2);HH(1,9,1,2);HH(14,9,1,2)}
     // legs and shoes
@@ -1699,8 +1729,9 @@ function paintChar(g,L,view,pose,blink){
     if(!bald){
       if(style==='buzz'){H(5,1,6,1);H(4,2,8,1);H(3,3,10,1);H(2,4,12,1);H(2,5,1,3);H(13,5,1,3);HH(5,3,3,1)}
       else if(style==='mohawk'){H(6,0,4,5);HH(7,0,1,3);HS(9,1,1,4);P(3,4,3,1,hairS);P(10,4,3,1,hairS);P(2,5,1,2,hairS);P(13,5,1,2,hairS)}
-      else if(style==='curly'||style==='curlylong'||style==='afro'){H(4,0,8,1);H(2,1,12,1);H(1,2,14,4);H(0,3,1,4);H(15,3,1,4);H(1,6,3,2);H(12,6,3,2);H(4,6,2,1);H(9,6,3,1);H(1,8,1,2);H(14,8,1,2);
-        HH(4,1,2,1);HH(9,2,2,1);HH(12,4,1,1);HH(2,3,1,1);HS(6,4,1,1);HS(11,5,1,1);HS(3,5,1,1);HS(8,1,1,1)}
+      else if(style==='undercut'){H(5,0,7,1);H(3,1,10,2);H(3,3,10,2);H(9,5,4,1);HH(5,1,5,1);HH(4,2,2,1);HS(11,3,2,2);P(2,5,1,3,hairS);P(13,5,1,3,hairS)}   // long on top, swept over, short at the sides
+      else if(style==='curly'||style==='curlylong'||style==='afro'){H(4,0,8,1);H(2,1,12,1);H(1,2,14,4);H(0,3,1,4);H(15,3,1,4);H(0,7,1,1);H(15,7,1,1);
+        H(1,6,3,2);H(5,6,2,1);H(8,6,2,1);H(11,6,4,2);H(2,8,1,1);H(13,8,1,1);H(1,8,1,2);H(14,8,1,2)}   // a scalloped fringe of curls
       else if(style==='bun'){H(6,0,4,1);H(5,1,6,1);HH(6,0,2,1);HS(5,1,1,1);HS(10,1,1,1);H(3,2,10,1);P(6,2,4,1,'#b8577a');H(2,3,12,2);H(1,4,1,4);H(14,4,1,4);H(2,5,2,1);H(12,5,2,1);H(2,6,1,2);H(13,6,1,2);HH(4,3,3,1);HS(8,3,1,2)}   // hair pulled back into a top bun, with a scrunchie
       else{H(5,0,6,1);H(3,1,10,1);H(2,2,12,3);H(1,3,1,5);H(14,3,1,5);H(2,5,5,1);H(8,5,6,1);H(2,6,2,1);H(12,6,2,1);H(2,7,1,2);H(13,7,1,2);
         HH(4,2,4,1);HH(9,1,2,1);HS(6,5,1,1);HS(10,5,1,1);
@@ -1710,10 +1741,15 @@ function paintChar(g,L,view,pose,blink){
         if(style==='spiky'){H(2,1,2,1);H(12,1,2,1);H(4,0,1,1);H(7,0,2,1);H(11,0,1,1);P(5,0,1,1,hair);HH(7,0,1,1);HH(3,1,1,1)}
         if(style==='pixie'){H(3,5,9,1);H(3,6,5,1);H(3,7,2,1);HH(4,5,4,1)}
         if(style==='mullet'){H(2,9,1,6);H(13,9,1,6);HS(2,13,1,2);HS(13,13,1,2)}
-        if(style==='pigtails'){P(2,8,1,1,'#e8559a');P(13,8,1,1,'#e8559a')}}
+        if(style==='pigtails'){P(2,8,1,1,'#e8559a');P(13,8,1,1,'#e8559a')}
+        if(style==='bangs'){H(3,5,10,2);HH(4,5,3,1);HS(7,6,1,1);H(2,9,1,4);H(13,9,1,4)}   // a straight fringe
+        if(style==='shag'){H(3,5,3,2);H(7,5,2,1);H(10,5,3,2);HS(5,6,1,1);H(1,8,2,6);H(13,8,2,6)}
+        if(style==='spacebuns'){H(0,0,4,3);H(12,0,4,3);H(1,3,2,1);H(13,3,2,1);HH(1,0,2,1);HH(13,0,2,1);P(2,3,2,1,'#e8559a');P(12,3,2,1,'#e8559a')}   // two buns on top
+        if(style==='halfup'){H(6,0,4,1);HH(7,0,1,1);H(2,9,1,4);H(13,9,1,4)}
+        if(style==='locs'){H(1,8,2,5);H(13,8,2,5);HS(2,9,1,4);HS(13,9,1,4)}}
       if(L.streak){P(9,1,2,1,L.streak);P(10,2,2,1,L.streak);P(11,3,2,2,L.streak);P(12,5,1,1,L.streak);if(style==='bob'||style==='long')P(13,7,1,5,L.streak)}
     }
-    if(style==='braids'&&!bald){for(let y=9;y<20;y+=2){H(1,y,2,1);HS(1,y+1,2,1);H(13,y,2,1);HS(13,y+1,2,1)}HH(1,9,1,1);HH(13,9,1,1);P(1,20,2,1,'#e8559a');P(13,20,2,1,'#e8559a');H(1,21,2,1);H(13,21,2,1)}
+    if(style==='braids'&&!bald){plait(0,9,20);plait(13,9,20)}
     if(L.earrings){P(1,11,1,2,'#ffd166');P(14,11,1,2,'#ffd166')}
     extraBits(P,L,'f');if(L.hat)drawHat(g,P,L,'f');
   }else if(view==='b'){
@@ -1729,32 +1765,39 @@ function paintChar(g,L,view,pose,blink){
       if(style==='afro')oval(g,8,7,8.5,7.5,hair);
       if(style==='buzz'){H(5,1,6,1);H(4,2,8,1);H(3,3,10,1);H(2,4,12,5);H(3,9,10,1);HH(5,3,3,1)}
       else if(style==='mohawk'){H(6,0,4,11);HH(7,0,1,6);P(3,4,3,6,hairS);P(10,4,3,6,hairS)}
+      else if(style==='undercut'){H(5,0,7,1);H(3,1,10,4);HH(5,1,5,1);P(3,5,10,5,hairS);P(4,10,8,1,hairS)}
       else if(style==='curly'||style==='afro'){H(4,0,8,1);H(2,1,12,1);H(1,2,14,9);H(0,3,1,6);H(15,3,1,6);H(2,11,12,1);HH(4,2,2,1);HH(9,4,2,1);HS(5,7,2,1);HS(11,8,1,1);HS(3,9,1,1);HH(12,6,1,1)}
-      else if(style==='curlylong'){H(4,0,8,1);H(2,1,12,1);H(0,2,16,18);H(1,20,14,1);HH(4,2,2,1);HH(9,5,2,1);HS(4,10,2,1);HS(10,13,2,1);HH(6,16,1,1);HS(12,17,2,1);HS(2,15,1,2)}
+      else if(style==='curlylong'){H(4,0,8,1);H(2,1,12,1);H(0,2,16,18);H(1,20,3,1);H(5,20,3,1);H(9,20,2,1);H(12,20,3,1);H(2,21,1,1);H(6,21,1,1);H(13,21,1,1)}
       else if(style==='bun'){H(6,0,4,1);H(5,1,6,1);HH(6,0,2,1);HS(7,1,2,1);H(3,2,10,1);P(6,2,4,1,'#b8577a');H(2,3,12,8);H(1,4,1,5);H(14,4,1,5);H(3,11,10,1);HH(4,3,3,1);HS(5,6,1,4);HS(10,6,1,4)}
       else{H(5,0,6,1);H(3,1,10,1);H(2,2,12,9);H(1,3,1,6);H(14,3,1,6);H(3,11,10,1);HH(4,2,4,1);HH(9,1,2,1);HS(5,8,1,2);HS(10,7,1,3);
-        if(style==='long'){H(1,6,14,14);H(2,20,12,1);HS(5,10,1,8);HS(10,10,1,8);HS(1,16,1,4);HS(14,16,1,4)}
+        if(style==='long'||style==='bangs'||style==='halfup'){H(1,6,14,14);H(2,20,12,1);HS(5,10,1,8);HS(10,10,1,8);HS(1,16,1,4);HS(14,16,1,4)}
+        if(style==='halfup'){H(6,0,4,2);HH(7,0,1,1);P(6,2,4,1,'#b8577a')}
+        if(style==='shag'){H(1,6,14,9);H(1,15,2,1);H(4,15,3,1);H(9,15,2,1);H(13,15,2,1);HS(5,9,1,5);HS(10,9,1,5)}
+        if(style==='spacebuns'){H(0,0,4,3);H(12,0,4,3);HH(1,0,2,1);HH(13,0,2,1);P(2,3,2,1,'#e8559a');P(12,3,2,1,'#e8559a')}
+        if(style==='locs'){HS(2,11,12,7);for(let x=2;x<14;x+=2){H(x,11,1,8+(x*7)%3);HS(x+1,11,1,7+(x*5)%3)}}
         if(style==='bob'){H(1,6,14,9);HS(1,14,2,1);HS(13,14,2,1);HS(7,10,1,4)}
         if(style==='bun'){H(6,0,4,1);HH(7,0,1,1)}
         if(style==='ponytail'){H(7,10,2,8);HS(7,10,2,1);HH(8,13,1,2)}
         if(style==='mullet'){H(3,11,10,5);HS(3,15,10,1);HS(7,12,1,3)}
         if(style==='shoulder'){H(1,6,14,10);HS(5,9,1,5);HS(10,9,1,5)}
-        if(style==='wavy'){H(1,6,14,14);H(2,20,12,1);for(let y=7;y<20;y+=3){HS(0,y,1,2);HS(15,y+1,1,2)}HS(5,10,1,8);HS(10,10,1,8)}
+        if(style==='wavy'){H(1,6,14,14);for(let y=7;y<20;y++){const w=Math.round(Math.sin(y/1.7));if(w>0)H(0,y,1,1);if(w<0)H(15,y,1,1)}H(2,20,3,1);H(6,20,4,1);H(11,20,3,1);H(3,21,1,1);H(7,21,2,1);H(12,21,1,1)}
         if(style==='pigtails'){H(0,8,3,7);H(13,8,3,7);HS(0,13,3,2);HS(13,13,3,2);P(2,8,1,1,'#e8559a');P(13,8,1,1,'#e8559a')}
-        if(style==='braids'){for(let y=11;y<20;y+=2){H(4,y,2,1);HS(4,y+1,2,1);H(10,y,2,1);HS(10,y+1,2,1)}P(4,20,2,1,'#e8559a');P(10,20,2,1,'#e8559a');H(4,21,2,1);H(10,21,2,1)}}
+        if(style==='braids'){HS(7,2,2,9);HH(5,3,1,1);HH(10,3,1,1);plait(3,11,21);plait(10,11,21)}}
       if(L.streak){P(4,2,2,1,L.streak);P(3,3,2,2,L.streak);P(2,5,1,6,L.streak)}
     }
     extraBits(P,L,'b');if(L.hat)drawHat(g,P,L,'b');
   }else{                                                           // side view, facing right
-    if(style==='long'){H(1,6,5,14);H(2,20,4,1);HS(1,15,1,5)}
-    if(style==='curlylong'){H(0,5,6,15);H(1,20,5,1);HS(0,10,1,2);HS(2,19,2,1)}
+    if(style==='long'||style==='bangs'||style==='halfup'){H(1,6,5,14);H(2,20,4,1);HS(1,15,1,5)}
+    if(style==='shag'){H(1,6,5,9);H(1,15,2,1);H(4,15,2,1);HS(1,12,1,3)}
+    if(style==='locs'){H(1,7,5,5);for(let x=1;x<6;x++)(x%2?H:HS)(x,12,1,7+(x%3))}
+    if(style==='curlylong'){H(0,5,6,15);H(1,20,2,1);H(4,20,2,1);H(2,21,1,1)}
     if(style==='bob'){H(1,6,5,9);HS(1,14,2,1)}
     if(style==='ponytail'){H(0,6,3,4);H(0,10,2,5)}
     if(style==='shoulder'){H(1,6,5,10);HS(1,15,2,1)}
-    if(style==='wavy'){H(1,6,5,14);H(2,20,4,1);for(let y=7;y<20;y+=3)HS(0,y,1,2)}
+    if(style==='wavy'){H(1,6,5,14);for(let y=7;y<20;y++){if(Math.round(Math.sin(y/1.7))>0)H(0,y,1,1)}H(2,20,3,1);H(3,21,1,1)}
     if(style==='afro')oval(g,7,7,8,7.5,hair);
     if(style==='pigtails'){H(0,8,3,7);HS(0,13,3,2)}
-    if(style==='braids'){for(let y=9;y<20;y+=2){H(2,y,2,1);HS(2,y+1,2,1)}P(2,20,2,1,'#e8559a');H(2,21,2,1)}
+    if(style==='braids')plait(1,9,21);
     if(sit){P(5,22,8,3,pants);P(5,24,8,1,pantsS);P(11,25,2,1,pants);P(10,25,5,2,shoe);P(10,26,5,1,shoeS)}
     else if(wa){P(5,22,6,3,pants);P(8,25,3,3,pants);P(8,28,5,2,shoe);P(8,29,5,1,shoeS);P(4,25,3,2,pantsS);P(2,27,4,2,shoe);P(2,28,4,1,shoeS)}
     else if(wb){P(5,22,6,3,pants);P(6,25,4,3,pants);P(6,28,6,2,shoe);P(6,29,6,1,shoeS)}
@@ -1766,7 +1809,7 @@ function paintChar(g,L,view,pose,blink){
     topSide(P,L,shirt,shirtS,shirtH,pants);
     const ax=wa?8:wb?6:7;P(ax,16,2,4,shirtS);P(ax,16,1,4,shirt);P(ax,20,2,2,skin);
     if(L.top==='tank'){P(ax,16,2,4,skin);P(ax+1,16,1,4,skinS)}else if(L.top==='vest'||L.top==='cardigan'&&0){P(ax,16,2,4,'#f4f2ec');P(ax+1,16,1,4,'#d9d6cc')}
-    if(bald){P(5,1,4,1,skin);P(4,2,7,1,skin)}P(4,3,7,1,skin);P(3,4,9,1,skin);P(2,5,11,8,skin);P(13,9,1,2,skin);P(3,13,9,1,skin);P(3,13,1,1,skinS);
+    P(4,3,7,1,skin);P(3,4,9,1,skin);P(2,5,11,8,skin);P(13,9,1,2,skin);P(3,13,9,1,skin);P(3,13,1,1,skinS);
     P(10,10,2,1,blush);P(6,9,1,2,skinS);
     if(L.glasses){P(10,8,2,2,'#eef8ff');P(6,7,7,1,DARK);P(9,8,1,2,DARK);if(blink)P(10,9,2,1,DARK);else P(11,8,1,2,DARK)}
     if(L.sunglasses){P(9,7,4,3,'#1d1c21');P(6,7,3,1,'#1d1c21');P(10,8,1,1,'#5b6168')}
@@ -1778,6 +1821,7 @@ function paintChar(g,L,view,pose,blink){
     if(!bald){
       if(style==='buzz'){H(5,1,5,1);H(4,2,7,1);H(3,3,9,1);H(2,4,10,1);H(2,5,4,4);HH(5,3,3,1)}
       else if(style==='mohawk'){H(3,0,8,1);H(2,1,10,2);HH(5,0,3,1);P(2,3,4,4,hairS)}
+      else if(style==='undercut'){H(4,0,7,1);H(3,1,10,3);H(9,4,4,1);HH(5,1,5,1);P(2,4,4,5,hairS)}
       else if(style==='curly'||style==='curlylong'||style==='afro'){H(4,0,7,1);H(2,1,11,1);H(1,2,13,4);H(0,3,1,5);H(1,6,5,5);H(9,6,3,1);H(6,6,2,2);HH(4,1,2,1);HH(9,2,2,1);HS(2,6,1,1);HS(11,4,1,1);HS(4,8,1,1)}
       else if(style==='bun'){H(2,0,4,1);H(1,1,5,1);HH(3,0,1,1);P(3,2,3,1,'#b8577a');H(6,2,5,1);H(2,3,11,2);H(1,3,1,5);H(2,5,4,5);H(10,5,2,1);HH(6,3,4,1);HS(3,7,1,2)}
       else{H(5,0,6,1);H(3,1,9,1);H(2,2,11,3);H(1,3,1,5);H(2,5,4,6);H(6,5,6,1);H(10,6,2,1);HH(4,2,4,1);HH(9,1,1,1);HS(3,8,1,2);
@@ -1786,7 +1830,12 @@ function paintChar(g,L,view,pose,blink){
         if(style==='sidepart'){H(6,5,6,2);HH(7,5,3,1)}
         if(style==='spiky'){H(3,0,2,1);H(7,0,2,1);H(11,1,2,1);HH(7,0,1,1)}
         if(style==='pixie'){H(8,5,4,1);H(10,6,2,1)}
-        if(style==='mullet'){H(1,11,4,5);HS(1,15,4,1)}}
+        if(style==='mullet'){H(1,11,4,5);HS(1,15,4,1)}
+        if(style==='bangs'){H(6,5,6,2);HH(7,5,3,1);H(2,11,3,3)}
+        if(style==='shag'){H(8,5,3,2);H(2,11,3,3)}
+        if(style==='spacebuns'){H(1,0,4,3);H(9,0,3,2);HH(2,0,2,1);P(2,3,2,1,'#e8559a')}
+        if(style==='halfup'){H(1,1,3,2);HH(2,1,1,1);H(2,11,3,3)}
+        if(style==='locs'){H(2,11,3,3)}}
       if(L.streak){P(8,1,2,1,L.streak);P(9,2,2,1,L.streak);P(10,3,2,2,L.streak)}
     }
     if(L.earrings)P(5,11,1,2,'#ffd166');
@@ -2863,9 +2912,9 @@ view.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,
 view.addEventListener('dblclick',()=>fit());
 
 window.addEventListener('keydown',e=>{
-  if(e.target&&/INPUT|TEXTAREA|BUTTON/.test(e.target.tagName)&&e.key!=='Escape')return;
+  if(e.target&&(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable)&&e.key!=='Escape')return;   // letter keys still work after clicking a button
   const k=e.key.toLowerCase();
-  if(k==='n')showNames=!showNames;else if(k==='d')showDesks=!showDesks;else if(k==='l')toggleList();else if(k==='w'||k==='t'){wxKey(k);if(k==='t'&&!pv.tod)resync()}else if(k==='m'){if(mmPreview)endMeeting();else{mmPreview=true;MM.at=0}}
+  if(k==='n')showNames=!showNames;else if(k==='d'){if(PL.me)startDance();else showDesks=!showDesks}else if(k==='l')toggleList();else if(k==='w'||k==='t'){wxKey(k);if(k==='t'&&!pv.tod)resync()}else if(k==='m'){if(mmPreview)endMeeting();else{mmPreview=true;MM.at=0}}
   else if(k==='s')sndToggle();else if(k==='e'){const i=pv.season?SEASONS.indexOf(pv.season)+1:0;pv.season=i<SEASONS.length?SEASONS[i]:null;hud()}else if(k==='r'||k==='0'||k==='escape')fit();
 });
 window.addEventListener('resize',resize);
@@ -3351,26 +3400,25 @@ if(window.ResizeObserver){const ro=new ResizeObserver(es=>{for(const e of es)if(
 const PL={me:null,remote:new Map(),ctl:new Set(),keys:[],url:'/api/players',netT:0,busy:false,players:0,sprCache:new Map()};
 // ---------- how someone looks: a small set of choices, turned into sprites ----------
 const LOOKS={skin:['#fbe0c4','#f6d2ad','#f2c9a1','#e8b48c','#d9a06e','#c99068','#ab7145','#8a5a3a','#6b4429','#4a2c1a'],
-  style:['short','sidepart','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','long','wavy','mullet','ponytail','pigtails','bun','braids','bald'],
+  style:['short','sidepart','undercut','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','shag','long','bangs','wavy','halfup','mullet','ponytail','pigtails','spacebuns','bun','braids','locs','bald'],
   top:['tee','graphic','stripes','tank','collar','flannel','hoodie','sweater','turtleneck','vest','cardigan','jacket','overalls'],bottom:['pants','joggers','shorts','skirt','longskirt']};
-const NICE={short:'Short',sidepart:'Side part',pixie:'Pixie',spiky:'Spiky',buzz:'Buzz',mohawk:'Mohawk',curly:'Curly',curlylong:'Long curls',afro:'Afro',bob:'Bob',shoulder:'Shoulder',long:'Long',wavy:'Wavy',mullet:'Mullet',ponytail:'Ponytail',pigtails:'Pigtails',bun:'Bun',braids:'Braids',bald:'Bald',
+const NICE={short:'Short',sidepart:'Side part',pixie:'Pixie',spiky:'Spiky',buzz:'Buzz',mohawk:'Mohawk',curly:'Curly',curlylong:'Long curls',afro:'Afro',bob:'Bob',shoulder:'Shoulder',long:'Long',wavy:'Wavy',mullet:'Mullet',ponytail:'Ponytail',pigtails:'Pigtails',bun:'Bun',braids:'Braids',bald:'Bald',undercut:'Undercut',shag:'Shag',bangs:'Long + bangs',halfup:'Half up',spacebuns:'Space buns',locs:'Locs',
   tee:'T-shirt',graphic:'Heart tee',stripes:'Stripes',tank:'Tank top',collar:'Collared',flannel:'Flannel',hoodie:'Hoodie',sweater:'Sweater',turtleneck:'Turtleneck',vest:'Sweater vest',cardigan:'Cardigan',jacket:'Jacket',overalls:'Overalls',pants:'Pants',joggers:'Joggers',shorts:'Shorts',skirt:'Skirt',longskirt:'Long skirt'};
-const ACCS=[['None',{}],['Glasses',{glasses:1}],['Sunglasses',{sunglasses:1}],['Earrings',{earrings:1}],['Glasses + earrings',{glasses:1,earrings:1}],
-  ['Beanie',{hat:1,hatStyle:'beanie'}],['Cap',{hat:1,hatStyle:'cap'}],['Beanie + glasses',{hat:1,hatStyle:'beanie',glasses:1}],['Cap + sunglasses',{hat:1,hatStyle:'cap',sunglasses:1}],
-  ['Bucket hat',{hat:1,hatStyle:'bucket'}],['Headphones',{headphones:1}],['Hair bow',{bow:1}],['Headband',{headband:1}],['Flower clip',{flower:1}],['Scarf',{scarf:1}],['Necklace',{necklace:1}],
-  ['Glasses + scarf',{glasses:1,scarf:1}],['Headphones + glasses',{headphones:1,glasses:1}],['Bow + earrings',{bow:1,earrings:1}],['Flower + necklace',{flower:1,necklace:1}]];
+const ACCS=[['None',{}],['Glasses',{glasses:1}],['Sunglasses',{sunglasses:1}],['Earrings',{earrings:1}],['Beanie',{hat:1,hatStyle:'beanie'}],['Cap',{hat:1,hatStyle:'cap'}],['Bucket hat',{hat:1,hatStyle:'bucket'}],
+  ['Headphones',{headphones:1}],['Hair bow',{bow:1}],['Headband',{headband:1}],['Flower clip',{flower:1}],['Scarf',{scarf:1}],['Necklace',{necklace:1}]];   // one extra at a time
+const V2_ACC=[0,1,2,3,1,4,5,4,5,6,7,8,9,10,11,12,1,7,8,10];          // the older, longer list of extras, mapped onto this one
 const FACES=[['None',{}],['Beard',{beard:1}],['Mustache',{mustache:1}],['Beard + mustache',{beard:1,mustache:1}]];   // facial hair, its own choice
 const OLD_ACC=[[0,0],[1,0],[2,0],[3,0],[0,1],[0,2],[1,1],[2,1],[1,2],[4,0],[5,0],[6,0],[7,0],[8,0],[6,1]];   // looks saved before facial hair had its own row
 const HEX=/^#[0-9a-f]{6}$/i;
 function cleanLook(l){l=l||{};const o={};for(const k of['skin','hair','eyes','shirt','pants'])o[k]=HEX.test(l[k])?l[k]:{skin:'#e8b48c',hair:'#3d2616',eyes:'#3a2212',shirt:'#2f6fe0',pants:'#34404e'}[k];
   o.style=LOOKS.style.includes(l.style)?l.style:'short';o.top=LOOKS.top.includes(l.top)?l.top:'tee';o.bottom=LOOKS.bottom.includes(l.bottom)?l.bottom:'pants';
-  let acc=l.acc|0,face=l.face|0;if(l.v!==2){const m=OLD_ACC[acc]||[0,0];acc=m[0];face=m[1]}
-  o.acc=Math.max(0,Math.min(ACCS.length-1,acc));o.face=Math.max(0,Math.min(FACES.length-1,face));o.v=2;if(HEX.test(l.streak))o.streak=l.streak;return o}
+  let acc=l.acc|0,face=l.face|0;if(l.v!==2&&l.v!==3){const m=OLD_ACC[acc]||[0,0];acc=m[0];face=m[1]}if(l.v!==3)acc=V2_ACC[acc]??0;
+  o.acc=Math.max(0,Math.min(ACCS.length-1,acc));o.face=Math.max(0,Math.min(FACES.length-1,face));o.v=3;if(HEX.test(l.streak))o.streak=l.streak;return o}
 function spriteLook(l){const f=Object.assign({},ACCS[l.acc|0]?ACCS[l.acc|0][1]:{},FACES[l.face|0]?FACES[l.face|0][1]:{});const o=Object.assign({},l,{glasses:!!f.glasses,sunglasses:!!f.sunglasses,earrings:!!f.earrings,beard:!!f.beard,mustache:!!f.mustache,headphones:!!f.headphones,bow:!!f.bow,headband:!!f.headband,flower:!!f.flower,scarf:!!f.scarf,necklace:!!f.necklace});
   if(f.hat){o.hat=mix(l.shirt,-.2);o.hatStyle=f.hatStyle}else{o.hat=null;o.hatStyle=null}return o}
 function modelFromDef(L){                                          // a teammate's current look, in the maker's terms
   const has=k=>!!L[k],acc=ACCS.findIndex(([,f])=>['glasses','sunglasses','earrings','headphones','bow','headband','flower','scarf','necklace'].every(k=>!!f[k]===has(k))&&!f.hat),face=FACES.findIndex(([,f])=>['beard','mustache'].every(k=>!!f[k]===has(k)));
-  return cleanLook({v:2,skin:L.skin,hair:L.hair,eyes:L.eyes,shirt:L.shirt,pants:L.pants,style:L.style,top:L.top,bottom:L.bottom,acc:acc<0?0:acc,face:face<0?0:face,streak:L.streak})}
+  return cleanLook({v:3,skin:L.skin,hair:L.hair,eyes:L.eyes,shirt:L.shirt,pants:L.pants,style:L.style,top:L.top,bottom:L.bottom,acc:acc<0?0:acc,face:face<0?0:face,streak:L.streak})}
 let MYLOOK=cleanLook({});try{const l=JSON.parse(localStorage.getItem('kotoNY.look')||'null');if(l)MYLOOK=cleanLook(l)}catch(_){}
 const lookSprites=l=>{const k=JSON.stringify(l);if(!PL.sprCache.has(k))PL.sprCache.set(k,makeSprites(spriteLook(l)));return PL.sprCache.get(k)};
 // colour <-> three 0-100 sliders (hue, saturation, brightness), like a farm game's character screen
@@ -3485,17 +3533,19 @@ function tipText(){const t=document.getElementById('walkTip');
   if(PL.me&&PL.me.char&&!PL.me.home&&!offHours(PL.me.char)){t.textContent='Sit at your desk to go back to work';t.hidden=false;placeTip()}
   else{t.hidden=true;placeTip()}}   // guests get no hints
 const KEYDIR={ArrowUp:[0,-1,'N'],ArrowDown:[0,1,'S'],ArrowLeft:[-1,0,'W'],ArrowRight:[1,0,'E']};
-function keyOn(k){if(!KEYDIR[k])return;PL.keys=PL.keys.filter(x=>x!==k);PL.keys.push(k);if(!PL.me)startWalking()}
+function keyOn(k){if(!KEYDIR[k])return;if(PL.me&&PL.me.dance){PL.me.dance=0;PL.netT=0}PL.keys=PL.keys.filter(x=>x!==k);PL.keys.push(k);if(!PL.me)startWalking()}
 function keyOff(k){PL.keys=PL.keys.filter(x=>x!==k)}
 addEventListener('keydown',e=>{if(!KEYDIR[e.key]||e.metaKey||e.ctrlKey||e.altKey)return;if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(!document.getElementById('who').hidden)return;
   if(!ON.name&&!ON.guest)return;e.preventDefault();keyOn(e.key)});
 addEventListener('keyup',e=>keyOff(e.key));addEventListener('blur',()=>{PL.keys=[]});
-for(const bt of document.querySelectorAll('#pad button')){const k=bt.dataset.k;
+document.getElementById('padDance').addEventListener('pointerdown',e=>{e.preventDefault();if(!PL.me)startWalking();startDance()});
+for(const bt of document.querySelectorAll('#pad button[data-k]')){const k=bt.dataset.k;
   bt.addEventListener('pointerdown',e=>{e.preventDefault();bt.classList.add('on');try{bt.setPointerCapture(e.pointerId)}catch(_){}keyOn(k)});
   for(const ev of['pointerup','pointercancel','lostpointercapture'])bt.addEventListener(ev,()=>{bt.classList.remove('on');keyOff(k)})}
 const MIRRORS=[[1.5,3.5],[6.5,3.5]];
 const walkable=(i,j)=>inb(i,j)&&(walk[ix(i,j)]||!!seatAt[ix(i,j)]);   // floor, plus chairs (you can step into a chair to sit)
 function playStep(dt){
+  if(PL.me&&PL.me.dance&&performance.now()-PL.me.dance>6000){PL.me.dance=0;PL.netT=0}   // a dance lasts about six seconds
   document.getElementById('pad').classList.toggle('show',matchMedia('(hover:none)').matches&&!!(ON.name||ON.guest)&&document.getElementById('who').hidden);
   const me=PL.me;
   if(me){
@@ -3524,7 +3574,21 @@ function playStep(dt){
 }
 function puppets(){const out=[];if(PL.me){PL.me.key=PL.me.ry*TS+5;out.push(PL.me)}for(const r of PL.remote.values()){r.key=r.ry*TS+5;out.push(r)}return out}
 function drawAny(c){if(c.puppet)drawPuppet(c);else drawChar(c)}
+function startDance(){const me=PL.me;if(!me)return;if(me.sit){me.sit=false;me.up=0}me.home=0;me.dance=performance.now();PL.keys=[];PL.netT=0;
+  if(SND.on&&SND.C&&SND.C.state==='running'){const t=SND.C.currentTime;[784,988,1175,1568,1175,1568].forEach((f,i)=>bell(f,t+i*.11,.03,.6))}}   // a happy little jingle
+function danceView(p,an){                                          // the dance: bounce on the beat, spin round, step side to side, arms up
+  const t=(performance.now()-p.dance)/1000,beat=Math.floor(t*4),spin=['f','s','b','w'][Math.floor(t*2)%4];
+  const v=Math.floor(t)%3===2?spin:(beat%4<2?'f':['s','w'][Math.floor(beat/4)%2]);
+  return{v,pose:['walkA','stand','walkB','stand'][beat%4],hop:Math.round(Math.abs(Math.sin(t*Math.PI*2))*4),sway:beat%2?1:-1,t}}
+function danceSparkles(x,top,t){                                   // music notes and hearts floating up while they dance
+  for(let k=0;k<3;k++){const ph=(t*.9+k/3)%1,yy=Math.round(top-9-ph*16),xx=Math.round(x+(k-1)*10+Math.sin((t+k)*3)*2);b.globalAlpha=1-ph;
+    if(k===1){b.fillStyle='#ff6f9c';b.fillRect(xx-1,yy,1,1);b.fillRect(xx+1,yy,1,1);b.fillRect(xx-1,yy+1,3,1);b.fillRect(xx,yy+2,1,1)}
+    else{b.fillStyle=k?'#6fb6ea':'#8a5cd0';b.fillRect(xx,yy,1,3);b.fillRect(xx-2,yy+2,2,2);b.fillRect(xx+1,yy,1,1)}}
+  b.globalAlpha=1}
 function drawPuppet(p){
+  if(p.dance&&performance.now()-p.dance<8000){const spr=p.char?p.char.spr:lookSprites(p.look||MYLOOK),x=Math.round(p.rx*TS),yf=Math.round(p.ry*TS+5),d=danceView(p),top=yf-31-d.hop;
+    b.fillStyle='rgba(40,20,30,.28)';b.fillRect(x-5+d.hop/2,yf-2,10-d.hop,3);
+    b.drawImage(spr[d.v+d.pose],x-9+d.sway,top);if(p.char&&p.char.def.staff)drawUniform(x-9+d.sway,top,d.v,false);danceSparkles(x,top,d.t);return}
   const spr=p.char?p.char.spr:lookSprites(p.look||MYLOOK),x=Math.round(p.rx*TS),yf=Math.round(p.ry*TS+5),an=performance.now()/1000,moving=p===PL.me?p.mv:p.mvv;
   const pose=p.sit?'sit':moving?['walkA','stand','walkB','stand'][Math.floor(an*9)%4]:'stand',v=p.dir==='S'?'f':p.dir==='N'?'b':p.dir==='E'?'s':'w',top=yf-31-(p.sit?p.up:0);
   if(!p.sit){b.fillStyle='rgba(40,20,30,.28)';b.fillRect(x-6,yf-2,12,3);b.fillRect(x-4,yf-3,8,5)}
@@ -3555,7 +3619,7 @@ function puppetLabels(fs,hits,placed){
 // --- sharing positions with everyone else ---
 async function sendMove(leave){
   if(location.protocol==='file:'||PL.busy)return;PL.busy=true;
-  const me=PL.me,body=me&&!leave?{id:ON.id,who:me.who,guest:me.guest,look:me.look,x:+me.x.toFixed(2),y:+me.y.toFixed(2),dir:me.dir,sit:me.sit,up:me.up}:{id:ON.id,leave:true};
+  const me=PL.me,body=me&&!leave?{id:ON.id,who:me.who,guest:me.guest,look:me.look,x:+me.x.toFixed(2),y:+me.y.toFixed(2),dir:me.dir,sit:me.sit,up:me.up,dance:!!me.dance}:{id:ON.id,leave:true};
   try{const r=await fetch(PL.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(j&&j.ok)takePlayers(j.players||[])}catch(_){}
   PL.busy=false;
 }
@@ -3564,7 +3628,7 @@ function takePlayers(list){
   for(const q of list){if(q.id===ON.id)continue;seen.add(q.id);let r=PL.remote.get(q.id);
     const c=q.guest?null:chars.find(c=>c.def.name===q.who)||null;
     if(!r){r={id:q.id,puppet:true,rx:q.x,ry:q.y};PL.remote.set(q.id,r)}
-    Object.assign(r,{who:q.who,guest:!!q.guest,look:q.guest?cleanLook(q.look):null,char:c,x:q.x,y:q.y,dir:q.dir||'S',sit:!!q.sit,up:q.up||0})}
+    Object.assign(r,{who:q.who,guest:!!q.guest,look:q.guest?cleanLook(q.look):null,char:c,x:q.x,y:q.y,dir:q.dir||'S',sit:!!q.sit,up:q.up||0,dance:q.dance?(r.dance||performance.now()):0})}
   for(const id of[...PL.remote.keys()])if(!seen.has(id))PL.remote.delete(id);
   PL.ctl=new Set([...PL.remote.values()].map(r=>r.char).filter(Boolean));if(PL.me&&PL.me.char)PL.ctl.add(PL.me.char);
   PL.players=PL.remote.size;
@@ -3741,7 +3805,7 @@ function frame(t){
 resync();                                                          // work out the office as it is right now
 for(const c of chars){c.rx=c.x;c.ry=c.y}
 hud();resize();requestAnimationFrame(frame);
-window.__office={makeSprites,spriteLook,cleanLook,SQ,NP,PIX,pixSvg,chatters,MM,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
+window.__office={scr:p=>{const[fx,fy]=charXY(p);return[sx(fx)/dpr,sy(fy)/dpr]},makeSprites,spriteLook,cleanLook,SQ,NP,PIX,pixSvg,chatters,MM,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
 })();
 </script>
 </body>
