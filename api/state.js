@@ -1,8 +1,8 @@
 // Everything the office needs to stay live, in one small answer that everyone shares.
 // GET /api/state -> { ok, t, people, visitors, guests, players, chat, sonos, looksV, boardV }
 //
-// Every open copy of the site asks for this every few seconds. The answer is cached by Vercel's network for
-// 2 seconds, so however many people have the site open, the storage is only read about once every 2 seconds,
+// Every open copy asks for this (under a second apart while anyone's walking around). The answer is cached by Vercel's
+// network for 1 second, so however many people have the site open, the storage is read at most about once a second,
 // with 5 commands (one round trip). Writes (moving, chatting, checking in) go to the other functions.
 
 const STALE_PLAYER = 30_000;          // someone walking around who hasn't checked in for 30 seconds has gone
@@ -43,8 +43,8 @@ export default async function handler(req, res) {
     const chat = (chatRaw || []).map(parse).filter(Boolean).reverse();
     const cur = Math.floor(now / SLOT), sonos = (parse(sonosRaw) || []).filter(s => s && s.slot >= cur - 1).sort((a, b) => a.slot - b.slot);
     const m = {}; for (let i = 0; meta && i < meta.length; i += 2) m[meta[i]] = +meta[i + 1] || 0;
-    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=2, stale-while-revalidate=4');   // shared by everyone for 2 seconds
-    res.setHeader('Vercel-CDN-Cache-Control', 'max-age=2, stale-while-revalidate=4');
+    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=1');   // shared by everyone for 1 second (never older than that)
+    res.setHeader('Vercel-CDN-Cache-Control', 'max-age=1');
     return res.status(200).json({ ok: true, t: now, people, visitors, guests: guests.size, walking: players.length, players, chat, sonos, looksV: m.looksV || 0, boardV: m.boardV || 0 });
   } catch (err) {
     res.setHeader('Cache-Control', 'no-store');
