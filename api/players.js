@@ -4,7 +4,7 @@
 
 const PEOPLE = ["Aleks","Alex","Arthur","David","Emma","Kayla","Mo","Jimmy","Hannah Ca","Hannah Ch","Jada","Simran","Laura","Kiera","Ru","Emilie","Rachel","Neat","Divya","Luke","Katie","LaDawn","Bryce","Alexis","Andreina","Anna","Blake","Goda","Hailey","Jenny","Kim","Lindsey","Maddy","Qichelle","Thalia","Lucy"];
 const KEY = 'koto:players';
-const STALE = 8000;
+const STALE = 30000;
 const STYLES = ['short','sidepart','undercut','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','shag','long','bangs','wavy','halfup','mullet','ponytail','pigtails','spacebuns','bun','braids','locs','bald'];
 const TOPS = ['tee','graphic','stripes','tank','collar','flannel','hoodie','sweater','turtleneck','vest','cardigan','jacket','overalls'], BOTTOMS = ['pants','joggers','shorts','skirt','longskirt'], ACCS = 30;
 const hex = v => /^#[0-9a-f]{6}$/i.test(String(v)) ? String(v) : null;
@@ -45,10 +45,12 @@ export default async function handler(req, res) {
           const p = { id, who, guest: !team, x: Math.max(0, Math.min(60, +body.x || 0)), y: Math.max(0, Math.min(40, +body.y || 0)),
             dir: ['N', 'S', 'E', 'W'].includes(body.dir) ? body.dir : 'S', sit: !!body.sit, up: Math.max(0, Math.min(8, +body.up || 0)), dance: !!body.dance, t: now };
           if (!team && body.look) p.look = cleanLook(body.look);
+          if (Array.isArray(body.trail)) p.trail = body.trail.slice(-24).map(q => Array.isArray(q) ? [Math.max(0, Math.min(60, +q[0] || 0)), Math.max(0, Math.min(40, +q[1] || 0)), +q[2] || 0, ['N','S','E','W'].includes(q[3]) ? q[3] : 'S'] : null).filter(Boolean);   // the path they just walked, so others can follow it smoothly
           await redis(['HSET', KEY, id, JSON.stringify(p)]);
         }
       }
     }
+    if (req.method === 'POST' && Math.random() > 0.05) return res.status(200).json({ ok: true });   // just saving; everyone reads positions from /api/state
     const flat = (await redis(['HGETALL', KEY])) || [];
     const players = [], stale = [];
     for (let i = 0; i < flat.length; i += 2) {
