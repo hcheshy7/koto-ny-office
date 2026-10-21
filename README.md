@@ -30,7 +30,10 @@ Everyone can **drag the boxes** (the clock and weather column, chat, Who's doing
 
 - `index.html`: the whole site.
 - `api/tasks.js`: a small function that saves and loads the shared tasks.
-- `api/state.js`: the one thing every open copy asks for every few seconds: who is online, who is walking where, the latest chat, and the Sonos queue. Vercel's network shares each answer between everyone for 2 seconds, so the storage is only read about once every 2 seconds however many people have the site open.
+- `api/live.js`: the live stream. Every change (someone moving, dancing, chatting, changing the queue, the board or their look, arriving or leaving) is pushed to everyone the moment it happens, usually within a quarter of a second. It needs the storage's direct Redis address (`KV_URL` or `REDIS_URL`, which Vercel's Upstash integration adds by itself). Without it the site carries on with `api/state.js` checks.
+- `api/state.js`: the backstop every open copy checks now and then: who is online, who is walking where, the latest chat, and the Sonos queue. Vercel's network shares each answer between everyone for 1 second.
+- `vercel.json`: lets the live stream stay open for up to 5 minutes before the browser quietly reconnects.
+- `favicon.svg`, `apple-touch-icon.png`: the tab icon and phone home-screen icon.
 - `api/chat.js`: saves chat messages (keeps the last 200). Each person can send at most one message every 1.5 seconds.
 - `api/players.js`: saves the position (and the path just walked) of anyone walking around, about once every 1.2 seconds while they move and every 15 seconds while they stand still.
 - `api/looks.js`: a small function that saves teammates' new looks from the bathroom mirror.
@@ -64,7 +67,8 @@ The office works without step 3, but the Online now panel and chat stay hidden u
 ## If the whole office has it open
 
 The site is built to stay light:
-- Everyone shares one answer from `api/state.js` (cached for 2 seconds), instead of each copy asking every function separately.
+- Changes are pushed through one shared Redis channel (`api/live.js`); each open, visible tab keeps one stream open, and a hidden tab closes it.
+- Everyone shares one answer from `api/state.js` (cached for 1 second) as a backstop, instead of each copy asking every function separately.
 - A copy asks every 2.5 seconds while something's happening (someone walking around, the chat or Sonos queue open), every 7 seconds otherwise, and every 30 seconds if nobody has touched the page for 3 minutes. A hidden tab asks for nothing until you come back to it.
 - People walking around send the path they just walked, so everyone else sees them move smoothly even between updates.
 

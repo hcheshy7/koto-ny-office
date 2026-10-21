@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/apple-touch-icon.png" type="image/png" sizes="180x180"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>Koto NY Office</title>
 <style>
   /* VT323 pixel font (SIL Open Font License), embedded so the page looks the same offline */
@@ -3417,12 +3418,13 @@ const ST={busy:false,timer:0,lastInput:performance.now(),looksV:-1,boardV:-1,fai
 for(const ev of['pointerdown','pointermove','keydown','wheel','touchstart'])addEventListener(ev,()=>{ST.lastInput=performance.now()},{passive:true});
 function stateGap(){
   const walking=PL.me||PL.remote.size>0,slow=ST.fails?Math.min(4,1+ST.fails):1;
+  if(LV.on)return(performance.now()-ST.lastInput>180000?30000:15000)*slow;              // changes are pushed live; this is just a backstop
   if(performance.now()-ST.lastInput>180000)return(walking?3000:15000)*slow;              // nobody's touched the page for 3 minutes
   const open=chatEl.classList.contains('full')||!document.getElementById('sonosQ').hidden||!document.getElementById('bulletin').hidden;
   return(walking?600:open?1000:3000)*slow}                                                 // near real time while anyone's walking around
-async function pollState(){
+async function pollState(fresh){
   clearTimeout(ST.timer);if(location.protocol==='file:'||document.hidden)return;           // a hidden tab asks for nothing; it catches up when you come back
-  ST.lastPoll=performance.now();if(!ST.busy){ST.busy=true;let j=null;try{const r=await fetch('/api/state');j=await r.json()}catch(_){}ST.busy=false;ST.lastJ=j;takeState(j)}
+  ST.lastPoll=performance.now();if(!ST.busy){ST.busy=true;let j=null;try{const r=await fetch('/api/state'+(fresh===true?'?f='+Date.now():''));j=await r.json()}catch(_){}ST.busy=false;ST.lastJ=j;takeState(j)}
   ST.timer=setTimeout(pollState,stateGap())}
 function takeState(j){
   if(!j||!j.ok){ST.fails++;showOnline(null);chatProblem(j&&j.error?j.error:'The live features aren’t set up on the server yet. Check that api/state.js is uploaded and storage is connected.');return}
@@ -3432,6 +3434,32 @@ function takeState(j){
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollState()});
 if(location.protocol!=='file:')setTimeout(pollState,50);
+/* ---------- truly live: /api/live pushes every change the moment it happens (moving, dancing, chat, the queue, the board, looks, who's online) ----------
+   If the stream can't be opened, everything still works through the /api/state checks above. */
+const LV={es:null,on:false,off:false,fails:0,oT:0};window.__lv=LV;
+function liveStart(){
+  if(location.protocol==='file:'||LV.es||LV.off||document.hidden||!window.EventSource)return;
+  const es=new EventSource('/api/live');LV.es=es;
+  es.addEventListener('hello',()=>{LV.on=true;LV.fails=0;pollState()});
+  es.addEventListener('nope',()=>{liveStop();LV.off=true});                              // the server can't stream; stay on checks
+  es.onmessage=e=>{let m=null;try{m=JSON.parse(e.data)}catch(_){}if(m)liveTake(m)};
+  es.onerror=()=>{const was=LV.on;LV.on=false;
+    if(es.readyState===2||(!was&&++LV.fails>3)){es.close();if(LV.es===es)LV.es=null;    // keeps failing: back off, then try again later
+      if(LV.fails>6){LV.off=true;setTimeout(()=>{LV.off=false;LV.fails=0;liveStart()},300000)}else setTimeout(liveStart,Math.min(20000,1000*2**LV.fails))}
+    pollState()};                                                                         // catch up on anything missed while it reconnects
+}
+function liveStop(){if(LV.es){LV.es.close();LV.es=null}LV.on=false}
+function liveTake(m){
+  if(m.k==='p'&&m.p){takeOne(m.p,true);plSync()}                                         // someone moved, sat, danced
+  else if(m.k==='x'){PL.gone.set(m.id,performance.now());if(PL.remote.delete(m.id))plSync()}                                  // someone stopped walking around
+  else if(m.k==='c'&&m.m)chatTake([m.m]);
+  else if(m.k==='s'&&Array.isArray(m.q))takeSonos(m.q);
+  else if(m.k==='b')pullBoard();
+  else if(m.k==='l')pullLooks();
+  else if(m.k==='o'){clearTimeout(LV.oT);LV.oT=setTimeout(()=>pollState(true),300)}       // who's online changed
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)liveStop();else liveStart()});
+if(location.protocol!=='file:')setTimeout(liveStart,400);
 /* ---------- move the boxes around: drag any of them along the edges of the screen (they always snap back to an edge) ---------- */
 const DOCK={m:14,saved:{}};
 try{DOCK.saved=JSON.parse(localStorage.getItem('kotoNY.dock')||'{}')||{}}catch(_){}
@@ -3471,7 +3499,7 @@ addEventListener('resize',()=>{for(const id in DOCK.saved){const el=document.get
 if(window.ResizeObserver){const ro=new ResizeObserver(es=>{for(const e of es)if(DOCK.saved[e.target.id])applyDock(e.target)});for(const id of['title','roster','online','chat'])ro.observe(document.getElementById(id))}
 /* ---------- walk around yourself: arrow keys (or the on-screen pad) take over your character; sit at your own desk to hand it back ----------
    Your character's normal day keeps running out of sight while you walk, so everyone's office stays in step. Others see you walking too. */
-const PL={me:null,remote:new Map(),ctl:new Set(),keys:[],url:'/api/players',netT:0,busy:false,players:0,sprCache:new Map()};
+const PL={me:null,remote:new Map(),gone:new Map(),ctl:new Set(),keys:[],url:'/api/players',netT:0,busy:false,players:0,sprCache:new Map()};
 // ---------- how someone looks: a small set of choices, turned into sprites ----------
 const LOOKS={skin:['#fbe0c4','#f6d2ad','#f2c9a1','#e8b48c','#d9a06e','#c99068','#ab7145','#8a5a3a','#6b4429','#4a2c1a'],
   style:['short','sidepart','undercut','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','shag','long','bangs','wavy','halfup','mullet','ponytail','pigtails','spacebuns','bun','braids','locs','bald'],
@@ -3639,7 +3667,7 @@ function playStep(dt){
     }else if(!me.sit&&!me.home){                                     // stopped on a chair: sit down in it
       const ti=Math.floor(me.x),tj=Math.floor(me.y),seat=seatAt[ix(ti,tj)];
       me.x+=(ti+.5-me.x)*Math.min(1,dt*10);me.y+=(tj+.5-me.y)*Math.min(1,dt*10);
-      if(seat&&(me.idle=(me.idle||0)+dt)>.2){me.x=ti+.5;me.y=tj+.5;me.sit=true;me.dir=seat.dir;me.up=seat.up||0;
+      if(seat&&(me.idle=(me.idle||0)+dt)>.2){me.x=ti+.5;me.y=tj+.5;me.sit=true;me.dir=seat.dir;me.up=seat.up||0;PL.netT=0;
         const c=me.char;if(c&&c.desk&&c.desk.i===ti&&c.desk.j===tj&&!offHours(c)){me.home=performance.now();tipText()}}
     }
     if(me.home){const c=me.char;if(offHours(c)){me.home=0;tipText()}else if(performance.now()-me.home>350)stopWalking()}
@@ -3648,7 +3676,7 @@ function playStep(dt){
     me.rx=me.x;me.ry=me.y;
   }
   for(const r of PL.remote.values()){const q=r.q;                // replay the path they walked, a moment behind, at their own pace
-    if(q&&q.length){const target=q[q.length-1][2]-300;if(r.clock==null||r.clock<target-1500)r.clock=Math.max(q[0][2],target-300);   // just behind where they are now
+    if(q&&q.length){const target=q[q.length-1][2]-(LV.on?160:300);if(r.clock==null||r.clock<target-1500)r.clock=Math.max(q[0][2],target-150);   // just behind where they are now
       const behind=target-r.clock;r.clock+=dt*1000*(behind>0?1+Math.min(1.5,behind/600):.85);if(r.clock>q[q.length-1][2])r.clock=q[q.length-1][2];
       while(q.length>1&&q[1][2]<=r.clock)q.shift();const a=q[0],b=q[1];
       if(b){const f=Math.max(0,Math.min(1,(r.clock-a[2])/Math.max(1,b[2]-a[2])));r.x=a[0]+(b[0]-a[0])*f;r.y=a[1]+(b[1]-a[1])*f;if(b[3])r.dir=b[3];r.mvv=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1])>.01}
@@ -3656,7 +3684,8 @@ function playStep(dt){
     else r.mvv=false;r.rx=r.x;r.ry=r.y}
   if(me){if(me.mv||me.home)me.lastMv=performance.now();
     if((me.trT=(me.trT||0)-dt)<=0){me.trT=.1;const tr=me.trail||(me.trail=[]),now=Date.now();tr.push([+me.x.toFixed(2),+me.y.toFixed(2),now,me.dir]);while(tr.length>30||tr[0][2]<now-3000)tr.shift()}   // the path you've just walked
-    if((PL.netT-=dt)<=0){PL.netT=performance.now()-(me.lastMv||0)<1500?.35:10;sendMove(false)}}   // about twice a second while moving, every 10 seconds when standing still
+    if(me.mv&&PL.netT>(LV.on?.12:.35))PL.netT=0;                    // just started moving: tell everyone now, not at the next 10-second check-in
+    if((PL.netT-=dt)<=0){PL.netT=performance.now()-(me.lastMv||0)<1500?(LV.on?.12:.35):10;sendMove(false)}}   // 8 times a second while moving (live), every 10 seconds when standing still
 }
 function puppets(){const out=[];if(PL.me){PL.me.key=PL.me.ry*TS+5;out.push(PL.me)}for(const r of PL.remote.values()){r.key=r.ry*TS+5;out.push(r)}return out}
 function drawAny(c){if(c.puppet)drawPuppet(c);else drawChar(c)}
@@ -3706,21 +3735,29 @@ function puppetLabels(fs,hits,placed){
 // --- sharing positions with everyone else ---
 async function sendMove(leave){
   if(location.protocol==='file:'||PL.busy)return;PL.busy=true;
-  const me=PL.me,body=me&&!leave?{id:ON.id,who:me.who,guest:me.guest,look:me.look,x:+me.x.toFixed(2),y:+me.y.toFixed(2),dir:me.dir,sit:me.sit,up:me.up,dance:!!me.dance,trail:me.trail||[]}:{id:ON.id,leave:true};
+  const me=PL.me,body=me&&!leave?{id:ON.id,who:me.who,guest:me.guest,look:me.look,x:+me.x.toFixed(2),y:+me.y.toFixed(2),dir:me.dir,sit:me.sit,up:me.up,dance:!!me.dance,trail:(me.trail||[]).slice(LV.on?-10:-30)}:{id:ON.id,leave:true};
   try{const r=await fetch(PL.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(j&&j.ok&&j.players)takePlayers(j.players)}catch(_){}
   PL.busy=false;
 }
-function takePlayers(list){
-  const seen=new Set();
-  for(const q of list){if(q.id===ON.id)continue;seen.add(q.id);let r=PL.remote.get(q.id);
+function takeOne(q,live){                                           // one person's latest position (from the live stream or the shared state)
+  if(!q||q.id===ON.id)return;let r=PL.remote.get(q.id);if(r&&q.t<r.t)return;            // older than what we already have
+  const gone=PL.gone.get(q.id);if(gone){if(!live&&performance.now()-gone<5000)return;PL.gone.delete(q.id)}   // they just left; a second-old shared state still lists them
+  {
     const c=q.guest?null:chars.find(c=>c.def.name===q.who)||null;
     if(!r){r={id:q.id,puppet:true,x:q.x,y:q.y,rx:q.x,ry:q.y,dir:q.dir||'S',q:[],lastT:0};PL.remote.set(q.id,r)}
     Object.assign(r,{who:q.who,guest:!!q.guest,look:q.guest?cleanLook(q.look):null,char:c,sit:!!q.sit,up:q.up||0,dance:q.dance?(r.dance||performance.now()):0});
     const pts=Array.isArray(q.trail)&&q.trail.length?q.trail:[[q.x,q.y,q.t,q.dir]];
     for(const p of pts)if(p[2]>r.lastT){r.q.push(p);r.lastT=p[2]}
     if(r.q.length>60)r.q.splice(0,r.q.length-60);
-    if(r.sit||r.dance){r.x=q.x;r.y=q.y;r.dir=q.dir||r.dir;r.q=[[q.x,q.y,r.lastT,q.dir]];r.clock=null}}
-  for(const id of[...PL.remote.keys()])if(!seen.has(id))PL.remote.delete(id);
+    if(r.sit||r.dance){r.x=q.x;r.y=q.y;r.dir=q.dir||r.dir;r.q=[[q.x,q.y,r.lastT,q.dir]];r.clock=null}
+    r.t=q.t;if(live)r.liveAt=performance.now()}
+}
+function takePlayers(list){
+  const seen=new Set();for(const q of list){takeOne(q);if(q)seen.add(q.id)}
+  for(const[id,r]of[...PL.remote])if(!seen.has(id)&&!(r.liveAt&&performance.now()-r.liveAt<10000))PL.remote.delete(id);   // the shared state can be a second old: don't drop someone the live stream just showed
+  plSync();
+}
+function plSync(){
   PL.ctl=new Set([...PL.remote.values()].map(r=>r.char).filter(Boolean));if(PL.me&&PL.me.char)PL.ctl.add(PL.me.char);
   PL.players=PL.remote.size;
 }
