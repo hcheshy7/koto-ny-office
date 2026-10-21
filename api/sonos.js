@@ -53,6 +53,7 @@ export default async function handler(req, res) {
         const last = q.length ? q[q.length - 1].slot : 0;
         q.push({ slot: Math.max(cur + 1, last + 1), title, artist, by, t: now });
         await redis(['SET', KEY, JSON.stringify(q), 'PX', 864e5]);
+        await redis(['PUBLISH', 'koto:live', JSON.stringify({ k: 's', q: q.filter(s => s.slot >= Math.floor(Date.now() / SLOT) - 1) })]);
         return res.status(200).json({ ok: true, queue: q });
       } finally { if (got) await redis(['DEL', KEY + ':lock']); }
     }
@@ -70,6 +71,7 @@ export default async function handler(req, res) {
         const q = (await load(now)).filter(s => s.slot < start);
         songs.forEach((x, k) => q.push(Object.assign({ slot: start + k, t: now + k }, x)));
         await redis(['SET', KEY, JSON.stringify(q), 'PX', 864e5]);
+        await redis(['PUBLISH', 'koto:live', JSON.stringify({ k: 's', q: q.filter(s => s.slot >= Math.floor(Date.now() / SLOT) - 1) })]);
         return res.status(200).json({ ok: true, queue: q });
       } finally { if (got) await redis(['DEL', KEY + ':lock']); }
     }
@@ -90,6 +92,7 @@ export default async function handler(req, res) {
         let next = cur + 1;
         for (const s of q) if (s.slot > cur) { s.slot = Math.max(next, Math.min(s.slot, next)); next = s.slot + 1; }
         await redis(['SET', KEY, JSON.stringify(q), 'PX', 864e5]);
+        await redis(['PUBLISH', 'koto:live', JSON.stringify({ k: 's', q: q.filter(s => s.slot >= Math.floor(Date.now() / SLOT) - 1) })]);
         return res.status(200).json({ ok: true, queue: q });
       } finally { if (got) await redis(['DEL', KEY + ':lock']); }
     }

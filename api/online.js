@@ -30,9 +30,11 @@ export default async function handler(req, res) {
     const guest = name ? '' : String(body.guest || '').replace(/[\u0000-\u001f<>|~]/g, '').replace(/\s+/g, ' ').trim().slice(0, 20);   // a visitor who typed their own name
     const member = id + '|' + (name || (guest ? '~' + guest : ''));
     const prev = typeof body.prev === 'string' && body.prev.startsWith(id + '|') ? body.prev.slice(0, 60) : '';
-    if (prev && prev !== member) await redis(['ZREM', KEY, prev]);             // they changed who they are
-    if (body.leave) await redis(['ZREM', KEY, member]);
-    else await redis(['ZADD', KEY, now, member]);
+    let changed = 0;
+    if (prev && prev !== member) changed += await redis(['ZREM', KEY, prev]);   // they changed who they are
+    if (body.leave) changed += await redis(['ZREM', KEY, member]);
+    else changed += await redis(['ZADD', KEY, now, member]);                     // 1 when they've just arrived, 0 for an "I'm still here"
+    if (changed) await redis(['PUBLISH', 'koto:live', '{"k":"o"}']);            // the list of who's online changed: everyone refreshes it
     if (Math.random() < 0.05) await redis(['ZREMRANGEBYSCORE', KEY, 0, now - WINDOW]);   // tidy up now and then
     return res.status(200).json({ ok: true, member });
   } catch (err) {

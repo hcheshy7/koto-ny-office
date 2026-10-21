@@ -44,19 +44,19 @@ export default async function handler(req, res) {
       if (!slow) return res.status(429).json({ ok: false, error: 'Give it a few seconds before pinning another.' });
       const note = { nid: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), by: clean(body.by, 20) || 'Someone', uid,
         color: COLORS.includes(body.color) ? body.color : COLORS[0], img, x: num(body.x, 0, .86, .4), y: num(body.y, 0, .76, .3), r: num(body.r, -8, 8, 0), t: Date.now() };
-      const notes = await locked(async () => { const q = await load(); q.push(note); const out = q.slice(-MAX); await redis(['SET', KEY, JSON.stringify(out)]); await redis(['HINCRBY', 'koto:meta', 'boardV', 1]); return out; });
+      const notes = await locked(async () => { const q = await load(); q.push(note); const out = q.slice(-MAX); await redis(['SET', KEY, JSON.stringify(out)]); await redis(['HINCRBY', 'koto:meta', 'boardV', 1]); await redis(['PUBLISH', 'koto:live', '{"k":"b"}']); return out; });
       return res.status(200).json({ ok: true, notes });
     }
     if (req.method === 'PATCH') {                                    // anyone can move a note around the board; it comes to the front
       const nid = String(body.nid || '').slice(0, 20), x = num(body.x, 0, .86, null), y = num(body.y, 0, .76, null);
       if (x === null || y === null) return res.status(400).json({ ok: false, error: 'Where to?' });
       const notes = await locked(async () => { const q = await load(); const k = q.findIndex(n => n.nid === nid); if (k < 0) return q;
-        const n = q.splice(k, 1)[0]; n.x = x; n.y = y; q.push(n); await redis(['SET', KEY, JSON.stringify(q)]); await redis(['HINCRBY', 'koto:meta', 'boardV', 1]); return q; });
+        const n = q.splice(k, 1)[0]; n.x = x; n.y = y; q.push(n); await redis(['SET', KEY, JSON.stringify(q)]); await redis(['HINCRBY', 'koto:meta', 'boardV', 1]); await redis(['PUBLISH', 'koto:live', '{"k":"b"}']); return q; });
       return res.status(200).json({ ok: true, notes });
     }
     if (req.method === 'DELETE') {
       const nid = String(body.nid || '').slice(0, 20);
-      const notes = await locked(async () => { const q = await load(); const out = q.filter(n => !(n.nid === nid && n.uid === uid)); if (out.length !== q.length) await redis(['SET', KEY, JSON.stringify(out)]); await redis(['HINCRBY', 'koto:meta', 'boardV', 1]); return out; });
+      const notes = await locked(async () => { const q = await load(); const out = q.filter(n => !(n.nid === nid && n.uid === uid)); if (out.length !== q.length) await redis(['SET', KEY, JSON.stringify(out)]); await redis(['HINCRBY', 'koto:meta', 'boardV', 1]); await redis(['PUBLISH', 'koto:live', '{"k":"b"}']); return out; });
       return res.status(200).json({ ok: true, notes });
     }
     res.setHeader('Allow', 'GET, POST, PATCH, DELETE');

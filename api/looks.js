@@ -43,7 +43,8 @@ export default async function handler(req, res) {
       const look = cleanLook(body.look);
       if (!look.skin || !look.hair || !look.eyes || !look.shirt || !look.pants) return res.status(400).json({ ok: false, error: 'Bad colours.' });
       await redis(['HSET', KEY, name, JSON.stringify(look)]);
-      await redis(['HINCRBY', 'koto:meta', 'looksV', 1]);   // tells everyone's copy to fetch the new look
+      await redis(['HINCRBY', 'koto:meta', 'looksV', 1]);
+      await redis(['PUBLISH', 'koto:live', '{"k":"l"}']);   // tells everyone's copy to fetch the new look
       return res.status(200).json({ ok: true });
     }
     res.setHeader('Allow', 'GET, POST');

@@ -44,6 +44,7 @@ export default async function handler(req, res) {
       const m = { t: Date.now(), who: name || guest, guest: !name, text, id };
       await redis(['LPUSH', KEY, JSON.stringify(m)]);
       await redis(['LTRIM', KEY, 0, 199]);
+      await redis(['PUBLISH', 'koto:live', JSON.stringify({ k: 'c', m })]);   // pushed to everyone's chat straight away
       return res.status(200).json({ ok: true, message: m });
     }
     res.setHeader('Allow', 'GET, POST');

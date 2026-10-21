@@ -27,6 +27,12 @@ async function redis(cmd) {
   if (j.error) throw new Error(j.error);
   return j.result;
 }
+async function pipe(cmds) {                                          // several commands in one trip
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+  const r = await fetch(url.replace(/\/$/, '') + '/pipeline', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(cmds) });
+  return r.json();
+}
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -37,7 +43,7 @@ export default async function handler(req, res) {
     body = body || {};
     const now = Date.now(), id = String(body.id || '').replace(/[^a-z0-9]/gi, '').slice(0, 24);
     if (req.method === 'POST' && id) {
-      if (body.leave) await redis(['HDEL', KEY, id]);
+      if (body.leave) await pipe([['HDEL', KEY, id], ['PUBLISH', 'koto:live', JSON.stringify({ k: 'x', id })]]);   // gone: tell everyone straight away
       else {
         const team = PEOPLE.find(n => n === body.who);
         const who = team || clean(body.who, 20);
@@ -46,7 +52,8 @@ export default async function handler(req, res) {
             dir: ['N', 'S', 'E', 'W'].includes(body.dir) ? body.dir : 'S', sit: !!body.sit, up: Math.max(0, Math.min(8, +body.up || 0)), dance: !!body.dance, t: now };
           if (!team && body.look) p.look = cleanLook(body.look);
           if (Array.isArray(body.trail)) p.trail = body.trail.slice(-30).map(q => Array.isArray(q) ? [Math.max(0, Math.min(60, +q[0] || 0)), Math.max(0, Math.min(40, +q[1] || 0)), +q[2] || 0, ['N','S','E','W'].includes(q[3]) ? q[3] : 'S'] : null).filter(Boolean);   // the path they just walked, so others can follow it smoothly
-          await redis(['HSET', KEY, id, JSON.stringify(p)]);
+          const js = JSON.stringify(p);
+          await pipe([['HSET', KEY, id, js], ['PUBLISH', 'koto:live', '{"k":"p","p":' + js + '}']]);   // saved for anyone who joins later, and pushed to everyone watching now
         }
       }
     }
