@@ -3416,9 +3416,10 @@ chatIn.addEventListener('keydown',e=>{if(e.key==='Escape'){chatIn.blur();chatVie
 const ST={busy:false,timer:0,lastInput:performance.now(),looksV:-1,boardV:-1,fails:0};
 for(const ev of['pointerdown','pointermove','keydown','wheel','touchstart'])addEventListener(ev,()=>{ST.lastInput=performance.now()},{passive:true});
 function stateGap(){
-  if(performance.now()-ST.lastInput>180000)return 30000;                                  // nobody's touched the page for 3 minutes
-  const lively=PL.me||PL.remote.size>0||chatEl.classList.contains('full')||!document.getElementById('sonosQ').hidden||!document.getElementById('bulletin').hidden;
-  return(lively?2500:7000)*(ST.fails?Math.min(4,1+ST.fails):1)}
+  const walking=PL.me||PL.remote.size>0,slow=ST.fails?Math.min(4,1+ST.fails):1;
+  if(performance.now()-ST.lastInput>180000)return(walking?3000:15000)*slow;              // nobody's touched the page for 3 minutes
+  const open=chatEl.classList.contains('full')||!document.getElementById('sonosQ').hidden||!document.getElementById('bulletin').hidden;
+  return(walking?600:open?1000:3000)*slow}                                                 // near real time while anyone's walking around
 async function pollState(){
   clearTimeout(ST.timer);if(location.protocol==='file:'||document.hidden)return;           // a hidden tab asks for nothing; it catches up when you come back
   ST.lastPoll=performance.now();if(!ST.busy){ST.busy=true;let j=null;try{const r=await fetch('/api/state');j=await r.json()}catch(_){}ST.busy=false;ST.lastJ=j;takeState(j)}
@@ -3647,14 +3648,15 @@ function playStep(dt){
     me.rx=me.x;me.ry=me.y;
   }
   for(const r of PL.remote.values()){const q=r.q;                // replay the path they walked, a moment behind, at their own pace
-    if(q&&q.length){if(r.clock==null||r.clock<q[0][2])r.clock=q[0][2];const span=q[q.length-1][2]-r.clock;r.clock+=dt*1000*(span>3500?2:span>2200?1.35:1);
+    if(q&&q.length){const target=q[q.length-1][2]-300;if(r.clock==null||r.clock<target-1500)r.clock=Math.max(q[0][2],target-300);   // just behind where they are now
+      const behind=target-r.clock;r.clock+=dt*1000*(behind>0?1+Math.min(1.5,behind/600):.85);if(r.clock>q[q.length-1][2])r.clock=q[q.length-1][2];
       while(q.length>1&&q[1][2]<=r.clock)q.shift();const a=q[0],b=q[1];
       if(b){const f=Math.max(0,Math.min(1,(r.clock-a[2])/Math.max(1,b[2]-a[2])));r.x=a[0]+(b[0]-a[0])*f;r.y=a[1]+(b[1]-a[1])*f;if(b[3])r.dir=b[3];r.mvv=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1])>.01}
       else{r.x=a[0];r.y=a[1];r.mvv=false}}
     else r.mvv=false;r.rx=r.x;r.ry=r.y}
   if(me){if(me.mv||me.home)me.lastMv=performance.now();
-    if((me.trT=(me.trT||0)-dt)<=0){me.trT=.15;const tr=me.trail||(me.trail=[]),now=Date.now();tr.push([+me.x.toFixed(2),+me.y.toFixed(2),now,me.dir]);while(tr.length>32||tr[0][2]<now-4800)tr.shift()}   // the path you've just walked
-    if((PL.netT-=dt)<=0){PL.netT=performance.now()-(me.lastMv||0)<2500?1.2:15;sendMove(false)}}   // every 1.2 seconds while moving, every 15 when standing still
+    if((me.trT=(me.trT||0)-dt)<=0){me.trT=.1;const tr=me.trail||(me.trail=[]),now=Date.now();tr.push([+me.x.toFixed(2),+me.y.toFixed(2),now,me.dir]);while(tr.length>30||tr[0][2]<now-3000)tr.shift()}   // the path you've just walked
+    if((PL.netT-=dt)<=0){PL.netT=performance.now()-(me.lastMv||0)<1500?.35:10;sendMove(false)}}   // about twice a second while moving, every 10 seconds when standing still
 }
 function puppets(){const out=[];if(PL.me){PL.me.key=PL.me.ry*TS+5;out.push(PL.me)}for(const r of PL.remote.values()){r.key=r.ry*TS+5;out.push(r)}return out}
 function drawAny(c){if(c.puppet)drawPuppet(c);else drawChar(c)}
