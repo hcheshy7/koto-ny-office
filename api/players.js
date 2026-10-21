@@ -5,14 +5,14 @@
 const PEOPLE = ["Aleks","Alex","Arthur","David","Emma","Kayla","Mo","Jimmy","Hannah Ca","Hannah Ch","Jada","Simran","Laura","Kiera","Ru","Emilie","Rachel","Neat","Divya","Luke","Katie","LaDawn","Bryce","Alexis","Andreina","Anna","Blake","Goda","Hailey","Jenny","Kim","Lindsey","Maddy","Qichelle","Thalia","Lucy"];
 const KEY = 'koto:players';
 const STALE = 8000;
-const STYLES = ['short','sidepart','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','long','wavy','mullet','ponytail','pigtails','bun','braids','bald'];
+const STYLES = ['short','sidepart','undercut','pixie','spiky','buzz','mohawk','curly','curlylong','afro','bob','shoulder','shag','long','bangs','wavy','halfup','mullet','ponytail','pigtails','spacebuns','bun','braids','locs','bald'];
 const TOPS = ['tee','graphic','stripes','tank','collar','flannel','hoodie','sweater','turtleneck','vest','cardigan','jacket','overalls'], BOTTOMS = ['pants','joggers','shorts','skirt','longskirt'], ACCS = 30;
 const hex = v => /^#[0-9a-f]{6}$/i.test(String(v)) ? String(v) : null;
 function cleanLook(l) {
   l = l || {};
   const o = { skin: hex(l.skin), hair: hex(l.hair), eyes: hex(l.eyes), shirt: hex(l.shirt), pants: hex(l.pants),
     style: STYLES.includes(l.style) ? l.style : 'short', top: TOPS.includes(l.top) ? l.top : 'tee', bottom: BOTTOMS.includes(l.bottom) ? l.bottom : 'pants',
-    acc: Math.max(0, Math.min(ACCS - 1, l.acc | 0)), face: Math.max(0, Math.min(3, l.face | 0)), v: l.v === 2 ? 2 : 1 };
+    acc: Math.max(0, Math.min(ACCS - 1, l.acc | 0)), face: Math.max(0, Math.min(3, l.face | 0)), v: l.v === 3 ? 3 : l.v === 2 ? 2 : 1 };
   if (hex(l.streak)) o.streak = l.streak;
   return o;
 }
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
         const who = team || clean(body.who, 20);
         if (who) {
           const p = { id, who, guest: !team, x: Math.max(0, Math.min(60, +body.x || 0)), y: Math.max(0, Math.min(40, +body.y || 0)),
-            dir: ['N', 'S', 'E', 'W'].includes(body.dir) ? body.dir : 'S', sit: !!body.sit, up: Math.max(0, Math.min(8, +body.up || 0)), t: now };
+            dir: ['N', 'S', 'E', 'W'].includes(body.dir) ? body.dir : 'S', sit: !!body.sit, up: Math.max(0, Math.min(8, +body.up || 0)), dance: !!body.dance, t: now };
           if (!team && body.look) p.look = cleanLook(body.look);
           await redis(['HSET', KEY, id, JSON.stringify(p)]);
         }
