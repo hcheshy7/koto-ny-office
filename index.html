@@ -1904,7 +1904,21 @@ function makeSprites(L){
     const key=v+p+(blink?'Z':'');out[key]=outlined(a,'#3a1f1a');
     if(v==='s')out['w'+p+(blink?'Z':'')]=flipX(out[key]);          // facing left
   }
+  for(const v of['f','b','s'])for(const d of['dUp','dOut','dL','dR']){   // dance frames: arms in the air, eyes shut, big smile
+    const a=mk(16,30),g=a.getContext('2d');paintChar(g,L,v,'stand',v!=='b');danceArms(g,L,v,d);
+    out[v+d]=outlined(a,'#3a1f1a');if(v==='s')out['w'+d]=flipX(out[v+d]);
+  }
   return out;
+}
+function danceArms(g,L,v,d){
+  const P=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h)};
+  const skin=L.skin||'#f6d2ad',shirt=L.shirt||'#4a90d9',arm=L.top==='tank'?skin:L.top==='vest'?'#f4f2ec':shirt,armS=mix(arm,-.2);
+  const up=(x,s)=>{const o=s?1:-1,a=s?x+1:x-1;P(x,13,2,3,arm);P(a,9,2,4,arm);P(s?a+1:a,9,1,4,armS);P(a,7,2,2,skin)},out=(x,dir)=>{P(x,16,3,2,arm);P(x,17,3,1,armS);P(dir<0?x:x+2,14,1,2,skin)},
+    hip=(x,dir)=>{P(x,16,2,2,arm);P(dir<0?x:x+1,18,1,2,arm);P(dir<0?x+1:x-1,19,2,1,skin)};
+  if(v==='s'){if(d==='dUp'||d==='dL'){P(9,13,2,3,arm);P(11,9,2,4,arm);P(12,9,1,4,armS);P(12,7,2,2,skin)}else{P(8,16,4,2,arm);P(8,17,4,1,armS);P(12,15,2,2,skin)}return}
+  g.clearRect(2,16,2,6);g.clearRect(12,16,2,6);                    // take the arms down from their sides first
+  if(d==='dUp'){up(1,0);up(13,1)}else if(d==='dOut'){out(0,-1);out(13,1)}else if(d==='dL'){up(1,0);hip(13,1)}else{hip(1,-1);up(13,1)}
+  if(v==='f'){P(6,11,4,1,'#6a2430');P(7,12,2,1,'#e8788a');P(5,10,1,1,mix(skin,-.36));P(10,10,1,1,mix(skin,-.36))}   // a big open-mouthed smile
 }
 
 /* ---------- where people can walk ---------- */
@@ -2283,6 +2297,21 @@ function drawWalker(c){                                            // someone on
       b.globalAlpha=Math.max(0,1-ph*1.15);for(const[dx,dy,col]of[[1,1,'rgba(40,15,5,.55)'],[0,0,k%2?'#ffd23f':'#ffffff']]){b.fillStyle=col;
       b.fillRect(nx+dx,ny+dy,2,2);b.fillRect(nx+1+dx,ny-4+dy,1,5);b.fillRect(nx+2+dx,ny-4+dy,1,1);b.fillRect(nx+3+dx,ny-3+dy,1,1)}}
     b.globalAlpha=1}}
+function talkMouth(o,x,top,v){                                     // while they're "saying" their chat message, their mouth flaps open and shut
+  if(!o||!(o.talkUntil>performance.now())||v==='b')return;const open=Math.floor(performance.now()/95+(o.idx||0)*.37)%3!==1;if(!open)return;
+  const mx=v==='f'?x-1:v==='s'?x+3:x-5;b.fillStyle='#4a1a24';b.fillRect(mx,top+12,2,2);b.fillStyle='#e8788a';b.fillRect(mx,top+13,2,1)}
+function animalese(text,seed){                                      // a cute made-up voice, one little blip per letter, like a cosy village game
+  if(!SND.on||!SND.C||SND.C.state!=='running')return;const C=SND.C,base=[330,370,415,466,523,587,659][Math.abs(seed)%7];let t=C.currentTime+.04,n=0;
+  for(const ch of text.toLowerCase()){if(n>=48)break;
+    if(ch===' '){t+=.045;continue}if(/[.,!?…]/.test(ch)){t+=.14;continue}if(!/[a-z0-9]/.test(ch))continue;
+    const code=ch.charCodeAt(0),vowel='aeiou'.includes(ch),f=base*(1+((code*7)%9)/18)*(vowel?1.18:1);
+    const o=C.createOscillator(),o2=C.createOscillator(),g=C.createGain(),bp=C.createBiquadFilter();
+    o.type='square';o2.type='triangle';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*(vowel?1.12:.94),t+.05);o2.frequency.setValueAtTime(f*2,t);
+    bp.type='bandpass';bp.frequency.value=f*2.2;bp.Q.value=1.4;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+.008);g.gain.exponentialRampToValueAtTime(.001,t+.06);
+    o.connect(bp);o2.connect(bp);bp.connect(g);g.connect(SND.master);o.start(t);o2.start(t);o.stop(t+.07);o2.stop(t+.07);t+=.068;n++}
+  return t-C.currentTime}
+const talkTime=text=>{let n=0,t=0;for(const ch of text){if(n>=48)break;if(ch===' ')t+=45;else if(/[.,!?…]/.test(ch))t+=140;else if(/[a-z0-9]/i.test(ch)){t+=68;n++}}return t+80};
 function drawChar(c){                                              // drawn in office coordinates
   if(c.act&&c.act.wc&&c.state==='act')return;                     // in the bathroom: out of sight
   const x=Math.round(c.rx*TS),yf=Math.round(c.ry*TS+5),moving=c.path.length>0,an=performance.now()/1000;
@@ -2293,7 +2322,7 @@ function drawChar(c){                                              // drawn in o
   const v=c.dir==='S'?'f':c.dir==='N'?'b':c.dir==='E'?'s':'w',top=yf-31-raiseOf(c)-hop-(c.held?8:0);
   const blink=!moving&&!c.held&&v!=='b'&&(c.bub+c.idx*.61)%4.3<.16;        // everyone blinks now and then
   if(!c.sit){b.fillStyle='rgba(40,20,30,.28)';b.fillRect(x-6,yf-2,12,3);b.fillRect(x-4,yf-3,8,5)}
-  b.drawImage(c.spr[v+pose+(blink?'Z':'')],x-9,top);if(c.def.staff)drawUniform(x-9,top,v,pose==='sit');
+  b.drawImage(c.spr[v+pose+(blink?'Z':'')],x-9,top);if(c.def.staff)drawUniform(x-9,top,v,pose==='sit');talkMouth(c,x,top,v);
   const it=c.act&&(c.state!=='walk'||c.act.carry)&&c.act.hold;
   if(c.act&&c.act.phones&&c.state==='act'){                        // headphones on
     const ox=x-8,oy=top+1,P=(a,y,w,h,col)=>{b.fillStyle=col;b.fillRect(v==='w'?ox+16-a-w:ox+a,oy+y,w,h)};
@@ -3322,8 +3351,11 @@ function chatAdd(m,fresh){
   const li=document.createElement('li'),w=document.createElement('span'),tm=document.createElement('span');
   w.className='who'+(m.guest?' g':'');w.textContent=m.who+(m.guest?' (guest)':'')+': ';tm.className='tm';tm.textContent=hhmm(m.t);
   const tx=document.createElement('span');tx.className='msg';tx.textContent=m.text;w.textContent=m.who+(m.guest?' (guest)':'')+':';li.append(w,tx,tm);chatLog.appendChild(li);while(chatLog.children.length>120)chatLog.firstChild.remove();
-  if(fresh&&m.guest){for(const p of[PL.me,...PL.remote.values()])if(p&&p.guest&&p.who===m.who){p.chatSay=m.text.length>42?m.text.slice(0,40)+'…':m.text;p.chatUntil=performance.now()+8000}}
-  if(fresh){const c=!m.guest&&chars.find(c=>c.def.name===m.who);if(c&&!c.away){c.chatSay=m.text.length>42?m.text.slice(0,40)+'…':m.text;c.chatUntil=performance.now()+8000}   // their character says it in the office too
+  if(fresh){const say=m.text.length>48?m.text.slice(0,46)+'…':m.text,until=performance.now()+Math.min(12000,5000+m.text.length*90);   // whoever typed it says it in a speech bubble over their head
+    const talk=performance.now()+talkTime(m.text);
+    for(const p of[PL.me,...PL.remote.values()])if(p&&(p.id===m.id||p.who===m.who)){p.chatSay=say;p.chatUntil=until;p.talkUntil=talk}   // anyone walking around, guests too
+    const c=!m.guest&&chars.find(c=>c.def.name===m.who);if(c){c.chatSay=say;c.chatUntil=until;c.talkUntil=talk}                       // their character, at their desk or wherever they are
+    {let h=0;for(const ch of m.who)h=(h*31+ch.charCodeAt(0))|0;animalese(m.text,h)}                                                 // and you hear them say it
     const mine=m.id===ON.id;if(!mine&&!chatEl.classList.contains('full')){CH.unread++;showBadge()}}
 }
 function chatProblem(msg){chatEl.hidden=false;if(CH.ready)return;chatLog.textContent='';const li=document.createElement('li');li.className='empty';li.textContent=msg;chatLog.appendChild(li)}   // show the box anyway, with what's wrong
@@ -3576,10 +3608,11 @@ function puppets(){const out=[];if(PL.me){PL.me.key=PL.me.ry*TS+5;out.push(PL.me
 function drawAny(c){if(c.puppet)drawPuppet(c);else drawChar(c)}
 function startDance(){const me=PL.me;if(!me)return;if(me.sit){me.sit=false;me.up=0}me.home=0;me.dance=performance.now();PL.keys=[];PL.netT=0;
   if(SND.on&&SND.C&&SND.C.state==='running'){const t=SND.C.currentTime;[784,988,1175,1568,1175,1568].forEach((f,i)=>bell(f,t+i*.11,.03,.6))}}   // a happy little jingle
-function danceView(p,an){                                          // the dance: bounce on the beat, spin round, step side to side, arms up
-  const t=(performance.now()-p.dance)/1000,beat=Math.floor(t*4),spin=['f','s','b','w'][Math.floor(t*2)%4];
-  const v=Math.floor(t)%3===2?spin:(beat%4<2?'f':['s','w'][Math.floor(beat/4)%2]);
-  return{v,pose:['walkA','stand','walkB','stand'][beat%4],hop:Math.round(Math.abs(Math.sin(t*Math.PI*2))*4),sway:beat%2?1:-1,t}}
+function danceView(p){                                             // the groove: point left, point right, hands up, arms out; sway the hips, bob on the beat, spin now and then
+  const t=(performance.now()-p.dance)/1000,beat=Math.floor(t*2.6),step=beat%8;
+  const moves=['dL','dR','dL','dR','dUp','dOut','dUp','dOut'],spinning=Math.floor(beat/8)%2===1&&step>=4;
+  const v=spinning?['s','b','w','f'][step-4]:(step<4?'f':'f');
+  return{v,pose:moves[step],hop:Math.round(Math.abs(Math.sin(t*Math.PI*2.6))*2),sway:Math.round(Math.sin(t*Math.PI*1.3)*2),t}}
 function danceSparkles(x,top,t){                                   // music notes and hearts floating up while they dance
   for(let k=0;k<3;k++){const ph=(t*.9+k/3)%1,yy=Math.round(top-9-ph*16),xx=Math.round(x+(k-1)*10+Math.sin((t+k)*3)*2);b.globalAlpha=1-ph;
     if(k===1){b.fillStyle='#ff6f9c';b.fillRect(xx-1,yy,1,1);b.fillRect(xx+1,yy,1,1);b.fillRect(xx-1,yy+1,3,1);b.fillRect(xx,yy+2,1,1)}
@@ -3592,7 +3625,7 @@ function drawPuppet(p){
   const spr=p.char?p.char.spr:lookSprites(p.look||MYLOOK),x=Math.round(p.rx*TS),yf=Math.round(p.ry*TS+5),an=performance.now()/1000,moving=p===PL.me?p.mv:p.mvv;
   const pose=p.sit?'sit':moving?['walkA','stand','walkB','stand'][Math.floor(an*9)%4]:'stand',v=p.dir==='S'?'f':p.dir==='N'?'b':p.dir==='E'?'s':'w',top=yf-31-(p.sit?p.up:0);
   if(!p.sit){b.fillStyle='rgba(40,20,30,.28)';b.fillRect(x-6,yf-2,12,3);b.fillRect(x-4,yf-3,8,5)}
-  b.drawImage(spr[v+pose],x-9,top);if(p.char&&p.char.def.staff)drawUniform(x-9,top,v,p.sit);
+  b.drawImage(spr[v+pose],x-9,top);if(p.char&&p.char.def.staff)drawUniform(x-9,top,v,p.sit);talkMouth(p.char&&p.char.talkUntil>performance.now()?p.char:p,x,top,v);
 }
 function puppetLabels(fs,hits,placed){
   const me=PL.me;
@@ -3805,7 +3838,7 @@ function frame(t){
 resync();                                                          // work out the office as it is right now
 for(const c of chars){c.rx=c.x;c.ry=c.y}
 hud();resize();requestAnimationFrame(frame);
-window.__office={scr:p=>{const[fx,fy]=charXY(p);return[sx(fx)/dpr,sy(fy)/dpr]},makeSprites,spriteLook,cleanLook,SQ,NP,PIX,pixSvg,chatters,MM,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
+window.__office={animalese:(...a)=>animalese(...a),sndToggle:()=>sndToggle(),scr:p=>{const[fx,fy]=charXY(p);return[sx(fx)/dpr,sy(fy)/dpr]},makeSprites,spriteLook,cleanLook,SQ,NP,PIX,pixSvg,chatters,MM,JOHNNY,SIM,TRF,resync,stepSim,nyAnchor,SND,mondayActive,setMM:v=>{mmPreview=v},nyHour,timeFactor,tagOf,PIECES,solid,seatAt,walk,chim:()=>CHIMNEYS,sunCalc,daylight,wxStep,cur,pv,live,loadWeather,LIT,LAMPS,hud,update,render,chars,buf,cam,things,scene,DESKS,SPOTS,lanes,parked,OZ,charXY,WX0,WY0,TS};
 })();
 </script>
 </body>
